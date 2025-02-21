@@ -1,12 +1,312 @@
-<title>forestbird space</title>
-hello<br>
-im zhaoweifeng<br>
-from china<br>
-wechat:BH2UBF<br>
-<br>
-之前BLOG备份：<br>
-<a href=https://github.com/forestbird/forestbird.github.io/>forestbird.github.io</a>
-<br>
-<br>
-查询GITHUB IP地址：<br>
-https://www.ipaddress.com/website/github.com/
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>forestbird space</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234CAF50' fill-opacity='0.1'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* 导航栏样式 */
+        nav {
+            background-color: rgba(51, 51, 51, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        nav a:hover {
+            background-color: #4CAF50;
+            transform: translateY(-2px);
+        }
+
+        nav a:active {
+            transform: translateY(0);
+        }
+
+        /* 主体内容样式 */
+        .container {
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .profile {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 2.5s ease-in-out;
+        }
+
+        .profile img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            border: 4px solid #4CAF50;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .profile img:hover {
+            transform: scale(1.1);
+        }
+
+        .profile h1 {
+            margin: 20px 0 10px;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .profile p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* 内容区块样式 */
+        section {
+            margin-bottom: 40px;
+        }
+
+        section h2 {
+            font-size: 1.8rem;
+            color: #4CAF50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #4CAF50;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        section p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* 作品集卡片样式 */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .portfolio-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .portfolio-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.2rem;
+            color: #4CAF50;
+        }
+
+        .portfolio-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* 联系方式样式 */
+        .contact-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-info p {
+            margin: 10px 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .contact-info a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 40px;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .profile img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .profile h1 {
+                font-size: 1.8rem;
+            }
+
+            .profile p {
+                font-size: 1rem;
+            }
+
+            section h2 {
+                font-size: 1.5rem;
+            }
+
+            section p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>forestbird space</h1>
+    <p>森林鸟 | forestbird | 业余无线电呼号: BH2UBF</p>
+</header>
+
+<nav>
+    <a href="#about"><i class="fas fa-user"></i> 关于我</a>
+    <a href="#portfolio"><i class="fas fa-briefcase"></i> 作品集</a>
+    <a href="#contact"><i class="fas fa-envelope"></i> 联系我</a>
+</nav>
+
+<div class="container">
+    <div class="profile">
+        <img src="https://via.placeholder.com/150" alt="赵伟峰的头像">
+        <h1>赵伟峰</h1>
+        <p>Web开发者 | 设计师 | 技术爱好者</p>
+        <p>个人网址: <a href="https://3.1415926.xyz" target="_blank">3.1415926.xyz</a></p>
+        <p>博客备份: <a href="https://github.com/forestbird/forestbird.github.io/" target="_blank">forestbird.github.io</a></p>
+    </div>
+
+    <section id="about">
+        <h2>关于我</h2>
+        <p>你好！我是赵伟峰，网名“森林鸟”（forestbird），业余无线电呼号 BH2UBF。我是一名热爱编程和设计的Web开发者，擅长使用HTML、CSS、JavaScript等技术来构建美观且功能强大的网站。我始终追求创新和卓越，致力于为用户提供最佳体验。</p>
+    </section>
+
+    <section id="portfolio">
+        <h2>作品集</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-card">
+                <h3>响应式企业官网</h3>
+                <p>为企业设计的现代化响应式官网，适配多种设备。</p>
+            </div>
+            <div class="portfolio-card">
+                <h3>在线教育平台</h3>
+                <p>一个功能丰富的在线教育平台，支持课程管理和学习跟踪。</p>
+            </div>
+            <div class="portfolio-card">
+                <h3>个人博客系统</h3>
+                <p>基于Markdown的个人博客系统，简洁高效。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>联系我</h2>
+        <div class="contact-info">
+            <p><i class="fas fa-envelope"></i> Email: <a href="mailto:hi@zhaoweifeng.cn">hi@zhaoweifeng.cn</a></p>
+            <p><i class="fab fa-weixin"></i> 微信: <strong>bh2ubf</strong></p>
+            <p>欢迎通过微信或邮件与我联系！</p>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <p>&copy; <span id="currentYear"></span> 赵伟峰 (森林鸟). 保留所有权利.</p>
+</footer>
+
+<script>
+    // 动态更新年份
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
