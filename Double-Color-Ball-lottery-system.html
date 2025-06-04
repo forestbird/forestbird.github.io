@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>双色球开奖系统 V3.0</title>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --danger-color: #F44336;
+            --grid-color: rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+
+        .ball-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .ball {
+            width: 60px;
+            height: 60px;
+            background: #2196F3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .red-ball {
+            background: #E53935;
+        }
+
+        .ball-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ball-container::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: -100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            to {
+                left: 100%;
+            }
+        }
+
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        button {
+            padding: 15px 30px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .history {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .history th, .history td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .history tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 15px;
+                padding: 15px;
+            }
+            
+            .ball {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .ball {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: var(--primary-color); text-align: center; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">
+            🎯 双色球开奖系统 V3.0
+        </h1>
+        
+        <div class="controls">
+            <button onclick="generateNumbers()">立即开奖</button>
+            <button onclick="saveHistory()">保存记录</button>
+            <button onclick="clearHistory()">清空记录</button>
+        </div>
+
+        <div id="result" class="ball-grid"></div>
+
+        <h2 style="color: var(--primary-color); margin-top: 30px;">历史记录</h2>
+        <table class="history">
+            <thead>
+                <tr>
+                    <th>期数</th>
+                    <th>红球</th>
+                    <th>蓝球</th>
+                    <th>开奖时间</th>
+                </tr>
+            </thead>
+            <tbody id="historyList"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let history = JSON.parse(localStorage.getItem('lotteryHistory')) || [];
+
+        function generateNumbers() {
+            const red = [];
+            const blue = [];
+            
+            // 生成红球
+            while(red.length < 6) {
+                const num = Math.floor(Math.random() * 33) + 1;
+                if(!red.includes(num)) red.push(num);
+            }
+            
+            // 生成蓝球
+            while(blue.length < 1) {
+                const num = Math.floor(Math.random() * 16) + 1;
+                if(!blue.includes(num)) blue.push(num);
+            }
+
+            // 显示结果
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+            
+            red.forEach(num => {
+                const ball = createBall(num, false);
+                resultDiv.appendChild(ball);
+            });
+            
+            blue.forEach(num => {
+                const ball = createBall(num, true);
+                resultDiv.appendChild(ball);
+            });
+
+            // 保存历史
+            const entry = {
+                id: Date.now(),
+                red: red.sort((a,b) => a-b),
+                blue: blue[0],
+                date: new Date().toLocaleString()
+            };
+            
+            history.unshift(entry);
+            if(history.length > 100) history.pop();
+            localStorage.setItem('lotteryHistory', JSON.stringify(history));
+            updateHistoryDisplay();
+        }
+
+        function createBall(num, isBlue) {
+            const container = document.createElement('div');
+            container.className = 'ball-container';
+            
+            const ball = document.createElement('div');
+            ball.className = `ball ${isBlue ? 'red-ball' : ''}`;
+            ball.textContent = num;
+            
+            container.appendChild(ball);
+            return container;
+        }
+
+        function saveHistory() {
+            if(history.length === 0) {
+                alert('暂无历史记录可保存！');
+                return;
+            }
+            
+            const blob = new Blob([JSON.stringify(history)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `双色球历史记录_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearHistory() {
+            if(confirm('确定要清空所有历史记录吗？')) {
+                history = [];
+                localStorage.removeItem('lotteryHistory');
+                updateHistoryDisplay();
+            }
+        }
+
+        function updateHistoryDisplay() {
+            const tbody = document.getElementById('historyList');
+            tbody.innerHTML = '';
+            
+            history.forEach((entry, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${entry.red.join(' | ')}</td>
+                    <td>${entry.blue}</td>
+                    <td>${entry.date}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 初始化显示历史记录
+        updateHistoryDisplay();
+
+        // 添加键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            if(e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveHistory();
+            }
+        });
+    </script>
+</body>
+</html>
