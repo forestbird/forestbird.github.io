@@ -16,6 +16,9 @@
             --success-color: #2ecc71;
             --warning-color: #f39c12;
             --info-color: #1abc9c;
+            --wechat-color: #07C160;
+            --weibo-color: #E6162D;
+            --qq-color: #12B7F5;
         }
         
         * {
@@ -327,6 +330,81 @@
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         }
         
+        .social-share {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .share-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .share-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .wechat-btn {
+            background-color: var(--wechat-color);
+        }
+        
+        .weibo-btn {
+            background-color: var(--weibo-color);
+        }
+        
+        .qq-btn {
+            background-color: var(--qq-color);
+        }
+        
+        .qrcode-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .qrcode-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        .qrcode-img {
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+        }
+        
+        .close-qrcode {
+            margin-top: 15px;
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
         .disclaimer {
             margin-top: 30px;
             font-size: 0.8rem;
@@ -427,6 +505,18 @@
                     <h3><i class="fas fa-robot"></i> AI预测分析</h3>
                     <p id="aiAnalysisText">点击"AI预测"按钮获取智能分析结果</p>
                     <div class="prediction-result" id="predictionResult"></div>
+                    
+                    <div class="social-share">
+                        <div class="share-btn wechat-btn" id="shareWechat">
+                            <i class="fab fa-weixin"></i>
+                        </div>
+                        <div class="share-btn weibo-btn" id="shareWeibo">
+                            <i class="fab fa-weibo"></i>
+                        </div>
+                        <div class="share-btn qq-btn" id="shareQQ">
+                            <i class="fab fa-qq"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -482,6 +572,16 @@
         </div>
     </div>
 
+    <!-- 微信分享二维码弹窗 -->
+    <div class="qrcode-container" id="qrcodeContainer">
+        <div class="qrcode-box">
+            <h3>微信分享</h3>
+            <p>打开微信，点击"发现"->"扫一扫"</p>
+            <div class="qrcode-img" id="qrcodeImg"></div>
+            <button class="close-qrcode" id="closeQrcode">关闭</button>
+        </div>
+    </div>
+
     <script>
         // DOM元素
         const drawBtn = document.getElementById('drawBtn');
@@ -504,6 +604,12 @@
         const smartNumberBtn = document.getElementById('smartNumberBtn');
         const aiAnalysisText = document.getElementById('aiAnalysisText');
         const predictionResult = document.getElementById('predictionResult');
+        const shareWechat = document.getElementById('shareWechat');
+        const shareWeibo = document.getElementById('shareWeibo');
+        const shareQQ = document.getElementById('shareQQ');
+        const qrcodeContainer = document.getElementById('qrcodeContainer');
+        const qrcodeImg = document.getElementById('qrcodeImg');
+        const closeQrcode = document.getElementById('closeQrcode');
         
         // 状态变量
         let isDrawing = false;
@@ -518,6 +624,7 @@
             loseStreak: 0
         };
         let historyChart;
+        let currentResult = "0 0 0";
         
         // 初始化图表
         function initChart() {
@@ -574,7 +681,7 @@
             return Math.floor(Math.random() * 10);
         }
         
-        // 模拟抽奖动画
+        // 模拟抽奖 - 修改为一次生成1000条记录
         function startDrawing() {
             if (isDrawing) return;
             
@@ -582,46 +689,47 @@
             drawBtn.disabled = true;
             drawBtn.innerHTML = '<i class="fas fa-spinner spin"></i> 抽奖中...';
             
-            let count = 0;
-            const totalFlashes = 30;
-            
-            drawInterval = setInterval(() => {
-                ball1.textContent = getRandomNumber();
-                ball2.textContent = getRandomNumber();
-                ball3.textContent = getRandomNumber();
+            // 批量生成1000条记录
+            for (let i = 0; i < 1000; i++) {
+                const num1 = getRandomNumber();
+                const num2 = getRandomNumber();
+                const num3 = getRandomNumber();
                 
-                // 添加旋转动画
-                if (animationCheck.checked) {
-                    ball1.style.animation = 'spin 0.2s linear';
-                    ball2.style.animation = 'spin 0.2s linear';
-                    ball3.style.animation = 'spin 0.2s linear';
-                    
-                    setTimeout(() => {
-                        ball1.style.animation = '';
-                        ball2.style.animation = '';
-                        ball3.style.animation = '';
-                    }, 200);
-                }
+                currentResult = `${num1} ${num2} ${num3}`;
                 
-                count++;
-                if (count >= totalFlashes) {
-                    stopDrawing();
+                const now = new Date();
+                const dateStr = now.toLocaleDateString();
+                const timeStr = now.toLocaleTimeString();
+                
+                // 检查是否中奖
+                let isWin = false;
+                myNumbers.forEach(num => {
+                    if (num.replace(/\s/g, '') === currentResult.replace(/\s/g, '')) {
+                        isWin = true;
+                    }
+                });
+                
+                history.unshift({
+                    date: dateStr,
+                    time: timeStr,
+                    result: currentResult,
+                    isWin: isWin
+                });
+                
+                // 更新统计
+                stats.drawCount++;
+                if (isWin) {
+                    stats.winCount++;
+                    stats.loseStreak = 0;
+                } else {
+                    stats.loseStreak++;
                 }
-            }, 100);
-        }
-        
-        // 停止抽奖
-        function stopDrawing() {
-            clearInterval(drawInterval);
+            }
             
-            // 最终结果
-            const num1 = getRandomNumber();
-            const num2 = getRandomNumber();
-            const num3 = getRandomNumber();
-            
-            ball1.textContent = num1;
-            ball2.textContent = num2;
-            ball3.textContent = num3;
+            // 显示最后一条结果
+            ball1.textContent = history[0].result.split(' ')[0];
+            ball2.textContent = history[0].result.split(' ')[1];
+            ball3.textContent = history[0].result.split(' ')[2];
             
             // 添加弹跳动画
             if (animationCheck.checked) {
@@ -636,36 +744,6 @@
                 }, 500);
             }
             
-            // 添加到历史记录
-            const now = new Date();
-            const dateStr = now.toLocaleDateString();
-            const timeStr = now.toLocaleTimeString();
-            const resultStr = `${num1} ${num2} ${num3}`;
-            
-            // 检查是否中奖
-            let isWin = false;
-            myNumbers.forEach(num => {
-                if (num.replace(/\s/g, '') === resultStr.replace(/\s/g, '')) {
-                    isWin = true;
-                }
-            });
-            
-            history.unshift({
-                date: dateStr,
-                time: timeStr,
-                result: resultStr,
-                isWin: isWin
-            });
-            
-            // 更新统计
-            stats.drawCount++;
-            if (isWin) {
-                stats.winCount++;
-                stats.loseStreak = 0;
-            } else {
-                stats.loseStreak++;
-            }
-            
             // 保存数据
             localStorage.setItem('fucai3d_history', JSON.stringify(history));
             localStorage.setItem('fucai3d_stats', JSON.stringify(stats));
@@ -677,11 +755,6 @@
             isDrawing = false;
             drawBtn.disabled = false;
             drawBtn.innerHTML = '<i class="fas fa-play"></i> 开始抽奖';
-            
-            // 如果是自动抽奖模式，继续下一次抽奖
-            if (isAutoDrawing) {
-                setTimeout(startDrawing, 2000);
-            }
         }
         
         // 自动抽奖
@@ -699,7 +772,7 @@
             }
         }
         
-        // AI预测功能 - 已修复
+        // AI预测功能
         function aiPredict() {
             if (history.length < 5) {
                 aiAnalysisText.textContent = '需要至少5期历史数据才能进行预测';
@@ -772,6 +845,29 @@
                 aiPredictBtn.disabled = false;
                 aiPredictBtn.innerHTML = '<i class="fas fa-brain"></i> AI预测';
             }, 1500);
+        }
+        
+        // 分享到微信
+        function shareToWechat() {
+            // 生成二维码
+            const shareText = `我在福彩3D模拟系统中抽到了 ${currentResult}，你也来试试吧！`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(shareText)}`;
+            qrcodeImg.innerHTML = `<img src="${qrUrl}" alt="微信分享二维码">`;
+            qrcodeContainer.style.display = 'flex';
+        }
+        
+        // 分享到微博
+        function shareToWeibo() {
+            const shareText = `我在福彩3D模拟系统中抽到了 ${currentResult}，你也来试试吧！`;
+            const url = `https://service.weibo.com/share/share.php?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(shareText)}`;
+            window.open(url, '_blank', 'width=600,height=400');
+        }
+        
+        // 分享到QQ
+        function shareToQQ() {
+            const shareText = `我在福彩3D模拟系统中抽到了 ${currentResult}，你也来试试吧！`;
+            const url = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent('福彩3D模拟系统')}&desc=${encodeURIComponent(shareText)}`;
+            window.open(url, '_blank', 'width=600,height=400');
         }
         
         // 更新统计显示
@@ -859,7 +955,7 @@
         }
         
         // 删除号码
-        function removeNumber(index) {
+        function   函数 removeNumber(index) {
             myNumbers.splice(index, 1);
             localStorage.setItem('fucai3d_myNumbers', JSON.stringify(myNumbers));
             updateNumberPoolDisplay();
@@ -877,10 +973,14 @@
         // 清空历史
         function clearHistory() {
             if (confirm('确定要清空所有历史记录吗?')) {
-                history = [];
-                stats = { drawCount: 0, winCount: 0, loseStreak: 0 };
-                localStorage.setItem('fucai3d_history', JSON.stringify(history));
-                localStorage.setItem('fucai3d_stats', JSON.stringify(stats));
+                history = [];   历史= []；
+                stats = { drawCount: 0, winCount: 0, loseStreak: 0 };stats = { 平局次数： 0， 胜利次数： 0， 连败次数： 0
+                localStorage.setItem('fucai3d_history', JSON.stringify(history));将 `history` 对象转换为 JSON 字符串并存储到本地存储的 `fucai3d_history` 键中。
+                localStorage.setItem('fucai3d_stats', JSON.stringify(stats));localStorage.setItem('fucai3d_stats', JSON.stringify(stats))； 
+
+这行代码的准确中文翻译为：
+
+将 stats 对象转换为 JSON 字符串，并将其存储
                 updateHistoryDisplay();
                 updateStatsDisplay();
                 updateChart();
@@ -888,33 +988,48 @@
         }
         
         // 生成智能号码
-        function generateSmartNumber() {
-            if (history.length < 3) {
+        function generateSmartNumber() {function generateSmartNumber() { 生成智能数字函数：
+            if (history.length < 3) {   如果（历史记录的长度小于 3）{
                 alert('需要至少3期历史数据才能生成智能号码');
-                return;
+                return;   返回;
             }
             
             // 简单算法 - 混合热号和冷号
-            const counts = Array(10).fill(0);
-            history.slice(0, 3).forEach(item => {
-                item.result.split(' ').forEach(num => counts[parseInt(num)]++);
+            const counts = Array(10).fill(0);const counts = Array(10).fill(0);  // 创建一个长度为 10 的数组，所有元素初始值为 0
+            history.slice(0, 3).forEach(item => {history 切片（0，3）中的每一项执行以下操作：
+                item.result.split(' ').forEach(num => counts[parseInt(num)]++);`item.result.split(' ').forEach(num => counts[parseInt(num)]);` 这段代码的意思是将 `item.result` 按空格分割成数组，然后对每个元素
             });
             
-            const hotNumber = counts.indexOf(Math.max(...counts));
-            const coldNumber = counts.indexOf(Math.min(...counts));
-            const randomNumber = getRandomNumber();
+            const hotNumber = counts.indexOf(Math.max(...counts));const hotNumber = counts.indexOf(Math.max(...counts))； 
+
+// 翻译为：
+
+const hotNumber = counts.indexOf(Math.max(...counts));  //
+            const coldNumber = counts.indexOf(Math.min(...counts));const coldNumber = counts.indexOf(Math.min(...counts))； 
+
+// 翻译为中文
+const 冷门数字 = counts.indexOf(Math.min(...counts
+            const randomNumber = getRandomNumber();const 随机数 = 获取随机数
             
-            myNumber.value = `${hotNumber} ${coldNumber} ${randomNumber}`;
+            myNumber.value = `${hotNumber} ${coldNumber} ${randomNumber}`;myNumber。价值= $ number = $ coldNumber = $ randomNumber;
         }
         
         // 事件监听
-        drawBtn.addEventListener('click', startDrawing);
-        autoBtn.addEventListener('click', toggleAutoDraw);
-        aiPredictBtn.addEventListener('click', aiPredict);
-        addNumberBtn.addEventListener('click', addNumber);
-        clearNumbersBtn.addEventListener('click', clearNumbers);
+        drawBtn.addEventListener('click', startDrawing);绘制按钮添加点击事件监听器，当点击时调用开始绘制函数。
+        autoBtn.addEventListener('click', toggleAutoDraw);autoBtn .addEventListener——toggleAutoDraw无限点击”;
+        aiPredictBtn.addEventListener('click', aiPredict);aiPredictBtn 元素添加了一个点击事件监听器，当点击该元素时会触发 aiPredict 函数。
+        addNumberBtn.addEventListener('click', addNumber);addNumberBtn 元素添加点击事件监听器，当点击时执行 addNumber 函数。
+        clearNumbersBtn.addEventListener('click', clearNumbers);clearNumbersBtn.addEventListener('click', clearNumbers)； 
+
+清除数字按钮添加点击事件监听器，当点击时执行 clearNumbers 函数。
         clearHistoryBtn.addEventListener('click', clearHistory);
         smartNumberBtn.addEventListener('click', generateSmartNumber);
+        shareWechat.addEventListener('click', shareToWechat);
+        shareWeibo.addEventListener('click', shareToWeibo);
+        shareQQ.addEventListener('click', shareToQQ);
+        closeQrcode.addEventListener('click', () => {
+            qrcodeContainer.style.display = 'none';
+        });
         
         soundCheck.addEventListener('change', () => {
             localStorage.setItem('fucai3d_sound', soundCheck.checked);
