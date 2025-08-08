@@ -1,0 +1,30 @@
+---
+id: 565
+title: イルカの漁期（写真）の大規模な虐殺に日本の漁村
+date: '2010-10-13T22:26:54+08:00'
+author: forestbird
+layout: post
+guid: 'https://bird.work/?p=565'
+permalink: /2010/10/13/qi-xiezhen-damonueribencun/
+categories:
+    - log
+tags:
+    - 日本
+    - 漁期
+    - 虐殺
+---
+
+ <span class="Apple-style-span" style="font-family: Verdana, 'Lucida Grande', Arial, Helvetica, sans-serif; line-height: 25px; font-size: 14px; color: rgb(68, 68, 68); -webkit-border-horizontal-spacing: 2px; -webkit-border-vertical-spacing: 2px; "><span class="Apple-style-span" style="color: rgb(0, 0, 0); font-size: x-large; ">**大規模な虐殺のイルカ漁の漁村にの日本**</span></span>
+
+<div align="center" style="word-wrap: break-word; word-break: break-all; "> </div><div align="center" style="word-wrap: break-word; word-break: break-all; ">**<font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; "> </font>**</div><div align="center" style="word-wrap: break-word; word-break: break-all; "><div align="center" class="uchome-message-pic" style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">![](http://www.zhaoweifeng.cn/blog/upload/201010131428336388.jpg)</font></div><div align="center" class="uchome-message-pic" style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">![](http://www.zhaoweifeng.cn/blog/upload/201010131428342078.jpg)</font></div></div><div align="center" style="word-wrap: break-word; word-break: break-all; "><font color="#000000" style="word-wrap: break-word; word-break: break-all; "><font size="4" style="word-wrap: break-word; word-break: break-all; "> </font></font></div><div align="left" style="word-wrap: break-word; word-break: break-all; "><span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">活動狩猟よると、外国人に）小さな漁村"悪名高い日本、"太地"（太地"レポートのために大規模な虐殺のイルカと時間を現地12起動もう一度、イルカ、2つだけがイルカの売却後に逮捕水族館は、6仔は、イルカにリリースされた残りのは、多数の虐殺されたイルカ。</font></span></div><div style="word-wrap: break-word; word-break: break-all; ">  
+<span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">報告によると、アカデミー賞を受賞したドキュメンタリー"コーブ"が村を釣りに公開日本語では"太地"毎年、コレクションのストーカースケール大きく、狩猟イルカ血行為は、国際社会の強い反応。</font></span></div><div style="word-wrap: break-word; word-break: break-all; ">  
+<span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">来年3月に毎年9月以降では、イルカが狩猟や釣りであり、丸めて、この漁村"シーズン"。</font></span> <span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">地元の漁師が夜、丸めるように生きるの包囲の下包囲、ベイ小さな使用して、ノイズイルカが殺到する他の方法は、選択のイルカや、動物の水槽を販売は、showいい感じのイルカ残りはすべて殺される肉を販売するイルカ。</font></span></div><div style="word-wrap: break-word; word-break: break-all; ">  
+<span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">交流が"コーブ"Octoberさんの今年の日本の"太地"村が膜がされてリリース、11丸め、イルカが活動である"伝統的なも従事しての"。</font></span> <span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">12に示すように、漁師が水槽に美しいイルカの売却に見える2つのことが、6つの若いバンドウイルカをリリースし、イルカ釣りフックすべての残りの部分を側に殺すために。</font></span> <span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">湾の水が血で赤くした。</font></span></div><div style="word-wrap: break-word; word-break: break-all; ">  
+<span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">地元の漁師は漁師日本のイルカの大虐殺に対しては、世界開催されたデモを前面に殺到する予定のデモ隊と述べた彼らはアメリカのイルカグループの虐殺に対する抗議する日本大使館で発表、10月14日。</font></span></div><div style="word-wrap: break-word; word-break: break-all; ">  
+<span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">6人がいた報告している日本の漁師のバンドウイルカは、両親で泳いで発生したカブスは、海、その探していることかもしれないが、心配している、非常に。</font></span></div><div style="word-wrap: break-word; word-break: break-all; ">  
+<span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">それは、ここ1ヶ月の最後の報告された、バンドウイルカ12キャプチャの地元の漁師のため、動物保護団体がいたイルカこれらの、ベイ小さいと海に逃げたこと、そして彼らは止まっので、漁網カットでnet利点がかかるイルカは逃げられない最終的な。</font></span></div><div style="word-wrap: break-word; word-break: break-all; ">  
+<span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">報告イルカを、日本のように年間20,000各殺すために政府が、それはイルカである日本の伝統を殺すだけでなく、漁民生活の手段の、あきらめることはできない。</font></span> <span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">報告によると、購入、地元の漁  
+師をしようとしている組織は、  
+動物保護は、寄付を集めるイルカ、これらの世界には、イルカを捕まえる漁師を拒否されました。</font></span></div><div style="word-wrap: break-word; word-break: break-all; ">  
+<span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">"太地"漁師が事件についてコメントを拒否します。</font></span></div><div style="word-wrap: break-word; word-break: break-all; ">  
+<font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; "> </font></div><div style="word-wrap: break-word; word-break: break-all; "><span style="word-wrap: break-word; word-break: break-all; "><font color="#000000" size="4" style="word-wrap: break-word; word-break: break-all; ">ソース：新華ファイナンス</font></span></div>
