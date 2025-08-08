@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>福彩3D抽奖模拟系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #3498db;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --info-color: #1abc9c;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(44, 62, 80, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), #c0392b);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .main-content {
+            padding: 25px;
+        }
+        
+        .lottery-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .lottery-machine {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 15px;
+        }
+        
+        .number-ball {
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle at 30% 30%, white, var(--primary-color));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 42px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+        
+        .draw-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, var(--primary-color), #c0392b);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 220px;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, var(--secondary-color), #2980b9);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .stats-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--success-color);
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .history-section {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            color: var(--success-color);
+        }
+        
+        .history-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .history-column {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .history-list {
+            list-style-type: none;
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+        }
+        
+        .history-list li {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.05rem;
+        }
+        
+        .history-list li.highlight {
+            background-color: rgba(231, 76, 60, 0.2);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .repeat-list {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .repeat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .repeat-count {
+            background-color: var(--warning-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+        }
+        
+        .repeat-badge {
+            background-color: var(--warning-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+        
+        .disclaimer {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #ccc;
+            text-align: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        .bounce {
+            animation: bounce 0.6s;
+        }
+        
+        @media (max-width: 768px) {
+            .number-ball {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
+            }
+            
+            .history-container {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stats-card {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>福彩3D抽奖模拟系统</h1>
+            <p>完整记录每次抽奖结果</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="lottery-section">
+                <div class="lottery-machine">
+                    <div class="number-ball" id="ball1">0</div>
+                    <div class="number-ball" id="ball2">0</div>
+                    <div class="number-ball" id="ball3">0</div>
+                </div>
+                
+                <div class="draw-controls">
+                    <button class="btn" id="drawBtn">
+                        <i class="fas fa-play"></i> 开始抽奖
+                    </button>
+                    
+                    <div class="stats-container">
+                        <div class="stats-card">
+                            <div class="stat-label">抽奖次数</div>
+                            <div class="stat-value" id="drawCount">0</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stat-label">重复号码数</div>
+                            <div class="stat-value" id="repeatCount">0</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stat-label">重复号码比率</div>
+                            <div class="stat-value" id="repeatRate">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="history-section">
+                <div class="section-title">
+                    <i class="fas fa-history"></i>
+                    <h2>历史记录与统计</h2>
+                </div>
+                
+                <div class="history-container">
+                    <div class="history-column">
+                        <h3><i class="fas fa-list"></i> 全部抽奖记录</h3>
+                        <div class="history-list" id="historyList">
+                            <li style="text-align:center;color:#aaa;">暂无历史记录</li>
+                        </div>
+                    </div>
+                    
+                    <div class="history-column">
+                        <h3><i class="fas fa-chart-bar"></i> 重复号码统计</h3>
+                        <div class="repeat-list" id="repeatList">
+                            <div style="text-align:center;color:#aaa;padding:20px;">
+                                <i class="fas fa-info-circle"></i><br>
+                                暂无重复号码
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" id="clearHistoryBtn" style="margin-top: 20px; width:100%;">
+                    <i class="fas fa-trash"></i> 清空历史记录
+                </button>
+            </div>
+        </div>
+        
+        <div class="disclaimer">
+            <p><i class="fas fa-exclamation-triangle"></i> 本系统仅为娱乐模拟用途，不涉及真实金钱交易</p>
+            <p>彩票有风险，购彩需理性。禁止未成年人参与赌博</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM元素
+        const drawBtn = document.getElementById('drawBtn');
+        const ball1 = document.getElementById('ball1');
+        const ball2 = document.getElementById('ball2');
+        const ball3 = document.getElementById('ball3');
+        const historyList = document.getElementById('historyList');
+        const repeatList = document.getElementById('repeatList');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const drawCountEl = document.getElementById('drawCount');
+        const repeatCountEl = document.getElementById('repeatCount');
+        const repeatRateEl = document.getElementById('repeatRate');
+        
+        // 状态变量
+        let history = JSON.parse(localStorage.getItem('fucai3d_history')) || [];
+        let resultCounts = {};
+        let repeatNumbers = 0;
+        
+        // 初始化显示
+        updateResultCounts();
+        updateStatsDisplay();
+        updateHistoryDisplay();
+        
+        // 生成随机数
+        function getRandomNumber() {
+            return Math.floor(Math.random() * 10);
+        }
+        
+        // 更新号码统计
+        function updateResultCounts() {
+            resultCounts = {};
+            repeatNumbers = 0;
+            
+            // 统计每个号码出现的次数
+            history.forEach(item => {
+                const result = item.result;
+                resultCounts[result] = (resultCounts[result] || 0) + 1;
+            });
+            
+            // 计算重复号码数量
+            repeatNumbers = Object.values(resultCounts).filter(count => count > 1).length;
+        }
+        
+        // 更新统计显示
+        function updateStatsDisplay() {
+            const totalDraws = history.length;
+            drawCountEl.textContent = totalDraws;
+            repeatCountEl.textContent = repeatNumbers;
+            
+            const repeatRate = totalDraws > 0 
+                ? Math.round((repeatNumbers / totalDraws) * 100) 
+                : 0;
+            repeatRateEl.textContent = `${repeatRate}%`;
+        }
+        
+        // 模拟抽奖 - 每次生成1组号码
+        function startDrawing() {
+            const num1 = getRandomNumber();
+            const num2 = getRandomNumber();
+            const num3 = getRandomNumber();
+            
+            const result = `${num1} ${num2} ${num3}`;
+            
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            const timeStr = now.toLocaleTimeString();
+            
+            // 添加到历史记录
+            history.unshift({
+                date: dateStr,
+                time: timeStr,
+                result: result
+            });
+            
+            // 更新统计
+            updateResultCounts();
+            
+            // 更新显示
+            ball1.textContent = num1;
+            ball2.textContent = num2;
+            ball3.textContent = num3;
+            
+            // 添加弹跳动画
+            ball1.classList.add('bounce');
+            ball2.classList.add('bounce');
+            ball3.classList.add('bounce');
+            
+            setTimeout(() => {
+                ball1.classList.remove('bounce');
+                ball2.classList.remove('bounce');
+                ball3.classList.remove('bounce');
+            }, 600);
+            
+            // 保存数据
+            localStorage.setItem('fucai3d_history', JSON.stringify(history));
+            
+            // 更新显示
+            updateStatsDisplay();
+            updateHistoryDisplay();
+        }
+        
+        // 更新历史记录显示
+        function updateHistoryDisplay() {
+            // 更新历史列表
+            if (history.length === 0) {
+                historyList.innerHTML = '<li style="text-align:center;color:#aaa;">暂无历史记录</li>';
+                repeatList.innerHTML = '<div style="text-align:center;color:#aaa;padding:20px;"><i class="fas fa-info-circle"></i><br>暂无重复号码</div>';
+                return;
+            }
+            
+            // 显示所有记录
+            historyList.innerHTML = '';
+            
+            history.forEach((item, index) => {
+                const li = document.createElement('li');
+                const count = resultCounts[item.result];
+                const isRepeated = count > 1;
+                
+                if (isRepeated) {
+                    li.classList.add('highlight');
+                }
+                
+                li.innerHTML = `
+                    <span>${item.result} 
+                        ${isRepeated ? `<span class="repeat-badge">重复${count}次</span>` : ''}
+                    </span>
+                    <span style="color:#aaa; font-size:0.9rem;">${item.date} ${item.time}</span>
+                `;
+                historyList.appendChild(li);
+            });
+            
+            // 更新重复号码统计
+            updateRepeatStats();
+        }
+        
+        // 更新重复号码统计
+        function updateRepeatStats() {
+            // 筛选出重复的组合并按次数排序
+            const repeats = Object.entries(resultCounts)
+                .filter(([_, count]) => count > 1)
+                .sort((a, b) => b[1] - a[1]);
+            
+            repeatList.innerHTML = '';
+            
+            if (repeats.length === 0) {
+                repeatList.innerHTML = '<div style="text-align:center;color:#aaa;padding:20px;"><i class="fas fa-info-circle"></i><br>暂无重复号码</div>';
+                return;
+            }
+            
+            // 显示所有重复号码
+            repeats.forEach(([result, count]) => {
+                const div = document.createElement('div');
+                div.className = 'repeat-item';
+                div.innerHTML = `
+                    <span>${result}</span>
+                    <span class="repeat-count">重复 ${count} 次</span>
+                `;
+                repeatList.appendChild(div);
+            });
+        }
+        
+        // 清空历史
+        function clearHistory() {
+            if (confirm('确定要清空所有历史记录吗?')) {
+                history = [];
+                resultCounts = {};
+                repeatNumbers = 0;
+                localStorage.setItem('fucai3d_history', JSON.stringify(history));
+                updateStatsDisplay();
+                updateHistoryDisplay();
+                
+                // 重置抽奖球
+                ball1.textContent = '0';
+                ball2.textContent = '0';
+                ball3.textContent = '0';
+            }
+        }
+        
+        // 事件监听
+        drawBtn.addEventListener('click', startDrawing);
+        clearHistoryBtn.addEventListener('click', clearHistory);
+    </script>
+</body>
+</html>
