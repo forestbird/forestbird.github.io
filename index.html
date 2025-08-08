@@ -1,3 +1,534 @@
-<html>
-    <h1> hello word  foresbird BH2UBF</h1>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>forestbird space</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a12;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 10% 20%, rgba(25, 45, 35, 0.8) 0%, rgba(10, 10, 18, 1) 90%);
+        }
+
+        /* 动态LOGO样式 */
+        .dynamic-logo {
+            width: 100%;
+            max-width: 400px;
+            height: 180px;
+            background: linear-gradient(135deg, #0a1a20 0%, #121230 100%);
+            border: 2px solid #00aaff;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 170, 255, 0.4);
+            cursor: pointer;
+            margin: 20px auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .dynamic-logo:hover {
+            transform: scale(1.02);
+        }
+        
+        .pi-symbol {
+            position: absolute;
+            left: 30px;
+            top: 50px;
+            color: #bb88ff;
+            font-size: 64px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+            text-shadow: 0 0 15px rgba(187, 136, 255, 0.7);
+        }
+        
+        .logo-text {
+            position: absolute;
+            right: 30px;
+            top: 45px;
+            color: #00ccff;
+            font-size: 24px;
+            text-align: right;
+            line-height: 1.2;
+            text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+        }
+        
+        .logo-text span {
+            color: #ff88aa;
+            font-size: 32px;
+            display: block;
+            font-weight: 700;
+        }
+        
+        .domain {
+            position: absolute;
+            left: 0;
+            bottom: 25px;
+            width: 100%;
+            color: #00ffff;
+            font-size: 18px;
+            text-align: center;
+            animation: scroll 12s linear infinite;
+            white-space: nowrap;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, #1a4c2e, #0d3520);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 10;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            animation: fadeIn 1.5s ease-in-out;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        header p {
+            margin: 15px 0 0;
+            font-size: 1.3rem;
+            animation: fadeIn 2s ease-in-out;
+            opacity: 0.9;
+        }
+
+        /* 导航栏样式 */
+        nav {
+            background-color: rgba(25, 35, 45, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        nav a {
+            color: #b8e0c8;
+            text-decoration: none;
+            padding: 10px 22px;
+            margin: 5px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        nav a:hover {
+            background: rgba(76, 175, 80, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            border-color: #4CAF50;
+        }
+
+        /* 主体内容样式 */
+        .container {
+            padding: 30px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .profile, section {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 2.5s ease-in-out;
+            padding: 30px;
+            background: rgba(20, 30, 40, 0.6);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .profile h1 {
+            margin: 20px 0 15px;
+            font-size: 2.4rem;
+            color: #e0f0e0;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .profile p, section p {
+            font-size: 1.2rem;
+            color: #b0d0b0;
+            max-width: 700px;
+            margin: 0 auto 20px;
+            line-height: 1.8;
+        }
+
+        section h2 {
+            font-size: 2.2rem;
+            color: #4CAF50;
+            margin-bottom: 25px;
+            display: inline-block;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #4CAF50;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 作品集卡片样式 */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .portfolio-card {
+            background: rgba(30, 45, 60, 0.7);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 170, 255, 0.3);
+            border-color: #00aaff;
+        }
+
+        .portfolio-card h3 {
+            margin: 0 0 15px;
+            font-size: 1.4rem;
+            color: #4CAF50;
+            display: flex;
+            align-items: center;
+        }
+
+        .portfolio-card h3 i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .portfolio-card a {
+            display: inline-block;
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid #4CAF50;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .portfolio-card a:hover {
+            background: rgba(76, 175, 80, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            color: #fff;
+        }
+
+        /* 联系方式样式 */
+        .contact-info {
+            background: rgba(30, 45, 60, 0.7);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .contact-info p {
+            margin: 15px 0;
+            font-size: 1.1rem;
+            color: #d0e0d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-info i {
+            font-size: 1.3rem;
+            margin-right: 12px;
+            color: #4CAF50;
+            min-width: 30px;
+        }
+
+        .contact-info a {
+            color: #00ccff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: #00f7ff;
+            text-decoration: underline;
+            text-shadow: 0 0 8px rgba(0, 247, 255, 0.5);
+        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: rgba(15, 25, 35, 0.9);
+            color: #a0c0a0;
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 60px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+            font-size: 0.95rem;
+            border-top: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .dynamic-logo {
+                height: 150px;
+                max-width: 320px;
+            }
+            
+            .pi-symbol {
+                font-size: 48px;
+                top: 40px;
+                left: 20px;
+            }
+            
+            .logo-text {
+                font-size: 18px;
+                top: 35px;
+                right: 20px;
+            }
+            
+            .logo-text span {
+                font-size: 24px;
+            }
+            
+            .domain {
+                font-size: 14px;
+                bottom: 20px;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            header p {
+                font-size: 1.1rem;
+            }
+            
+            nav {
+                padding: 8px 0;
+            }
+            
+            nav a {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .profile h1, section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dynamic-logo {
+                height: 120px;
+                max-width: 280px;
+            }
+            
+            .pi-symbol {
+                font-size: 36px;
+                top: 30px;
+                left: 15px;
+            }
+            
+            .logo-text {
+                font-size: 14px;
+                top: 25px;
+                right: 15px;
+            }
+            
+            .logo-text span {
+                font-size: 18px;
+            }
+            
+            .domain {
+                font-size: 11px;
+                bottom: 15px;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            .profile h1 {
+                font-size: 1.6rem;
+            }
+            
+            .profile p, section p {
+                font-size: 1rem;
+            }
+            
+            section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 动态LOGO -->
+    <div class="dynamic-logo" onclick="window.open('https://3.1415926.xyz')">
+        <div class="pi-symbol">π</div>
+        <div class="logo-text">
+            <span>FORESTBIRD</span>
+            SPACE
+        </div>
+        <div class="domain">3.1415926.xyz • CLICK TO VISIT • 3.1415926.xyz • CLICK TO VISIT •</div>
+    </div>
+
+    <header>
+        <h1>forestbird space</h1>
+        <p>森林鸟 | forestbird | 业余无线电呼号: BH2UBF</p>
+    </header>
+
+    <nav>
+        <a href="#about"><i class="fas fa-user"></i> 关于我</a>
+        <a href="#portfolio"><i class="fas fa-briefcase"></i> 作品集</a>
+        <a href="#contact"><i class="fas fa-envelope"></i> 联系我</a>
+    </nav>
+
+    <div class="container">
+        <div class="profile">
+            <h1>forestbird</h1>
+        </div>
+
+        <section id="about">
+            <h2>关于我</h2>
+            <p>你好！我是森林鸟（forestbird），业余无线电呼号 BH2UBF。我是一名热爱编程和设计的Web开发者，擅长使用HTML、CSS、JavaScript等技术来构建美观且功能强大的网站。我始终追求创新和卓越，致力于为用户提供最佳体验。</p>
+            <p>在业余时间，我热爱探索新技术、参与开源项目，并通过业余无线电与全球的无线电爱好者交流。我相信技术的价值在于创造和连接，这也是我不断前行的动力。</p>
+        </section>
+
+        <section id="portfolio">
+            <h2>作品集</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-card">
+                    <h3><i class="fas fa-blog"></i> 个人博客系统</h3>
+                    <p>基于Markdown的个人博客系统，简洁高效，支持代码高亮和文章分类管理。</p>
+                    <a href="#">查看项目</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3><i class="fas fa-dice"></i> 双色球开奖系统</h3>
+                    <p>模拟中国福利彩票双色球开奖系统，包含历史数据分析和开奖号码生成功能。</p>
+                    <a href="./Double-Color-Ball-lottery-system.html">访问系统</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3><i class="fas fa-dice-three"></i> 福彩3D抽奖模拟</h3>
+                    <p>中国福利彩票3D游戏模拟系统，提供随机选号和开奖模拟功能。</p>
+                    <a href="./404.html">体验模拟</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3><i class="fab fa-github"></i> GitHub 主页</h3>
+                    <p>访问我的GitHub主页，查看开源项目和代码仓库，参与协作开发。</p>
+                    <a href="https://github.com/forestbird/forestbird.github.io/" target="_blank">访问主页</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3><i class="fas fa-globe"></i> 3.1415926.xyz</h3>
+                    <p>个人专属域名网站，展示个人作品和技术博客，分享知识和经验。</p>
+                    <a href="https://3.1415926.xyz" target="_blank">访问网站</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>联系我</h2>
+            <div class="contact-info">
+                <p><i class="fas fa-envelope"></i> Email: <a href="mailto:hi@zhaoweifeng.cn">hi@zhaoweifeng.cn</a></p>
+                <p><i class="fab fa-weixin"></i> 微信: <a href="#">bh2ubf</a></p>
+                <p><i class="fab fa-github"></i> GitHub: <a href="https://github.com/forestbird" target="_blank">forestbird</a></p>
+                <p><i class="fas fa-signal"></i> 业余无线电呼号: BH2UBF</p>
+                <p style="margin-top: 20px;">欢迎通过微信、邮件或GitHub与我联系！</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; <span id="currentYear"></span> forestbird (森林鸟). 保留所有权利.</p>
+        <p>最后更新: <span id="lastUpdated"></span></p>
+        <p>DeepSeek 见正奇迹时刻 | 探索无限可能</p>
+    </footer>
+
+    <script>
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+        
+        // 设置最后更新时间
+        const lastUpdated = new Date();
+        document.getElementById("lastUpdated").textContent = lastUpdated.toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
 </html>
