@@ -2,10 +2,11 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>林鸟斋 · 文章内容</title>
+  <title>森林鸟 · bird.work · 文章阅读</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <meta name="description" content="森林鸟（forestbird，赵伟峰）博客文章阅读页，域名 bird.work | 3.1415926.xyz | zhaoweifeng.cn">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     :root {
       --primary-color: #b41c1c;
@@ -67,11 +68,12 @@
       padding: 39px 30px 32px 30px;
       min-height: 220px;
       word-break: break-word;
+      position: relative;
     }
     h1.title {
       text-align: center;
-      font-size: 2.2rem;
-      margin: 0 0 22px 0;
+      font-size: 2.15rem;
+      margin: 0 0 18px 0;
       color: var(--primary-color);
       font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
       font-weight: 700;
@@ -80,7 +82,7 @@
     }
     .back {
       display: inline-block;
-      margin: 14px 0 0 0;
+      margin: 20px 0 0 0;
       text-decoration: none;
       color: var(--primary-color);
       font-weight: 600;
@@ -91,10 +93,20 @@
       background: rgba(180,28,28,0.06);
       transition: background 0.2s, color 0.2s;
       font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
+      position: absolute;
+      left: 30px;
+      top: 30px;
     }
     .back:hover {
       background: var(--primary-color);
       color: #fff;
+    }
+    @media (max-width: 800px) {
+      .container { padding: 20px 6vw 18px 6vw; }
+      h1.title { font-size: 1.3rem; }
+      .back { left: 6vw; top: 20px; font-size: 0.97rem; }
+      .cloud-header { height: 34px;}
+      .cloud-svg{ width: 74px;height:19px;}
     }
     .meta {
       font-size: 1rem;
@@ -171,6 +183,22 @@
       max-width: 100%;
       border-radius: 7px;
       margin: 10px 0;
+      box-shadow: 0 2px 14px #e4c7b244;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    /* 新增“文章结束”中国风分隔 */
+    .end-divider {
+      text-align: center;
+      margin: 36px 0 18px 0;
+      opacity: 0.6;
+    }
+    .end-divider svg {
+      width: 60px;
+      height: 20px;
+      vertical-align: middle;
+      opacity: 0.82;
     }
     .footer {
       margin-top: 38px;
@@ -184,6 +212,27 @@
       background: linear-gradient(90deg,#fff7e7 60%,#fbeee7 100%);
       border-top: 2.5px dashed #c09756;
       box-shadow: 0 -8px 40px -14px #eabf92;
+    }
+    .footer .domains {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin: 5px 0 0 0;
+      font-size: 0.99em;
+      flex-wrap: wrap;
+    }
+    .footer .domain {
+      color: #b41c1c;
+      background: #efe8d7;
+      border-radius: 7px;
+      padding: 2px 10px;
+      font-family: 'ZCOOL KuaiLe','Noto Serif SC',serif;
+      font-weight: 600;
+    }
+    .footer a {
+      color: #b41c1c;
+      font-weight: 600;
+      text-decoration: underline dotted #c09756;
     }
     .close-page-btn-wrapper {
       width: 100%;
@@ -210,29 +259,38 @@
     }
     @media (max-width: 800px) {
       .container { padding: 20px 6vw 18px 6vw; }
-      h1.title { font-size: 1.3rem; }
+      h1.title { font-size: 1.12rem; }
       .close-page-btn { font-size: 1rem; padding: 9px 18px;}
       .cloud-header { height: 34px;}
       .cloud-svg{ width: 74px;height:19px;}
+      .footer .domains { gap: 7px;}
     }
   </style>
 </head>
 <body>
-  <!-- 祥云装饰 -->
   <div class="cloud-header">
     <svg class="cloud-svg" viewBox="0 0 128 42" fill="none"><path d="M2 29c4.5-13.5 20-17.5 28-6.5 11 16 24-3 38 1s11.5 20.5 31 14c19.5-6.5 15-36.5-10-36.5C56.5 1 49.5 19 28 17 11 13 2 29 2 29Z" fill="#E8DBB9" fill-opacity=".79"/><path d="M50 17c2-6 10-7 14-3" stroke="#b41c1c" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="96" cy="18" r="5" fill="#e9c87a" fill-opacity=".49"/></svg>
   </div>
-  <a href="index.html" class="back">← 返回首页</a>
   <div class="container">
+    <a href="index.html" class="back" title="返回首页">← 返回</a>
     <h1 id="title" class="title"></h1>
     <div id="meta" class="meta"></div>
     <div id="content"></div>
+    <div class="end-divider" id="end-divider" style="display:none;">
+      <svg viewBox="0 0 60 20" fill="none"><path d="M5 10 Q20 2 30 10 T55 10" stroke="#b41c1c" stroke-width="2" fill="none"/><circle cx="30" cy="10" r="2.8" fill="#c09756"/></svg>
+      <div style="font-size:0.98em;color:#b78950;margin-top:4px;">—— 文章结束 ——</div>
+    </div>
     <div id="error" style="color: #e53935;"></div>
   </div>
   <div class="footer">
-    © 2025 林鸟斋 · forestbird |
-    <a href="rss.xml" target="_blank" style="color:#b41c1c;font-weight:600;text-decoration:underline dotted #c09756;">RSS订阅</a>
-    | Powered by GitHub Pages
+    © 2025 森林鸟（forestbird / 赵伟峰）
+    <div class="domains">
+      <span class="domain">bird.work</span>
+      <span class="domain">3.1415926.xyz</span>
+      <span class="domain">zhaoweifeng.cn</span>
+    </div>
+    <a href="rss.html" target="_blank">RSS订阅</a>
+    | Powered by bird.work
     <br>
     <span style="font-size:1.08em;color:#c09756;margin-top:6px;letter-spacing:1.7px;">愿君安康，琴茶书画</span>
   </div>
@@ -240,6 +298,7 @@
     <button class="close-page-btn" onclick="closePage()">关闭本页</button>
   </div>
   <script>
+    // 解析 YAML frontmatter
     function parseYAMLFrontmatter(md) {
       const match = md.match(/^---\s*\n([\s\S]+?)\n---/);
       if (!match) return {};
@@ -271,6 +330,7 @@
       }
       return null;
     }
+    // 加载并渲染
     const mdUrl = getQueryVariable('url');
     if (mdUrl) {
       fetch(mdUrl)
@@ -279,7 +339,7 @@
           const fm = parseYAMLFrontmatter(md);
           const title = fm.title || '';
           document.getElementById('title').textContent = title;
-          document.title = (title ? (title + " | ") : "") + "林鸟斋";
+          document.title = (title ? (title + " | ") : "") + "森林鸟 · bird.work";
           let metaHtml = '';
           if (fm.date) metaHtml += `<strong>日期</strong> ${fm.date}`;
           if (fm.author) metaHtml += `<strong>作者</strong> ${fm.author}`;
@@ -293,7 +353,8 @@
           }
           document.getElementById('meta').innerHTML = metaHtml;
           const body = md.replace(/^---\s*\n[\s\S]+?\n---/, '').replace(/^\s+/, '');
-          document.getElementById('content').innerHTML = marked.parse(body);
+          document.getElementById('content').innerHTML = marked.parse(body || '*（暂无内容）*');
+          document.getElementById('end-divider').style.display = '';
         })
         .catch(err => {
           document.getElementById('error').textContent = '无法加载内容: ' + err.message;
