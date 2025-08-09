@@ -12,6 +12,8 @@
       --text: #23242d;
       --card-bg: #fff;
       --card-shadow: 0 4px 24px 0 rgba(60,60,80,0.06);
+      --tag-bg: #e3e6f6;
+      --tag: #3f51b5;
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -19,6 +21,8 @@
         --text: #f2f2f2;
         --card-bg: #23242d;
         --card-shadow: 0 2px 12px 0 rgba(0,0,0,0.2);
+        --tag-bg: #263159;
+        --tag: #b0c5ff;
       }
     }
     body {
@@ -68,6 +72,43 @@
       background: var(--primary-color);
       color: #fff;
     }
+    .meta {
+      font-size: 1rem;
+      color: #7a869a;
+      margin: 11px 0 19px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+      justify-content: center;
+    }
+    .meta strong {
+      color: var(--primary-color);
+      font-weight: 500;
+      margin-right: 3px;
+      letter-spacing: 0.5px;
+    }
+    .tags, .categories {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .tag, .category {
+      background: var(--tag-bg);
+      color: var(--tag);
+      border-radius: 7px;
+      padding: 2px 10px 2px 10px;
+      font-size: 0.93rem;
+      font-weight: 400;
+      margin-right: 2px;
+      letter-spacing: 0.5px;
+      border: 1px solid #e7eaf0;
+    }
+    .category {
+      background: #fceabb;
+      color: #e6b800;
+      border: 1px solid #fff2c5;
+    }
     #content :is(h2,h3,h4) {
       color: var(--primary-color);
       margin-top: 1.8em;
@@ -112,10 +153,33 @@
   <a href="index.html" class="back">← 返回首页</a>
   <div class="container">
     <h1 id="title" class="title"></h1>
+    <div id="meta" class="meta"></div>
     <div id="content"></div>
     <div id="error" style="color: #e53935;"></div>
   </div>
   <script>
+    // 解析 YAML 前置数据
+    function parseYAMLFrontmatter(md) {
+      const match = md.match(/^---\s*\n([\s\S]+?)\n---/);
+      if (!match) return {};
+      const yaml = match[1];
+      const result = {};
+      const lines = yaml.split('\n');
+      lines.forEach(line => {
+        const idx = line.indexOf(':');
+        if (idx === -1) return;
+        const key = line.slice(0, idx).trim();
+        let value = line.slice(idx + 1).trim();
+        if (value.startsWith('[') && value.endsWith(']')) {
+          value = value.slice(1, -1).split(',').map(v => v.trim()).filter(Boolean);
+        } else if (value.includes(',') && (key === 'categories' || key === 'tags')) {
+          value = value.split(',').map(v => v.trim()).filter(Boolean);
+        }
+        result[key] = value;
+      });
+      return result;
+    }
+
     function getQueryVariable(variable) {
       const query = window.location.search.substring(1);
       const vars = query.split('&');
@@ -128,16 +192,34 @@
       return null;
     }
     const mdUrl = getQueryVariable('url');
-    const title = getQueryVariable('title');
-    if (title) {
-      document.getElementById('title').textContent = title;
-      document.title = title + " | forestbird";
-    }
+    // title参数已不再直接用，统一用 md 文件里的 title 字段
     if (mdUrl) {
       fetch(mdUrl)
         .then(res => res.text())
         .then(md => {
-          document.getElementById('content').innerHTML = marked.parse(md);
+          // 解析YAML前置数据
+          const fm = parseYAMLFrontmatter(md);
+          // 标题
+          const title = fm.title || '';
+          document.getElementById('title').textContent = title;
+          document.title = (title ? (title + " | ") : "") + "forestbird";
+          // meta栏
+          let metaHtml = '';
+          if (fm.date) metaHtml += `<strong>日期</strong> ${fm.date}`;
+          if (fm.author) metaHtml += `<strong>作者</strong> ${fm.author}`;
+          if (fm.categories && fm.categories.length) {
+            let cats = Array.isArray(fm.categories) ? fm.categories : [fm.categories];
+            metaHtml += `<strong>分类</strong> <span class="categories">${cats.map(cat => `<span class="category">${cat}</span>`).join('')}</span>`;
+          }
+          if (fm.tags && fm.tags.length) {
+            let tags = Array.isArray(fm.tags) ? fm.tags : [fm.tags];
+            metaHtml += `<strong>标签</strong> <span class="tags">${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</span>`;
+          }
+          document.getElementById('meta').innerHTML = metaHtml;
+          // 正文
+          // 去掉 yaml 区块
+          const body = md.replace(/^---\s*\n[\s\S]+?\n---/, '').replace(/^\s+/, '');
+          document.getElementById('content').innerHTML = marked.parse(body);
         })
         .catch(err => {
           document.getElementById('error').textContent = '无法加载内容: ' + err.message;
