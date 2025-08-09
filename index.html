@@ -13,10 +13,10 @@
   <script>
     const repo = 'forestbird/forestbird.github.io'; // 你的仓库名
     const branch = 'main'; // 如果不是 main，请改成 master
-    const dir = '_post';
+    const dir = '_posts';
     const api = `https://api.github.com/repos/${repo}/contents/${dir}?ref=${branch}`;
 
-    // 获取 _post 下的 md 文件列表
+    // 获取 _posts 下的 md 文件列表
     fetch(api)
       .then(res => res.json())
       .then(files => {
