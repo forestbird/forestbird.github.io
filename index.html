@@ -5,6 +5,7 @@
   <title>文章索引 | forestbird</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    /* ...（样式同你之前的高大尚样式，可直接复用）... */
     :root {
       --primary-color: #3f51b5;
       --bg: #fafbfc;
@@ -152,11 +153,12 @@
   <div id="error"></div>
   <div class="footer">© 2025 forestbird | Powered by GitHub Pages</div>
   <script>
+    // 动态降级实现
+    const postsJsonUrl = 'posts.json';
     const repo = 'forestbird/forestbird.github.io';
     const branch = 'main';
     const dir = '_posts';
     const api = `https://api.github.com/repos/${repo}/contents/${dir}?ref=${branch}`;
-
     // 解析 YAML 前置数据
     function parseYAMLFrontmatter(md) {
       const match = md.match(/^---\s*\n([\s\S]+?)\n---/);
@@ -179,90 +181,94 @@
       });
       return result;
     }
-
-    fetch(api)
+    function renderPosts(posts) {
+      const list = document.getElementById('post-list');
+      list.innerHTML = '';
+      if (!Array.isArray(posts) || posts.length === 0) {
+        list.textContent = '没有文章。';
+        return;
+      }
+      posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      posts.forEach(post => {
+        const a = document.createElement('a');
+        a.className = "card";
+        const md_url = post.url
+          ? post.url
+          : `https://raw.githubusercontent.com/forestbird/forestbird.github.io/main/_posts/${encodeURIComponent(post.filename)}`;
+        a.href = `md_viewer.html?url=${encodeURIComponent(md_url)}&title=${encodeURIComponent(post.title)}`;
+        a.target = '_blank';
+        const titleEl = document.createElement('div');
+        titleEl.className = 'title';
+        titleEl.textContent = post.title;
+        const metaEl = document.createElement('div');
+        metaEl.className = 'meta';
+        if (post.date) metaEl.innerHTML += `<strong>日期</strong> ${post.date}`;
+        if (post.author) metaEl.innerHTML += `<strong>作者</strong> ${post.author}`;
+        if (post.categories && post.categories.length) {
+          let cats = Array.isArray(post.categories) ? post.categories : [post.categories];
+          metaEl.innerHTML += `<strong>分类</strong> <span class="categories">${cats.map(cat => `<span class="category">${cat}</span>`).join('')}</span>`;
+        }
+        if (post.tags && post.tags.length) {
+          let tags = Array.isArray(post.tags) ? post.tags : [post.tags];
+          metaEl.innerHTML += `<strong>标签</strong> <span class="tags">${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</span>`;
+        }
+        a.appendChild(titleEl);
+        a.appendChild(metaEl);
+        list.appendChild(a);
+      });
+    }
+    // 优先加载 posts.json，失败自动降级
+    fetch(postsJsonUrl)
       .then(res => {
-        if (!res.ok) throw new Error('API 请求失败: ' + res.statusText);
+        if (!res.ok) throw new Error('not found');
         return res.json();
       })
-      .then(async files => {
-        if (!Array.isArray(files)) throw new Error('API 响应不是文件数组');
-        const mdFiles = files.filter(f => f.name.endsWith('.md'));
-        const list = document.getElementById('post-list');
-        if (mdFiles.length === 0) {
-          list.textContent = '没有文章。';
-          return;
-        }
-
-        // 并发加载所有md文件的元数据
-        const posts = await Promise.all(mdFiles.map(async file => {
-          try {
-            const res = await fetch(file.download_url);
-            const text = await res.text();
-            const fm = parseYAMLFrontmatter(text);
-            return {
-              title: fm.title || file.name.replace(/\.md$/, ''),
-              date: fm.date || '',
-              author: fm.author || '',
-              categories: fm.categories || [],
-              tags: fm.tags || [],
-              url: file.download_url,
-              file: file
+      .then(renderPosts)
+      .catch(() => {
+        // 降级方案：动态抓取每个md
+        fetch(api)
+          .then(res => {
+            if (!res.ok) throw new Error('API 请求失败: ' + res.statusText);
+            return res.json();
+          })
+          .then(async files => {
+            if (!Array.isArray(files)) throw new Error('API 响应不是文件数组');
+            const mdFiles = files.filter(f => f.name.endsWith('.md'));
+            if (mdFiles.length === 0) {
+              document.getElementById('post-list').textContent = '没有文章。';
+              return;
             }
-          } catch {
-            return {
-              title: file.name.replace(/\.md$/, ''),
-              date: '',
-              author: '',
-              categories: [],
-              tags: [],
-              url: file.download_url,
-              file: file
-            }
-          }
-        }));
-
-        // 按 date 或文件名倒序
-        posts.sort((a, b) => {
-          if (a.date && b.date) {
-            return b.date.localeCompare(a.date);
-          }
-          return b.file.name.localeCompare(a.file.name);
-        });
-
-        posts.forEach(post => {
-          const a = document.createElement('a');
-          a.className = "card";
-          a.href = `md_viewer.html?url=${encodeURIComponent(post.url)}&title=${encodeURIComponent(post.title)}`;
-          a.target = '_blank';
-
-          // 文章标题
-          const titleEl = document.createElement('div');
-          titleEl.className = 'title';
-          titleEl.textContent = post.title;
-
-          // 元信息行
-          const metaEl = document.createElement('div');
-          metaEl.className = 'meta';
-          if (post.date) metaEl.innerHTML += `<strong>日期</strong> ${post.date}`;
-          if (post.author) metaEl.innerHTML += `<strong>作者</strong> ${post.author}`;
-          if (post.categories && post.categories.length) {
-            let cats = Array.isArray(post.categories) ? post.categories : [post.categories];
-            metaEl.innerHTML += `<strong>分类</strong> <span class="categories">${cats.map(cat => `<span class="category">${cat}</span>`).join('')}</span>`;
-          }
-          if (post.tags && post.tags.length) {
-            let tags = Array.isArray(post.tags) ? post.tags : [post.tags];
-            metaEl.innerHTML += `<strong>标签</strong> <span class="tags">${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</span>`;
-          }
-
-          a.appendChild(titleEl);
-          a.appendChild(metaEl);
-
-          list.appendChild(a);
-        });
-      })
-      .catch(err => {
-        document.getElementById('error').textContent = err.message;
+            const posts = await Promise.all(mdFiles.map(async file => {
+              try {
+                const res = await fetch(file.download_url);
+                const text = await res.text();
+                const fm = parseYAMLFrontmatter(text);
+                return {
+                  title: fm.title || file.name.replace(/\.md$/, ''),
+                  date: fm.date || '',
+                  author: fm.author || '',
+                  categories: fm.categories || [],
+                  tags: fm.tags || [],
+                  url: file.download_url,
+                  filename: file.name
+                }
+              } catch {
+                return {
+                  title: file.name.replace(/\.md$/, ''),
+                  date: '',
+                  author: '',
+                  categories: [],
+                  tags: [],
+                  url: file.download_url,
+                  filename: file.name
+                }
+              }
+            }));
+            renderPosts(posts);
+          })
+          .catch(err => {
+            document.getElementById('error').textContent = "无法加载文章列表：" + err.message;
+          });
       });
   </script>
 </body>
