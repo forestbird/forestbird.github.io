@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Forestbird's Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Google Fonts: Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -55,8 +54,6 @@
       font-weight: 700;
       color: var(--primary);
       font-family: inherit;
-      text-shadow: 0 2px 8px rgba(100,120,200,0.08);
-      user-select: none;
     }
     #post-list {
       width: 98%;
@@ -206,20 +203,21 @@
   <div id="post-list"></div>
   <div id="pagination"></div>
   <div id="error"></div>
-  <div class="footer">© 2025 forestbird | Powered by GitHub Pages</div>
+  <div class="footer">
+    © 2025 forestbird |
+    <a href="rss.xml" target="_blank" style="color:#3e63dd;font-weight:600;">RSS订阅</a>
+    | Powered by GitHub Pages
+  </div>
   <script>
-    // 配置
     const POSTS_PER_PAGE = 10;
     const postsJsonUrl = 'posts.json';
     const repo = 'forestbird/forestbird.github.io';
     const branch = 'main';
     const dir = '_posts';
     const api = `https://api.github.com/repos/${repo}/contents/${dir}?ref=${branch}`;
-    // DOM
     const postList = document.getElementById('post-list');
     const paginationDiv = document.getElementById('pagination');
     const errorDiv = document.getElementById('error');
-    // Loading 动画
     function showLoading() {
       postList.innerHTML = `
         <div class="loading-container">
@@ -227,7 +225,6 @@
         </div>`;
       paginationDiv.innerHTML = '';
     }
-    // 渲染分页按钮
     function renderPagination(total, current, onPage) {
       if (total <= 1) { paginationDiv.innerHTML = ''; return;}
       let html = '';
@@ -239,7 +236,6 @@
         btn.onclick = () => { if (btn.classList.contains('active')) return; onPage(Number(btn.dataset.page)); }
       });
     }
-    // 渲染文章列表
     function renderPosts(posts, page = 1) {
       const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
       const start = (page - 1) * POSTS_PER_PAGE;
@@ -279,7 +275,6 @@
       });
       renderPagination(totalPages, page, p => renderPosts(posts, p));
     }
-    // YAML 解析
     function parseYAMLFrontmatter(md) {
       const match = md.match(/^---\s*\n([\s\S]+?)\n---/);
       if (!match) return {};
@@ -300,7 +295,6 @@
       });
       return result;
     }
-    // 加载 posts.json，失败自动降级
     async function init() {
       showLoading();
       try {
