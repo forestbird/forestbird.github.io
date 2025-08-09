@@ -5,24 +5,25 @@
   <title>文章内容</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #3f51b5;
-      --bg: #fafbfc;
+      --primary-color: #3e63dd;
+      --bg: #f6f8fa;
       --text: #23242d;
       --card-bg: #fff;
       --card-shadow: 0 4px 24px 0 rgba(60,60,80,0.06);
       --tag-bg: #e3e6f6;
-      --tag: #3f51b5;
+      --tag: #3e63dd;
     }
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #181920;
-        --text: #f2f2f2;
-        --card-bg: #23242d;
+        --text: #e2e5ea;
+        --card-bg: #232842;
         --card-shadow: 0 2px 12px 0 rgba(0,0,0,0.2);
-        --tag-bg: #263159;
-        --tag: #b0c5ff;
+        --tag-bg: #223269;
+        --tag: #a9c1fa;
       }
     }
     body {
@@ -30,7 +31,7 @@
       padding: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+      font-family: 'Inter',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -65,7 +66,7 @@
       letter-spacing: 1px;
       border-radius: 8px;
       padding: 7px 18px;
-      background: rgba(63,81,181,0.06);
+      background: rgba(62,99,221,0.06);
       transition: background 0.2s, color 0.2s;
     }
     .back:hover {
@@ -105,8 +106,8 @@
       border: 1px solid #e7eaf0;
     }
     .category {
-      background: #fceabb;
-      color: #e6b800;
+      background: #fff6d7;
+      color: #d2a100;
       border: 1px solid #fff2c5;
     }
     #content :is(h2,h3,h4) {
@@ -134,7 +135,7 @@
       border-left: 4px solid var(--primary-color);
       margin: 1.5em 0;
       padding: 0.7em 1.5em;
-      background: rgba(63,81,181,0.05);
+      background: rgba(62,99,221,0.05);
       color: #555;
       border-radius: 8px;
     }
@@ -142,6 +143,15 @@
       max-width: 100%;
       border-radius: 7px;
       margin: 10px 0;
+    }
+    .footer {
+      margin-top: 38px;
+      color: #bbb;
+      font-size: 0.97rem;
+      text-align: center;
+      padding: 24px 0 18px 0;
+      letter-spacing: 1px;
+      user-select: none;
     }
     @media (max-width: 800px) {
       .container { padding: 20px 6vw 18px 6vw; }
@@ -157,8 +167,12 @@
     <div id="content"></div>
     <div id="error" style="color: #e53935;"></div>
   </div>
+  <div class="footer">
+    © 2025 forestbird |
+    <a href="rss.xml" target="_blank" style="color:#3e63dd;font-weight:600;">RSS订阅</a>
+    | Powered by GitHub Pages
+  </div>
   <script>
-    // 解析 YAML 前置数据
     function parseYAMLFrontmatter(md) {
       const match = md.match(/^---\s*\n([\s\S]+?)\n---/);
       if (!match) return {};
@@ -179,7 +193,6 @@
       });
       return result;
     }
-
     function getQueryVariable(variable) {
       const query = window.location.search.substring(1);
       const vars = query.split('&');
@@ -192,18 +205,14 @@
       return null;
     }
     const mdUrl = getQueryVariable('url');
-    // title参数已不再直接用，统一用 md 文件里的 title 字段
     if (mdUrl) {
       fetch(mdUrl)
         .then(res => res.text())
         .then(md => {
-          // 解析YAML前置数据
           const fm = parseYAMLFrontmatter(md);
-          // 标题
           const title = fm.title || '';
           document.getElementById('title').textContent = title;
           document.title = (title ? (title + " | ") : "") + "forestbird";
-          // meta栏
           let metaHtml = '';
           if (fm.date) metaHtml += `<strong>日期</strong> ${fm.date}`;
           if (fm.author) metaHtml += `<strong>作者</strong> ${fm.author}`;
@@ -216,8 +225,6 @@
             metaHtml += `<strong>标签</strong> <span class="tags">${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</span>`;
           }
           document.getElementById('meta').innerHTML = metaHtml;
-          // 正文
-          // 去掉 yaml 区块
           const body = md.replace(/^---\s*\n[\s\S]+?\n---/, '').replace(/^\s+/, '');
           document.getElementById('content').innerHTML = marked.parse(body);
         })
