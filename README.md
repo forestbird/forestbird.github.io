@@ -20,7 +20,7 @@
 
 ### 现在是2025年8月9日晚
 
-这些代码的演示放在了  forestbird.github.io 他会跳转到 https://zhaoweifeng.cn ，其它几个域名如：https://bird.work http://hon.party  https://3.1415926.xyz 使用了 Cloudflare CDN 网站加速，不能直接读取到这个BLOG，具体原因DEEPSEEK也跟我说了，我也没耐心去整了，这个东西现在也是免费的，所以这3个域名单独放了个首页是用deepseek做的，这样使得网站有些乱不是完美。
+这些代码的演示放在了  forestbird.github.io 他会跳转到 https://zhaoweifeng.cn ，其它几个域名如：https://bird.work https://hon.party  https://3.1415926.xyz 使用了 Cloudflare CDN 网站加速，不能直接读取到这个BLOG，具体原因DEEPSEEK也跟我说了，我也没耐心去整了，这个东西现在也是免费的，所以这3个域名单独放了个首页是用deepseek做的，这样使得网站有些乱不是完美。
 
 #### 本人上了年纪，已步入中老年43岁的我步入了悲惨的人生，父母年岁大，孩子还小。
 
