@@ -1,43 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>生成 RSS</title>
+  <title>生成 RSS - 森林鸟</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Noto Serif SC', serif, Arial; background: #f9f5e6; color: #333; padding: 30px;}
+    h1 { color: #b41c1c; font-size: 1.5em;}
+    button {
+      background: linear-gradient(90deg,#b41c1c 60%,#c09756 100%);
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      padding: 11px 38px;
+      font-size: 1.13rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 10px #e4bfa2;
+      margin: 8px 0 18px 0;
+      letter-spacing: 1.2px;
+    }
+    button:hover { background: linear-gradient(90deg,#c09756 20%,#b41c1c 100%);}
+    pre { background: #fffdfa; border-radius:10px; padding: 15px; max-width: 90vw; overflow-x: auto;}
+    .tips { color:#888; margin-bottom:18px;}
+    .err { color:#e53935; margin:10px 0;}
+    .ok { color:#388e3c; margin:10px 0;}
+  </style>
 </head>
 <body>
+  <h1>生成 &amp; 下载 RSS</h1>
+  <div class="tips">本工具将自动读取 <b>posts.json</b> 生成标准 <b>rss.xml</b> 文件，适合 GitHub Pages 静态站点。</div>
   <button onclick="makeRss()">生成/下载RSS</button>
+  <span id="msg"></span>
   <pre id="rss"></pre>
   <script>
     async function makeRss() {
-      const res = await fetch('posts.json');
-      const posts = await res.json();
+      const msg = document.getElementById('msg');
+      msg.textContent = '';
+      let posts = [];
+      try {
+        const res = await fetch('posts.json', {cache:'no-store'});
+        if (!res.ok) throw new Error('未找到 posts.json');
+        posts = await res.json();
+      } catch(e) {
+        msg.innerHTML = '<span class="err">无法加载 posts.json：'+e.message+'</span>';
+        return;
+      }
+      if (!Array.isArray(posts) || posts.length===0) {
+        msg.innerHTML = '<span class="err">posts.json 内容为空或格式不正确</span>';
+        return;
+      }
+      // 排序新到旧
+      posts.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
       let items = posts.map(post => `
-        <item>
-          <title>${post.title}</title>
-          <link>https://forestbird.github.io/md_viewer.html?url=${encodeURIComponent(post.url||('_posts/'+post.filename))}</link>
-          <pubDate>${post.date}</pubDate>
-          <description><![CDATA[]]></description>
-          <guid>https://forestbird.github.io/md_viewer.html?url=${encodeURIComponent(post.url||('_posts/'+post.filename))}</guid>
-        </item>
-      `).join('\n');
+    <item>
+      <title><![CDATA[${post.title||''}]]></title>
+      <link>https://bird.work/md_viewer.html?url=${encodeURIComponent(post.url||('_posts/'+post.filename))}</link>
+      <pubDate>${(post.date||'')}</pubDate>
+      <description><![CDATA[]]></description>
+      <guid>https://bird.work/md_viewer.html?url=${encodeURIComponent(post.url||('_posts/'+post.filename))}</guid>
+    </item>
+  `).join('\n');
       let xml = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
 <channel>
-<title>林鸟斋 · Forestbird's Blog</title>
-<link>https://forestbird.github.io/</link>
-<description>林鸟斋的技术与生活随笔</description>
-<language>zh-CN</language>
-<lastBuildDate>${new Date().toISOString()}</lastBuildDate>
+  <title>森林鸟 · bird.work</title>
+  <link>https://bird.work/</link>
+  <description>森林鸟（forestbird，赵伟峰）的博客</description>
+  <language>zh-CN</language>
+  <lastBuildDate>${new Date().toISOString()}</lastBuildDate>
 ${items}
 </channel>
 </rss>`;
       document.getElementById('rss').textContent = xml;
       // 自动下载
-      let blob = new Blob([xml], {type:"application/xml"});
-      let a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'rss.xml';
-      a.click();
+      try {
+        let blob = new Blob([xml], {type:"application/xml"});
+        let a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'rss.xml';
+        document.body.appendChild(a);  // 必须加到DOM
+        a.click();
+        setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1200);
+        msg.innerHTML = '<span class="ok">已生成并自动下载文件。如果未下载可手动复制下方内容保存为 rss.xml。</span>';
+      } catch(e) {
+        msg.innerHTML = '<span class="err">自动下载失败，可手动复制下方内容保存为 rss.xml。</span>';
+      }
     }
   </script>
 </body>
