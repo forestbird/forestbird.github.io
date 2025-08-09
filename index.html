@@ -12,24 +12,32 @@
   <div id="md-content"></div>
   <div id="error" style="color: red;"></div>
   <script>
-    const repo = 'forestbird/forestbird.github.io'; // 你的仓库名
-    const branch = 'main'; // 如果你的主分支不是 main，请改为 master
-    const dir = '_posts';   // 目录改为 _posts
+    const repo = 'forestbird/forestbird.github.io';
+    const branch = 'main'; // 如为 master，请改为 master
+    const dir = '_posts';
     const api = `https://api.github.com/repos/${repo}/contents/${dir}?ref=${branch}`;
+
+    function loadMd(url) {
+      fetch(url)
+        .then(res => {
+          if (!res.ok) throw new Error('无法加载日志内容: ' + res.statusText);
+          return res.text();
+        })
+        .then(md => {
+          document.getElementById('md-content').innerHTML = marked.parse(md);
+        })
+        .catch(err => {
+          document.getElementById('md-content').textContent = err.message;
+        });
+    }
 
     fetch(api)
       .then(res => {
-        if (!res.ok) {
-          document.getElementById('error').textContent = `API 请求失败: ${res.status} ${res.statusText}`;
-          throw new Error(res.statusText);
-        }
-        return res.json()
+        if (!res.ok) throw new Error(`API 请求失败: ${res.status} ${res.statusText}`);
+        return res.json();
       })
       .then(files => {
-        if (!Array.isArray(files)) {
-          document.getElementById('error').textContent = 'API 响应不是文件数组，可能目录不存在或拼写错误。';
-          return;
-        }
+        if (!Array.isArray(files)) throw new Error('API 响应不是文件数组，可能目录不存在或拼写错误。');
         const mdFiles = files
           .filter(f => f.name.endsWith('.md'))
           .sort((a, b) => a.name.localeCompare(b.name));
@@ -38,30 +46,29 @@
           list.textContent = '没有找到任何 .md 日志文件。';
           return;
         }
-        mdFiles.forEach(file => {
+        mdFiles.forEach((file, idx) => {
           const a = document.createElement('a');
           a.href = '#';
           a.textContent = file.name;
-          a.onclick = () => { loadMd(file.download_url); return false; };
+          a.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadMd(file.download_url);
+            // 高亮当前选中
+            [...list.children].forEach(el => el.style.fontWeight = 'normal');
+            a.style.fontWeight = 'bold';
+          });
           list.appendChild(a);
           list.appendChild(document.createElement('br'));
+          // 默认加载最新
+          if (idx === mdFiles.length - 1) {
+            loadMd(file.download_url);
+            a.style.fontWeight = 'bold';
+          }
         });
-        loadMd(mdFiles[mdFiles.length - 1].download_url); // 默认显示最新
       })
       .catch(err => {
         document.getElementById('error').textContent = '无法获取日志列表: ' + err.message;
       });
-
-    function loadMd(url) {
-      fetch(url)
-        .then(res => res.text())
-        .then(md => {
-          document.getElementById('md-content').innerHTML = marked.parse(md);
-        })
-        .catch(err => {
-          document.getElementById('md-content').textContent = '无法加载日志内容: ' + err.message;
-        });
-    }
   </script>
 </body>
 </html>
