@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>文章内容</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <h1 id="title"></h1>
+  <hr>
+  <div id="content"></div>
+  <script>
+    // 获取 URL 参数
+    function getQueryVariable(variable) {
+      const query = window.location.search.substring(1);
+      const vars = query.split('&');
+      for (let i = 0; i < vars.length; i++) {
+        const pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) === variable) {
+          return decodeURIComponent(pair[1]);
+        }
+      }
+      return null;
+    }
+    const mdUrl = getQueryVariable('url');
+    const title = getQueryVariable('title');
+    if (title) {
+      document.getElementById('title').textContent = title;
+    }
+    if (mdUrl) {
+      fetch(mdUrl)
+        .then(res => res.text())
+        .then(md => {
+          document.getElementById('content').innerHTML = marked.parse(md);
+        })
+        .catch(err => {
+          document.getElementById('content').textContent = '无法加载内容: ' + err.message;
+        });
+    } else {
+      document.getElementById('content').textContent = '缺少 md 文件 URL 参数';
+    }
+  </script>
+</body>
+</html>
