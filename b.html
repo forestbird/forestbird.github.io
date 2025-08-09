@@ -382,7 +382,7 @@ Powered by bird.work
           const md_url = post.url
             ? post.url
             : `https://raw.githubusercontent.com/forestbird/forestbird.github.io/main/_posts/${encodeURIComponent(post.filename)}`;
-          a.href = `md_viewer.html?url=${encodeURIComponent(md_url)}&title=${encodeURIComponent(post.title)}`;
+          a.href = `mdviewer.html?url=${encodeURIComponent(md_url)}&title=${encodeURIComponent(post.title)}`;
           a.target = '_blank';
           const titleEl = document.createElement('div');
           titleEl.className = 'title';
@@ -428,7 +428,7 @@ Powered by bird.work
         const md_url = post.url
           ? post.url
           : `https://raw.githubusercontent.com/forestbird/forestbird.github.io/main/_posts/${encodeURIComponent(post.filename)}`;
-        a.href = `md_viewer.html?url=${encodeURIComponent(md_url)}&title=${encodeURIComponent(post.title)}`;
+        a.href = `mdviewer.html?url=${encodeURIComponent(md_url)}&title=${encodeURIComponent(post.title)}`;
         a.target = '_blank';
         const titleEl = document.createElement('div');
         titleEl.className = 'title';
