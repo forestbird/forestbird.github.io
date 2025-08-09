@@ -9,8 +9,9 @@
   <h1 id="title"></h1>
   <hr>
   <div id="content"></div>
+  <div id="error" style="color: red;"></div>
   <script>
-    // 获取 URL 参数
+    // 获取 url 参数
     function getQueryVariable(variable) {
       const query = window.location.search.substring(1);
       const vars = query.split('&');
@@ -34,10 +35,10 @@
           document.getElementById('content').innerHTML = marked.parse(md);
         })
         .catch(err => {
-          document.getElementById('content').textContent = '无法加载内容: ' + err.message;
+          document.getElementById('error').textContent = '无法加载内容: ' + err.message;
         });
     } else {
-      document.getElementById('content').textContent = '缺少 md 文件 URL 参数';
+      document.getElementById('error').textContent = '缺少 md 文件 URL 参数';
     }
   </script>
 </body>
