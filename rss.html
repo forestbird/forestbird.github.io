@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>生成 RSS</title>
+</head>
+<body>
+  <button onclick="makeRss()">生成/下载RSS</button>
+  <pre id="rss"></pre>
+  <script>
+    async function makeRss() {
+      const res = await fetch('posts.json');
+      const posts = await res.json();
+      let items = posts.map(post => `
+        <item>
+          <title>${post.title}</title>
+          <link>https://forestbird.github.io/md_viewer.html?url=${encodeURIComponent(post.url||('_posts/'+post.filename))}</link>
+          <pubDate>${post.date}</pubDate>
+          <description><![CDATA[]]></description>
+          <guid>https://forestbird.github.io/md_viewer.html?url=${encodeURIComponent(post.url||('_posts/'+post.filename))}</guid>
+        </item>
+      `).join('\n');
+      let xml = `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+<title>林鸟斋 · Forestbird's Blog</title>
+<link>https://forestbird.github.io/</link>
+<description>林鸟斋的技术与生活随笔</description>
+<language>zh-CN</language>
+<lastBuildDate>${new Date().toISOString()}</lastBuildDate>
+${items}
+</channel>
+</rss>`;
+      document.getElementById('rss').textContent = xml;
+      // 自动下载
+      let blob = new Blob([xml], {type:"application/xml"});
+      let a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'rss.xml';
+      a.click();
+    }
+  </script>
+</body>
+</html>
