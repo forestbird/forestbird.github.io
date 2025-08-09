@@ -2,105 +2,131 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Forestbird's Blog</title>
+  <title>林鸟斋 · Forestbird's Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- 引入中文和谐字体（霞鹜文楷、思源宋体） -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #3e63dd;
-      --primary-dark: #204adb;
-      --bg: #f6f8fa;
-      --bg-dark: #181b22;
-      --card-bg: #fff;
-      --card-bg-dark: #232842;
-      --text: #23272f;
-      --text-dark: #e2e5ea;
-      --card-radius: 18px;
-      --shadow: 0 6px 32px 0 rgba(62,99,221,0.10);
-      --tag-bg: #e8eeff;
-      --tag-bg-dark: #223269;
-      --tag: #3e63dd;
-      --tag-dark: #a9c1fa;
-      --category-bg: #fff6d7;
-      --category-bg-dark: #332e15;
-      --category: #d2a100;
-      --category-dark: #ffeeba;
+      --china-red: #b41c1c;
+      --china-blue: #245699;
+      --china-gold: #c09756;
+      --china-bg: #f9f5e6;
+      --china-bg-dark: #191512;
+      --card-bg: #fffdfa;
+      --card-bg-dark: #23201a;
+      --text: #2e2116;
+      --text-dark: #e9e5de;
+      --border-radius: 22px;
     }
     @media (prefers-color-scheme: dark) {
-      body { background: var(--bg-dark); color: var(--text-dark);}
+      body { background: var(--china-bg-dark); color: var(--text-dark);}
       .card { background: var(--card-bg-dark); color: var(--text-dark);}
-      .meta, .footer { color: #7d8caa;}
+      .meta, .footer { color: #8b6e4a;}
       .tag, .category { border: none;}
-      .tag { background: var(--tag-bg-dark); color: var(--tag-dark);}
-      .category { background: var(--category-bg-dark); color: var(--category-dark);}
-      .pagination .page-btn { background: #232842; color: #a9c1fa; border: 1px solid #353d64;}
-      .pagination .active { background: var(--primary-dark); color: #fff;}
+      .tag { background: #38241c; color: #f7c49c;}
+      .category { background: #2f3136; color: #f9e1a0;}
+      .pagination .page-btn { background: #232842; color: #e9e5de; border: 1px solid #b41c1c;}
+      .pagination .active { background: var(--china-red); color: #fff;}
     }
     body {
       margin: 0;
       padding: 0;
-      background: var(--bg);
+      background: var(--china-bg);
       color: var(--text);
-      font-family: 'Inter',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif,'Inter',Arial,sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+    /* 页眉祥云装饰 */
+    .cloud-header {
+      width: 100vw;
+      height: 84px;
+      background: linear-gradient(90deg, #fff6f0 0%, #ffe5e4 100%);
+      position: relative;
+      margin-bottom: -40px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .cloud-svg {
+      width: 160px;
+      height: 52px;
+      margin-bottom: 0;
+      opacity: 0.45;
+      filter: blur(0.2px);
+    }
     h1 {
-      font-size: 2.5rem;
-      letter-spacing: 2px;
-      margin: 54px 0 16px 0;
-      font-weight: 700;
-      color: var(--primary);
-      font-family: inherit;
+      font-size: 2.6rem;
+      letter-spacing: 2.5px;
+      margin: 30px 0 22px 0;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
+      font-weight: 600;
+      text-align: center;
+      color: var(--china-red);
+      text-shadow: 0 2px 18px #fff8f6, 0 1px 0 #b41c1c66;
     }
     #post-list {
       width: 98%;
-      max-width: 740px;
+      max-width: 780px;
       min-height: 240px;
       margin: 0 auto 18px auto;
-      padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 22px;
+      gap: 26px;
     }
     .card {
       background: var(--card-bg);
-      border-radius: var(--card-radius);
-      box-shadow: var(--shadow);
-      padding: 22px 28px 17px 28px;
-      transition: box-shadow 0.18s, transform 0.18s;
-      font-size: 1.13rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 7px 34px 0 rgba(180,28,28,0.05);
+      padding: 23px 32px 17px 32px;
+      font-size: 1.14rem;
       font-weight: 500;
       cursor: pointer;
       text-decoration: none;
       color: inherit;
-      border-left: 7px solid var(--primary);
+      border-left: 8px solid var(--china-gold);
       display: block;
       margin-bottom: 2px;
+      transition: box-shadow 0.18s, transform 0.18s;
       position: relative;
     }
     .card:hover {
-      box-shadow: 0 8px 38px 0 rgba(62,99,221,0.16);
-      background: #e6f0ff;
-      color: var(--primary-dark);
+      box-shadow: 0 10px 40px 0 rgba(180,28,28,0.16);
+      background: #fff2ea;
+      color: var(--china-red);
       transform: translateY(-2px) scale(1.012);
-      border-left: 7px solid var(--primary-dark);
+      border-left: 8px solid var(--china-red);
       text-decoration: none;
     }
-    .title {
-      font-size: 1.21rem;
-      margin-bottom: 7px;
-      color: var(--primary);
-      font-weight: 600;
-      transition: color 0.2s;
-      line-height: 1.5;
+    /* 卡片中国结 SVG */
+    .china-jie {
+      position: absolute;
+      left: -42px;
+      top: 26px;
+      width: 32px;
+      height: 32px;
+      opacity: .75;
+      z-index: 2;
+      pointer-events: none;
     }
-    .card:hover .title { color: var(--primary-dark);}
+    .title {
+      font-size: 1.22rem;
+      margin-bottom: 7px;
+      color: var(--china-blue);
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      line-height: 1.5;
+      transition: color 0.2s;
+    }
+    .card:hover .title { color: var(--china-red);}
     .meta {
       font-size: 0.97rem;
-      color: #8a94a8;
+      color: #b78950;
       margin: 0 0 7px 0;
       display: flex;
       flex-wrap: wrap;
@@ -109,7 +135,7 @@
       user-select: none;
     }
     .meta strong {
-      color: var(--primary);
+      color: var(--china-gold);
       font-weight: 500;
       margin-right: 3px;
       letter-spacing: 0.5px;
@@ -120,32 +146,32 @@
       gap: 5px;
     }
     .tag, .category {
-      border-radius: 7px;
-      padding: 2px 10px 2px 10px;
-      font-size: 0.93rem;
+      border-radius: 9px;
+      padding: 2px 13px 2px 13px;
+      font-size: 0.99rem;
       font-weight: 400;
       margin-right: 2px;
       letter-spacing: 0.5px;
       border: none;
       display: inline-block;
     }
-    .tag { background: var(--tag-bg); color: var(--tag);}
-    .category { background: var(--category-bg); color: var(--category);}
+    .tag { background: #fde7e0; color: var(--china-red);}
+    .category { background: #e6eaff; color: var(--china-blue);}
     .pagination {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       margin: 38px 0 26px 0;
       justify-content: center;
       align-items: center;
     }
     .pagination .page-btn {
-      border: 1.5px solid #e4e8f0;
-      background: #f9fafd;
-      color: var(--primary);
-      border-radius: 9px;
-      padding: 7px 15px;
+      border: 2px solid var(--china-gold);
+      background: #fff9f3;
+      color: var(--china-red);
+      border-radius: 11px;
+      padding: 7px 18px;
       min-width: 36px;
-      font-size: 1rem;
+      font-size: 1.07rem;
       font-family: inherit;
       margin: 0 1px;
       cursor: pointer;
@@ -154,38 +180,39 @@
     }
     .pagination .page-btn:hover,
     .pagination .active {
-      background: var(--primary);
+      background: var(--china-red);
       color: #fff;
-      border-color: var(--primary);
+      border-color: var(--china-red);
     }
-    #close-pagination {
-      display: none; 
-      text-align: center; 
-      margin-bottom: 30px;
-    }
+    #close-pagination { display: none; text-align: center; margin-bottom: 30px;}
     #close-pagination button {
-      background: #3e63dd; 
-      color: #fff; 
-      border: none; 
-      border-radius: 10px; 
-      padding: 9px 28px; 
-      font-size: 1.07rem; 
-      font-weight: 600; 
-      cursor: pointer; 
-      box-shadow: 0 2px 10px rgba(62,99,221,0.09); 
+      background: linear-gradient(90deg,#b41c1c 60%,#c09756 100%);
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      padding: 11px 38px;
+      font-size: 1.13rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 10px #e4bfa2;
       transition: background 0.2s;
+      margin-top: 8px;
+      letter-spacing: 1.2px;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
     }
-    #close-pagination button:hover {
-      background: #204adb;
-    }
+    #close-pagination button:hover { background: linear-gradient(90deg,#c09756 20%,#b41c1c 100%);}
     .footer {
       margin-top: auto;
-      color: #bbb;
-      font-size: 0.97rem;
+      color: #b78950;
+      font-size: 1.05rem;
       text-align: center;
-      padding: 39px 0 18px 0;
-      letter-spacing: 1px;
+      padding: 47px 0 22px 0;
+      letter-spacing: 1.2px;
       user-select: none;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
+      background: linear-gradient(90deg,#fff7e7 60%,#fbeee7 100%);
+      border-top: 2.5px dashed #c09756;
+      box-shadow: 0 -8px 40px -14px #eabf92;
     }
     /* Loading */
     .loading-container {
@@ -198,7 +225,7 @@
     .dot-pulse span {
       display: block;
       width: 13px; height: 13px;
-      background: var(--primary);
+      background: var(--china-red);
       border-radius: 50%;
       animation: dotPulse 1.1s infinite cubic-bezier(.61,.06,.41,.95);
     }
@@ -210,16 +237,22 @@
       70% { opacity: 0.6; transform: scale(0.97);}
     }
     @media (max-width: 600px) {
-      h1 { font-size: 1.47rem; margin-top: 20px;}
-      .card { padding: 12px 7vw 9px 7vw; font-size: 0.99rem;}
+      h1 { font-size: 1.45rem; margin-top: 20px;}
+      .card { padding: 12px 7vw 9px 7vw; font-size: 0.98rem;}
       #post-list { max-width: 99vw; }
       .meta { font-size: 0.91rem; gap: 10px;}
       .pagination .page-btn { padding: 5px 9px; font-size: 0.95rem;}
+      .cloud-header { height: 46px;}
+      .cloud-svg{ width: 92px;height:36px;}
     }
   </style>
 </head>
 <body>
-  <h1>Forestbird's Blog</h1>
+  <!-- 祥云装饰 -->
+  <div class="cloud-header">
+    <svg class="cloud-svg" viewBox="0 0 128 42" fill="none"><path d="M2 29c4.5-13.5 20-17.5 28-6.5 11 16 24-3 38 1s11.5 20.5 31 14c19.5-6.5 15-36.5-10-36.5C56.5 1 49.5 19 28 17 11 13 2 29 2 29Z" fill="#E8DBB9" fill-opacity=".79"/><path d="M50 17c2-6 10-7 14-3" stroke="#b41c1c" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="96" cy="18" r="5" fill="#e9c87a" fill-opacity=".49"/></svg>
+  </div>
+  <h1>林鸟斋 · Forestbird's Blog</h1>
   <div id="post-list"></div>
   <div id="pagination"></div>
   <div id="close-pagination">
@@ -227,9 +260,11 @@
   </div>
   <div id="error"></div>
   <div class="footer">
-    © 2025 forestbird |
-    <a href="rss.xml" target="_blank" style="color:#3e63dd;font-weight:600;">RSS订阅</a>
+    © 2025 林鸟斋 · forestbird |
+    <a href="rss.xml" target="_blank" style="color:#b41c1c;font-weight:600;text-decoration:underline dotted #c09756;">RSS订阅</a>
     | Powered by GitHub Pages
+    <br>
+    <span style="font-size:1.15em;color:#c09756;margin-top:6px;letter-spacing:1.8px;">愿君安康，琴茶书画</span>
   </div>
   <script>
     const POSTS_PER_PAGE = 10;
@@ -272,6 +307,9 @@
         window.allPostsForClosePagination.forEach(post => {
           const a = document.createElement('a');
           a.className = "card";
+          a.innerHTML = `
+            <svg class="china-jie" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="#b41c1c"/><path d="M16 8v16M8 16h16" stroke="#fff6ea" stroke-width="2.2" stroke-linecap="round"/></svg>
+          `;
           const md_url = post.url
             ? post.url
             : `https://raw.githubusercontent.com/forestbird/forestbird.github.io/main/_posts/${encodeURIComponent(post.filename)}`;
@@ -315,6 +353,9 @@
       currentPosts.forEach(post => {
         const a = document.createElement('a');
         a.className = "card";
+        a.innerHTML = `
+          <svg class="china-jie" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="#b41c1c"/><path d="M16 8v16M8 16h16" stroke="#fff6ea" stroke-width="2.2" stroke-linecap="round"/></svg>
+        `;
         const md_url = post.url
           ? post.url
           : `https://raw.githubusercontent.com/forestbird/forestbird.github.io/main/_posts/${encodeURIComponent(post.filename)}`;
