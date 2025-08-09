@@ -1,17 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <title>文章内容</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #3f51b5;
+      --bg: #fafbfc;
+      --text: #23242d;
+      --card-bg: #fff;
+      --card-shadow: 0 4px 24px 0 rgba(60,60,80,0.06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #181920;
+        --text: #f2f2f2;
+        --card-bg: #23242d;
+        --card-shadow: 0 2px 12px 0 rgba(0,0,0,0.2);
+      }
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      max-width: 750px;
+      margin: 48px auto 32px auto;
+      width: 95vw;
+      background: var(--card-bg);
+      box-shadow: var(--card-shadow);
+      border-radius: 19px;
+      padding: 38px 30px 32px 30px;
+      min-height: 220px;
+      word-break: break-word;
+    }
+    h1.title {
+      text-align: center;
+      font-size: 2.3rem;
+      margin: 0 0 24px 0;
+      color: var(--primary-color);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+    .back {
+      display: inline-block;
+      margin: 14px 0 0 0;
+      text-decoration: none;
+      color: var(--primary-color);
+      font-weight: 500;
+      font-size: 1.08rem;
+      letter-spacing: 1px;
+      border-radius: 8px;
+      padding: 7px 18px;
+      background: rgba(63,81,181,0.06);
+      transition: background 0.2s, color 0.2s;
+    }
+    .back:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+    #content :is(h2,h3,h4) {
+      color: var(--primary-color);
+      margin-top: 1.8em;
+      margin-bottom: .7em;
+    }
+    #content {
+      line-height: 1.75;
+      font-size: 1.09rem;
+      margin-top: 14px;
+    }
+    pre, code {
+      background: #f6f8fa;
+      color: #222;
+      font-size: 0.99em;
+      border-radius: 6px;
+      padding: 2px 6px;
+    }
+    pre {
+      padding: 14px;
+      overflow-x: auto;
+    }
+    blockquote {
+      border-left: 4px solid var(--primary-color);
+      margin: 1.5em 0;
+      padding: 0.7em 1.5em;
+      background: rgba(63,81,181,0.05);
+      color: #555;
+      border-radius: 8px;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 7px;
+      margin: 10px 0;
+    }
+    @media (max-width: 800px) {
+      .container { padding: 20px 6vw 18px 6vw; }
+      h1.title { font-size: 1.5rem; }
+    }
+  </style>
 </head>
 <body>
-  <h1 id="title"></h1>
-  <hr>
-  <div id="content"></div>
-  <div id="error" style="color: red;"></div>
+  <a href="index.html" class="back">← 返回首页</a>
+  <div class="container">
+    <h1 id="title" class="title"></h1>
+    <div id="content"></div>
+    <div id="error" style="color: #e53935;"></div>
+  </div>
   <script>
-    // 获取 url 参数
     function getQueryVariable(variable) {
       const query = window.location.search.substring(1);
       const vars = query.split('&');
@@ -27,6 +131,7 @@
     const title = getQueryVariable('title');
     if (title) {
       document.getElementById('title').textContent = title;
+      document.title = title + " | forestbird";
     }
     if (mdUrl) {
       fetch(mdUrl)
