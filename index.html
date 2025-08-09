@@ -5,6 +5,7 @@
   <title>文章索引 | forestbird</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    /* 省略：和之前给你的高大尚样式一样，可直接用之前的 */
     :root {
       --primary-color: #3f51b5;
       --bg: #fafbfc;
@@ -111,7 +112,7 @@
         if (!res.ok) throw new Error('API 请求失败: ' + res.statusText);
         return res.json();
       })
-      .then(files => {
+      .then(async files => {
         if (!Array.isArray(files)) throw new Error('API 响应不是文件数组');
         const mdFiles = files.filter(f => f.name.endsWith('.md'));
         const list = document.getElementById('post-list');
@@ -119,13 +120,36 @@
           list.textContent = '没有文章。';
           return;
         }
-        mdFiles.reverse().forEach(file => {
-          let title = file.name.replace(/\.md$/, '');
-          title = title.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+
+        // 并发加载所有md文件的标题
+        const posts = await Promise.all(mdFiles.map(async file => {
+          try {
+            const res = await fetch(file.download_url);
+            const text = await res.text();
+            // 匹配第一行的 # 标题（如 "# 我的第一篇文章"）
+            const match = text.match(/^#\s+(.+)$/m);
+            return {
+              title: match ? match[1].trim() : file.name.replace(/\.md$/, ''),
+              url: file.download_url,
+              file: file
+            }
+          } catch {
+            return {
+              title: file.name.replace(/\.md$/, ''),
+              url: file.download_url,
+              file: file
+            }
+          }
+        }));
+
+        // 按文件名倒序（最新在上）
+        posts.sort((a, b) => b.file.name.localeCompare(a.file.name));
+
+        posts.forEach(post => {
           const a = document.createElement('a');
           a.className = "card";
-          a.textContent = title;
-          a.href = `md_viewer.html?url=${encodeURIComponent(file.download_url)}&title=${encodeURIComponent(title)}`;
+          a.textContent = post.title;
+          a.href = `md_viewer.html?url=${encodeURIComponent(post.url)}&title=${encodeURIComponent(post.title)}`;
           a.target = '_blank';
           list.appendChild(a);
         });
