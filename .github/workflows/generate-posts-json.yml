@@ -1,0 +1,53 @@
+name: Build posts.json
+
+on:
+  push:
+    paths:
+      - '_posts/**.md'
+      - '.github/workflows/generate-posts-json.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install gray-matter
+
+      - name: Build posts.json
+        run: |
+          node <<'EOF'
+          const fs = require('fs');
+          const matter = require('gray-matter');
+          const postsDir = '_posts';
+          const files = fs.readdirSync(postsDir).filter(f => f.endsWith('.md'));
+          const posts = files.map(filename => {
+            const raw = fs.readFileSync(`${postsDir}/${filename}`, 'utf-8');
+            const data = matter(raw).data;
+            return {
+              filename,
+              title: data.title || filename.replace(/\.md$/, ''),
+              date: data.date || '',
+              author: data.author || '',
+              categories: data.categories || [],
+              tags: data.tags || []
+            };
+          });
+          fs.writeFileSync('posts.json', JSON.stringify(posts, null, 2));
+          EOF
+
+      - name: Commit and push posts.json
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "auto: build posts.json"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          file_pattern: posts.json
