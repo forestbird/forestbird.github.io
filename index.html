@@ -2,72 +2,47 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Markdown 日志索引</title>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <title>文章索引</title>
 </head>
 <body>
-  <h1>Markdown 日志索引</h1>
-  <div id="md-list"></div>
-  <hr>
-  <div id="md-content"></div>
+  <h1>文章索引</h1>
+  <div id="post-list"></div>
   <div id="error" style="color: red;"></div>
   <script>
     const repo = 'forestbird/forestbird.github.io';
-    const branch = 'main'; // 如为 master，请改为 master
+    const branch = 'main';
     const dir = '_posts';
     const api = `https://api.github.com/repos/${repo}/contents/${dir}?ref=${branch}`;
 
-    function loadMd(url) {
-      fetch(url)
-        .then(res => {
-          if (!res.ok) throw new Error('无法加载日志内容: ' + res.statusText);
-          return res.text();
-        })
-        .then(md => {
-          document.getElementById('md-content').innerHTML = marked.parse(md);
-        })
-        .catch(err => {
-          document.getElementById('md-content').textContent = err.message;
-        });
-    }
-
     fetch(api)
       .then(res => {
-        if (!res.ok) throw new Error(`API 请求失败: ${res.status} ${res.statusText}`);
+        if (!res.ok) throw new Error('API 请求失败: ' + res.statusText);
         return res.json();
       })
       .then(files => {
-        if (!Array.isArray(files)) throw new Error('API 响应不是文件数组，可能目录不存在或拼写错误。');
-        const mdFiles = files
-          .filter(f => f.name.endsWith('.md'))
-          .sort((a, b) => a.name.localeCompare(b.name));
-        const list = document.getElementById('md-list');
+        if (!Array.isArray(files)) throw new Error('API 响应不是文件数组');
+        const mdFiles = files.filter(f => f.name.endsWith('.md'));
+        const list = document.getElementById('post-list');
         if (mdFiles.length === 0) {
-          list.textContent = '没有找到任何 .md 日志文件。';
+          list.textContent = '没有文章。';
           return;
         }
-        mdFiles.forEach((file, idx) => {
+        mdFiles.forEach(file => {
           const a = document.createElement('a');
-          a.href = '#';
-          a.textContent = file.name;
-          a.addEventListener('click', (e) => {
-            e.preventDefault();
-            loadMd(file.download_url);
-            // 高亮当前选中
-            [...list.children].forEach(el => el.style.fontWeight = 'normal');
-            a.style.fontWeight = 'bold';
-          });
+          // 去掉.md后缀显示
+          let title = file.name.replace(/\.md$/, '');
+          // 如果文件名类似"2024-08-09-xxx.md"，可以再去掉日期部分
+          title = title.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+          a.textContent = title;
+          // 跳转到 md_viewer.html，并带上 md 文件的 raw 下载地址
+          a.href = `md_viewer.html?url=${encodeURIComponent(file.download_url)}&title=${encodeURIComponent(title)}`;
+          a.target = '_blank';
           list.appendChild(a);
           list.appendChild(document.createElement('br'));
-          // 默认加载最新
-          if (idx === mdFiles.length - 1) {
-            loadMd(file.download_url);
-            a.style.fontWeight = 'bold';
-          }
         });
       })
       .catch(err => {
-        document.getElementById('error').textContent = '无法获取日志列表: ' + err.message;
+        document.getElementById('error').textContent = err.message;
       });
   </script>
 </body>
