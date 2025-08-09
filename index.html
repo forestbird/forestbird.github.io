@@ -5,7 +5,6 @@
   <title>文章索引 | forestbird</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* 省略：和之前给你的高大尚样式一样，可直接用之前的 */
     :root {
       --primary-color: #3f51b5;
       --bg: #fafbfc;
@@ -14,6 +13,8 @@
       --card-shadow: 0 4px 24px 0 rgba(60,60,80,0.06);
       --border-radius: 16px;
       --link-hover: #1a237e;
+      --tag-bg: #e3e6f6;
+      --tag: #3f51b5;
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -22,6 +23,8 @@
         --card-bg: #23242d;
         --card-shadow: 0 2px 12px 0 rgba(0,0,0,0.2);
         --link-hover: #90a4ae;
+        --tag-bg: #263159;
+        --tag: #b0c5ff;
       }
     }
     body {
@@ -45,7 +48,7 @@
     }
     #post-list {
       width: 95%;
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
       padding: 0;
       display: flex;
@@ -56,9 +59,7 @@
       background: var(--card-bg);
       border-radius: var(--border-radius);
       box-shadow: var(--card-shadow);
-      display: flex;
-      align-items: center;
-      padding: 20px 24px;
+      padding: 20px 24px 18px 24px;
       transition: box-shadow 0.2s, transform 0.2s;
       font-size: 1.13rem;
       font-weight: 500;
@@ -66,6 +67,8 @@
       text-decoration: none;
       color: var(--text);
       border-left: 5px solid var(--primary-color);
+      display: block;
+      margin-bottom: 2px;
     }
     .card:hover {
       box-shadow: 0 6px 24px 0 rgba(63,81,181,0.14);
@@ -75,10 +78,57 @@
       border-left: 5px solid var(--link-hover);
       text-decoration: none;
     }
+    .meta {
+      font-size: 0.97rem;
+      color: #7a869a;
+      margin: 3px 0 7px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+    }
+    .meta strong {
+      color: var(--primary-color);
+      font-weight: 500;
+      margin-right: 3px;
+      letter-spacing: 0.5px;
+    }
+    .tags, .categories {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .tag, .category {
+      background: var(--tag-bg);
+      color: var(--tag);
+      border-radius: 7px;
+      padding: 2px 10px 2px 10px;
+      font-size: 0.93rem;
+      font-weight: 400;
+      margin-right: 2px;
+      letter-spacing: 0.5px;
+      border: 1px solid #e7eaf0;
+    }
+    .category {
+      background: #fceabb;
+      color: #e6b800;
+      border: 1px solid #fff2c5;
+    }
+    .title {
+      font-size: 1.27rem;
+      margin-bottom: 2px;
+      color: var(--primary-color);
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .card:hover .title {
+      color: var(--link-hover);
+    }
     @media (max-width: 600px) {
       h1 { font-size: 2rem; margin-top: 28px;}
-      .card { padding: 16px 12px; font-size: 1rem;}
+      .card { padding: 16px 10px 14px 10px; font-size: 1rem;}
       #post-list { max-width: 96vw; }
+      .meta { font-size: 0.92rem; gap: 12px;}
     }
     #error {
       color: #e53935;
@@ -107,6 +157,29 @@
     const dir = '_posts';
     const api = `https://api.github.com/repos/${repo}/contents/${dir}?ref=${branch}`;
 
+    // 解析 YAML 前置数据
+    function parseYAMLFrontmatter(md) {
+      const match = md.match(/^---\s*\n([\s\S]+?)\n---/);
+      if (!match) return {};
+      const yaml = match[1];
+      const result = {};
+      const lines = yaml.split('\n');
+      lines.forEach(line => {
+        const idx = line.indexOf(':');
+        if (idx === -1) return;
+        const key = line.slice(0, idx).trim();
+        let value = line.slice(idx + 1).trim();
+        // 支持数组形式
+        if (value.startsWith('[') && value.endsWith(']')) {
+          value = value.slice(1, -1).split(',').map(v => v.trim()).filter(Boolean);
+        } else if (value.includes(',') && (key === 'categories' || key === 'tags')) {
+          value = value.split(',').map(v => v.trim()).filter(Boolean);
+        }
+        result[key] = value;
+      });
+      return result;
+    }
+
     fetch(api)
       .then(res => {
         if (!res.ok) throw new Error('API 请求失败: ' + res.statusText);
@@ -121,36 +194,70 @@
           return;
         }
 
-        // 并发加载所有md文件的标题
+        // 并发加载所有md文件的元数据
         const posts = await Promise.all(mdFiles.map(async file => {
           try {
             const res = await fetch(file.download_url);
             const text = await res.text();
-            // 匹配第一行的 # 标题（如 "# 我的第一篇文章"）
-            const match = text.match(/^#\s+(.+)$/m);
+            const fm = parseYAMLFrontmatter(text);
             return {
-              title: match ? match[1].trim() : file.name.replace(/\.md$/, ''),
+              title: fm.title || file.name.replace(/\.md$/, ''),
+              date: fm.date || '',
+              author: fm.author || '',
+              categories: fm.categories || [],
+              tags: fm.tags || [],
               url: file.download_url,
               file: file
             }
           } catch {
             return {
               title: file.name.replace(/\.md$/, ''),
+              date: '',
+              author: '',
+              categories: [],
+              tags: [],
               url: file.download_url,
               file: file
             }
           }
         }));
 
-        // 按文件名倒序（最新在上）
-        posts.sort((a, b) => b.file.name.localeCompare(a.file.name));
+        // 按 date 或文件名倒序
+        posts.sort((a, b) => {
+          if (a.date && b.date) {
+            return b.date.localeCompare(a.date);
+          }
+          return b.file.name.localeCompare(a.file.name);
+        });
 
         posts.forEach(post => {
           const a = document.createElement('a');
           a.className = "card";
-          a.textContent = post.title;
           a.href = `md_viewer.html?url=${encodeURIComponent(post.url)}&title=${encodeURIComponent(post.title)}`;
           a.target = '_blank';
+
+          // 文章标题
+          const titleEl = document.createElement('div');
+          titleEl.className = 'title';
+          titleEl.textContent = post.title;
+
+          // 元信息行
+          const metaEl = document.createElement('div');
+          metaEl.className = 'meta';
+          if (post.date) metaEl.innerHTML += `<strong>日期</strong> ${post.date}`;
+          if (post.author) metaEl.innerHTML += `<strong>作者</strong> ${post.author}`;
+          if (post.categories && post.categories.length) {
+            let cats = Array.isArray(post.categories) ? post.categories : [post.categories];
+            metaEl.innerHTML += `<strong>分类</strong> <span class="categories">${cats.map(cat => `<span class="category">${cat}</span>`).join('')}</span>`;
+          }
+          if (post.tags && post.tags.length) {
+            let tags = Array.isArray(post.tags) ? post.tags : [post.tags];
+            metaEl.innerHTML += `<strong>标签</strong> <span class="tags">${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</span>`;
+          }
+
+          a.appendChild(titleEl);
+          a.appendChild(metaEl);
+
           list.appendChild(a);
         });
       })
