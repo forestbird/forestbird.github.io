@@ -1,13 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>文章索引</title>
+  <title>文章索引 | forestbird</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --primary-color: #3f51b5;
+      --bg: #fafbfc;
+      --text: #222;
+      --card-bg: #fff;
+      --card-shadow: 0 4px 24px 0 rgba(60,60,80,0.06);
+      --border-radius: 16px;
+      --link-hover: #1a237e;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #181920;
+        --text: #f2f2f2;
+        --card-bg: #23242d;
+        --card-shadow: 0 2px 12px 0 rgba(0,0,0,0.2);
+        --link-hover: #90a4ae;
+      }
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      font-size: 2.7rem;
+      letter-spacing: 2px;
+      margin: 48px 0 18px 0;
+      font-weight: 700;
+      color: var(--primary-color);
+      text-shadow: 0 2px 8px rgba(100,120,200,0.08);
+    }
+    #post-list {
+      width: 95%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: center;
+      padding: 20px 24px;
+      transition: box-shadow 0.2s, transform 0.2s;
+      font-size: 1.13rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text);
+      border-left: 5px solid var(--primary-color);
+    }
+    .card:hover {
+      box-shadow: 0 6px 24px 0 rgba(63,81,181,0.14);
+      background: #f2f6ff;
+      color: var(--link-hover);
+      transform: translateY(-2px) scale(1.02);
+      border-left: 5px solid var(--link-hover);
+      text-decoration: none;
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; margin-top: 28px;}
+      .card { padding: 16px 12px; font-size: 1rem;}
+      #post-list { max-width: 96vw; }
+    }
+    #error {
+      color: #e53935;
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1rem;
+    }
+    .footer {
+      margin-top: auto;
+      color: #888;
+      font-size: 0.95rem;
+      text-align: center;
+      padding: 32px 0 18px 0;
+      letter-spacing: 1px;
+    }
+  </style>
 </head>
 <body>
-  <h1>文章索引</h1>
+  <h1>Forestbird's Blog</h1>
   <div id="post-list"></div>
-  <div id="error" style="color: red;"></div>
+  <div id="error"></div>
+  <div class="footer">© 2025 forestbird | Powered by GitHub Pages</div>
   <script>
     const repo = 'forestbird/forestbird.github.io';
     const branch = 'main';
@@ -27,18 +119,15 @@
           list.textContent = '没有文章。';
           return;
         }
-        mdFiles.forEach(file => {
-          const a = document.createElement('a');
-          // 去掉.md后缀显示
+        mdFiles.reverse().forEach(file => {
           let title = file.name.replace(/\.md$/, '');
-          // 如果文件名类似"2024-08-09-xxx.md"，可以再去掉日期部分
           title = title.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+          const a = document.createElement('a');
+          a.className = "card";
           a.textContent = title;
-          // 跳转到 md_viewer.html，并带上 md 文件的 raw 下载地址
           a.href = `md_viewer.html?url=${encodeURIComponent(file.download_url)}&title=${encodeURIComponent(title)}`;
           a.target = '_blank';
           list.appendChild(a);
-          list.appendChild(document.createElement('br'));
         });
       })
       .catch(err => {
