@@ -266,6 +266,22 @@
       border-top: 2.5px dashed #c09756;
       box-shadow: 0 -8px 40px -14px #eabf92;
     }
+    .footer .domains {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin: 5px 0 0 0;
+      font-size: 0.99em;
+      flex-wrap: wrap;
+    }
+    .footer .domain {
+      color: #b41c1c;
+      background: #efe8d7;
+      border-radius: 7px;
+      padding: 2px 10px;
+      font-family: 'ZCOOL KuaiLe','Noto Serif SC',serif;
+      font-weight: 600;
+    }
     .footer a {
       color: #b41c1c;
       font-weight: 600;
@@ -329,8 +345,12 @@
   </div>
   <div id="error"></div>
   <div class="footer">
-    © 2025 森林鸟（forestbird / 赵伟峰） |
-    <a href="rss.html" target="_blank">RSS订阅</a>
+    © 2025 森林鸟（forestbird / 赵伟峰）
+    <div class="domains">
+      <span class="domain">bird.work</span>
+      <span class="domain">3.1415926.xyz</span>
+      <span class="domain">zhaoweifeng.cn</span>
+    </div>
     | Powered by bird.work
     <br>
     <span style="font-size:1.15em;color:#c09756;margin-top:6px;letter-spacing:1.8px;">愿君安康，琴茶书画</span>
