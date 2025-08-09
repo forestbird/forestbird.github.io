@@ -2,28 +2,30 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>文章内容</title>
+  <title>林鸟斋 · 文章内容</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #3e63dd;
-      --bg: #f6f8fa;
-      --text: #23242d;
-      --card-bg: #fff;
-      --card-shadow: 0 4px 24px 0 rgba(60,60,80,0.06);
-      --tag-bg: #e3e6f6;
-      --tag: #3e63dd;
+      --primary-color: #b41c1c;
+      --china-blue: #245699;
+      --china-gold: #c09756;
+      --bg: #f9f5e6;
+      --text: #2e2116;
+      --card-bg: #fffdfa;
+      --card-shadow: 0 7px 34px 0 rgba(180,28,28,0.08);
+      --tag-bg: #fde7e0;
+      --tag: #b41c1c;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #181920;
-        --text: #e2e5ea;
-        --card-bg: #232842;
+        --bg: #191512;
+        --text: #e9e5de;
+        --card-bg: #23201a;
         --card-shadow: 0 2px 12px 0 rgba(0,0,0,0.2);
-        --tag-bg: #223269;
-        --tag: #a9c1fa;
+        --tag-bg: #38241c;
+        --tag: #f7c49c;
       }
     }
     body {
@@ -31,43 +33,64 @@
       padding: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: 'Inter',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif,'Inter',Arial,sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+    .cloud-header {
+      width: 100vw;
+      height: 66px;
+      background: linear-gradient(90deg, #fff6f0 0%, #ffe5e4 100%);
+      position: relative;
+      margin-bottom: -34px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .cloud-svg {
+      width: 130px;
+      height: 34px;
+      margin-bottom: 0;
+      opacity: 0.38;
+      filter: blur(0.2px);
+    }
     .container {
-      max-width: 750px;
+      max-width: 760px;
       margin: 48px auto 32px auto;
-      width: 95vw;
+      width: 96vw;
       background: var(--card-bg);
       box-shadow: var(--card-shadow);
-      border-radius: 19px;
-      padding: 38px 30px 32px 30px;
+      border-radius: 22px;
+      padding: 39px 30px 32px 30px;
       min-height: 220px;
       word-break: break-word;
     }
     h1.title {
       text-align: center;
-      font-size: 2.3rem;
-      margin: 0 0 24px 0;
+      font-size: 2.2rem;
+      margin: 0 0 22px 0;
       color: var(--primary-color);
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
       font-weight: 700;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 18px #fff8f6, 0 1px 0 #b41c1c66;
     }
     .back {
       display: inline-block;
       margin: 14px 0 0 0;
       text-decoration: none;
       color: var(--primary-color);
-      font-weight: 500;
+      font-weight: 600;
       font-size: 1.08rem;
       letter-spacing: 1px;
       border-radius: 8px;
       padding: 7px 18px;
-      background: rgba(62,99,221,0.06);
+      background: rgba(180,28,28,0.06);
       transition: background 0.2s, color 0.2s;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
     }
     .back:hover {
       background: var(--primary-color);
@@ -75,16 +98,17 @@
     }
     .meta {
       font-size: 1rem;
-      color: #7a869a;
+      color: #b78950;
       margin: 11px 0 19px 0;
       display: flex;
       flex-wrap: wrap;
       gap: 24px;
       align-items: center;
       justify-content: center;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
     }
     .meta strong {
-      color: var(--primary-color);
+      color: var(--china-gold);
       font-weight: 500;
       margin-right: 3px;
       letter-spacing: 0.5px;
@@ -97,27 +121,29 @@
     .tag, .category {
       background: var(--tag-bg);
       color: var(--tag);
-      border-radius: 7px;
-      padding: 2px 10px 2px 10px;
-      font-size: 0.93rem;
+      border-radius: 9px;
+      padding: 2px 13px 2px 13px;
+      font-size: 0.99rem;
       font-weight: 400;
       margin-right: 2px;
       letter-spacing: 0.5px;
       border: 1px solid #e7eaf0;
+      font-family: inherit;
     }
     .category {
-      background: #fff6d7;
-      color: #d2a100;
-      border: 1px solid #fff2c5;
+      background: #e6eaff;
+      color: var(--china-blue);
+      border: 1px solid #c4d0eb;
     }
     #content :is(h2,h3,h4) {
       color: var(--primary-color);
       margin-top: 1.8em;
       margin-bottom: .7em;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
     }
     #content {
-      line-height: 1.75;
-      font-size: 1.09rem;
+      line-height: 1.78;
+      font-size: 1.11rem;
       margin-top: 14px;
     }
     pre, code {
@@ -126,18 +152,20 @@
       font-size: 0.99em;
       border-radius: 6px;
       padding: 2px 6px;
+      font-family: "JetBrains Mono","Fira Mono",monospace;
     }
     pre {
-      padding: 14px;
+      padding: 15px;
       overflow-x: auto;
     }
     blockquote {
       border-left: 4px solid var(--primary-color);
       margin: 1.5em 0;
       padding: 0.7em 1.5em;
-      background: rgba(62,99,221,0.05);
+      background: rgba(180,28,28,0.05);
       color: #555;
       border-radius: 8px;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
     }
     img {
       max-width: 100%;
@@ -146,12 +174,16 @@
     }
     .footer {
       margin-top: 38px;
-      color: #bbb;
-      font-size: 0.97rem;
+      color: #b78950;
+      font-size: 1.05rem;
       text-align: center;
-      padding: 24px 0 12px 0;
-      letter-spacing: 1px;
+      padding: 28px 0 13px 0;
+      letter-spacing: 1.2px;
       user-select: none;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
+      background: linear-gradient(90deg,#fff7e7 60%,#fbeee7 100%);
+      border-top: 2.5px dashed #c09756;
+      box-shadow: 0 -8px 40px -14px #eabf92;
     }
     .close-page-btn-wrapper {
       width: 100%;
@@ -160,29 +192,36 @@
     }
     .close-page-btn {
       margin-top: 8px;
-      background: #3e63dd;
+      background: linear-gradient(90deg,#b41c1c 60%,#c09756 100%);
       color: #fff;
-      font-weight: 600;
+      font-weight: 700;
       border: none;
-      border-radius: 8px;
-      padding: 11px 38px;
+      border-radius: 13px;
+      padding: 13px 38px;
       cursor: pointer;
-      box-shadow: 0 2px 10px rgba(62,99,221,0.09);
-      font-size: 1.11rem;
+      box-shadow: 0 2px 10px #e4bfa2;
+      font-size: 1.13rem;
       transition: background 0.2s;
-      display: inline-block;
+      letter-spacing: 1.2px;
+      font-family: 'Noto Serif SC','ZCOOL KuaiLe',serif;
     }
     .close-page-btn:hover {
-      background: #204adb;
+      background: linear-gradient(90deg,#c09756 20%,#b41c1c 100%);
     }
     @media (max-width: 800px) {
       .container { padding: 20px 6vw 18px 6vw; }
-      h1.title { font-size: 1.5rem; }
+      h1.title { font-size: 1.3rem; }
       .close-page-btn { font-size: 1rem; padding: 9px 18px;}
+      .cloud-header { height: 34px;}
+      .cloud-svg{ width: 74px;height:19px;}
     }
   </style>
 </head>
 <body>
+  <!-- 祥云装饰 -->
+  <div class="cloud-header">
+    <svg class="cloud-svg" viewBox="0 0 128 42" fill="none"><path d="M2 29c4.5-13.5 20-17.5 28-6.5 11 16 24-3 38 1s11.5 20.5 31 14c19.5-6.5 15-36.5-10-36.5C56.5 1 49.5 19 28 17 11 13 2 29 2 29Z" fill="#E8DBB9" fill-opacity=".79"/><path d="M50 17c2-6 10-7 14-3" stroke="#b41c1c" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="96" cy="18" r="5" fill="#e9c87a" fill-opacity=".49"/></svg>
+  </div>
   <a href="index.html" class="back">← 返回首页</a>
   <div class="container">
     <h1 id="title" class="title"></h1>
@@ -191,9 +230,11 @@
     <div id="error" style="color: #e53935;"></div>
   </div>
   <div class="footer">
-    © 2025 forestbird |
-    <a href="rss.xml" target="_blank" style="color:#3e63dd;font-weight:600;">RSS订阅</a>
+    © 2025 林鸟斋 · forestbird |
+    <a href="rss.xml" target="_blank" style="color:#b41c1c;font-weight:600;text-decoration:underline dotted #c09756;">RSS订阅</a>
     | Powered by GitHub Pages
+    <br>
+    <span style="font-size:1.08em;color:#c09756;margin-top:6px;letter-spacing:1.7px;">愿君安康，琴茶书画</span>
   </div>
   <div class="close-page-btn-wrapper">
     <button class="close-page-btn" onclick="closePage()">关闭本页</button>
@@ -238,7 +279,7 @@
           const fm = parseYAMLFrontmatter(md);
           const title = fm.title || '';
           document.getElementById('title').textContent = title;
-          document.title = (title ? (title + " | ") : "") + "forestbird";
+          document.title = (title ? (title + " | ") : "") + "林鸟斋";
           let metaHtml = '';
           if (fm.date) metaHtml += `<strong>日期</strong> ${fm.date}`;
           if (fm.author) metaHtml += `<strong>作者</strong> ${fm.author}`;
