@@ -1,96 +1,173 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ForestBird的知识库</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="记录学习与成长的点点滴滴">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify/themes/vue.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
   <style>
     :root {
       --theme-color: #42b983;
-      --sidebar-width: 280px;
+      --sidebar-width: 300px;
+      --content-max-width: 900px;
     }
+    
+    /* 侧边栏样式 */
+    .sidebar {
+      padding: 20px 0;
+    }
+    .sidebar ul li a {
+      padding: 8px 15px;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    .sidebar ul li a:hover {
+      background: rgba(66, 185, 131, 0.1);
+    }
+    
     /* 文章元数据样式 */
     .article-meta {
-      margin: 1em 0;
-      padding: 0.8em;
-      background: #f8f8f8;
-      border-radius: 4px;
-      font-size: 0.9em;
+      margin: 1.5em 0;
+      padding: 1em;
+      background: #f9f9f9;
+      border-left: 4px solid var(--theme-color);
+      border-radius: 0 4px 4px 0;
+      font-size: 0.95em;
     }
     .article-meta-item {
-      display: inline-block;
-      margin-right: 1em;
+      display: inline-flex;
+      align-items: center;
+      margin-right: 1.5em;
     }
     .article-meta-item i {
-      margin-right: 0.3em;
+      margin-right: 0.5em;
       color: var(--theme-color);
+      min-width: 16px;
+      text-align: center;
     }
+    
     /* 标签样式 */
     .tag {
       display: inline-block;
-      padding: 0.2em 0.5em;
-      background: #f0f0f0;
-      border-radius: 3px;
-      font-size: 0.8em;
-      margin-right: 0.5em;
+      padding: 0.2em 0.7em;
+      background: rgba(66, 185, 131, 0.1);
+      color: var(--theme-color);
+      border-radius: 12px;
+      font-size: 0.85em;
+      margin: 0.2em 0.3em;
+      transition: all 0.2s;
+    }
+    .tag:hover {
+      background: rgba(66, 185, 131, 0.2);
+      transform: translateY(-1px);
+    }
+    
+    /* 封面页样式 */
+    .cover-main {
+      padding: 3em 1.5em;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+    .cover-main h1 {
+      font-size: 2.8em;
+      margin-bottom: 0.3em;
+      color: #2c3e50;
+    }
+    .cover-main p {
+      font-size: 1.2em;
+      max-width: 700px;
+      margin: 0 auto 1.5em;
+      color: #34495e;
+    }
+    
+    /* 响应式调整 */
+    @media (max-width: 768px) {
+      :root {
+        --sidebar-width: 260px;
+      }
+      .cover-main h1 {
+        font-size: 2.2em;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="app">加载中...</div>
+  <div id="app"></div>
   
   <script>
     window.$docsify = {
       name: 'ForestBird的知识库',
       repo: 'forestbird/forestbird.github.io',
       loadSidebar: true,
+      loadNavbar: false,
+      coverpage: true,
       autoHeader: true,
-      coverpage: false,
       mergeNavbar: true,
       maxLevel: 4,
       subMaxLevel: 3,
       alias: {
-        '/.*/_sidebar.md': '/_sidebar.md'
+        '/.*/_sidebar.md': '/_sidebar.md',
+        '/.*/_coverpage.md': '/_coverpage.md'
       },
       search: {
-        depth: 4,
+        maxAge: 86400000, // 1天缓存
+        paths: 'auto',
         placeholder: '搜索文章...',
         noData: '没有找到相关内容',
-        paths: 'auto'
+        depth: 4
       },
       plugins: [
         function(hook, vm) {
           hook.beforeEach(function(content) {
-            // 解析Front Matter并转换为HTML
+            // 解析Front Matter
             const fm = parseFrontMatter(content);
             let html = '';
             
             if (fm.exists) {
-              html += `<div class="article-meta">
-                ${fm.date ? `<span class="article-meta-item"><i class="fa fa-calendar"></i>${fm.date}</span>` : ''}
-                ${fm.author ? `<span class="article-meta-item"><i class="fa fa-user"></i>${fm.author}</span>` : ''}
-                ${fm.tags ? `<span class="article-meta-item"><i class="fa fa-tags"></i>${
-                  fm.tags.split(',').map(tag => 
-                    `<span class="tag">${tag.trim()}</span>`
-                  ).join('')
-                }</span>` : ''}
-              </div>`;
+              html += `<div class="article-meta">`;
+              
+              if (fm.date) {
+                html += `<span class="article-meta-item">
+                  <i class="fa fa-calendar"></i>${fm.date}
+                </span>`;
+              }
+              
+              if (fm.author) {
+                html += `<span class="article-meta-item">
+                  <i class="fa fa-user"></i>${fm.author}
+                </span>`;
+              }
+              
+              if (fm.tags) {
+                html += `<span class="article-meta-item">
+                  <i class="fa fa-tags"></i>
+                  ${fm.tags.split(',').map(tag => 
+                    `<a href="#/?search=${encodeURIComponent(tag.trim())}" class="tag">${tag.trim()}</a>`
+                  ).join('')}
+                </span>`;
+              }
+              
+              html += `</div>`;
             }
             
+            // 返回处理后的内容（移除Front Matter）
             return html + content.replace(/^---[\s\S]*?---/, '');
           });
           
           hook.doneEach(function() {
-            // 加载Font Awesome图标
-            if (!document.querySelector('.fa')) {
-              const fa = document.createElement('link');
-              fa.rel = 'stylesheet';
-              fa.href = 'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css';
-              document.head.appendChild(fa);
-            }
+            // 为文章标题添加锚点图标
+            document.querySelectorAll('.markdown-section h1, .markdown-section h2, .markdown-section h3').forEach(h => {
+              if (!h.querySelector('.anchor')) {
+                const anchor = document.createElement('a');
+                anchor.className = 'anchor';
+                anchor.innerHTML = '<i class="fa fa-link"></i>';
+                anchor.href = '#' + h.id;
+                h.appendChild(anchor);
+              }
+            });
           });
         }
       ]
