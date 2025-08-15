@@ -1,29 +1,30 @@
-// helper.js - 自动生成带Front Matter的侧边栏
+// helper.js - 支持任意文件名的自动生成系统
 document.addEventListener('DOMContentLoaded', function() {
-  // 检查是否生产环境
   if (window.location.hostname === 'forestbird.github.io') {
     loadPostsFromGitHub();
   } else {
-    // 本地开发使用模拟数据
     loadMockPosts();
   }
 });
 
 /**
- * 从GitHub API加载文章数据
+ * 从GitHub API加载文章数据（支持任意文件名）
  */
 async function loadPostsFromGitHub() {
   try {
-    // 1. 获取_posts目录下的文件列表
-    const response = await fetch('https://api.github.com/repos/forestbird/forestbird.github.io/contents/_posts');
-    if (!response.ok) throw new Error('无法加载文章列表');
+    // 获取_posts目录下的文件列表
+    const response = await fetch(
+      'https://api.github.com/repos/forestbird/forestbird.github.io/contents/_posts'
+    );
+    
+    if (!response.ok) throw new Error('无法加载文章列表: ' + response.status);
     
     const files = await response.json();
     const mdFiles = files.filter(file => 
       file.name.endsWith('.md') && file.type === 'file'
     );
     
-    // 2. 并行获取所有文章内容和Front Matter
+    // 并行获取所有文章内容和Front Matter
     const posts = await Promise.all(
       mdFiles.map(async file => {
         const contentResponse = await fetch(file.download_url);
@@ -35,23 +36,22 @@ async function loadPostsFromGitHub() {
           name: file.name.replace('.md', ''),
           download_url: file.download_url,
           title: fm.title || file.name.replace('.md', ''),
-          date: fm.date || '',
-          author: fm.author || '',
+          date: fm.date || file.created_at.substring(0, 10), // 使用GitHub创建日期
+          author: fm.author || 'ForestBird',
           tags: fm.tags || '',
-          cover: fm.cover || ''
+          cover: fm.cover || '',
+          excerpt: fm.excerpt || generateExcerpt(content, 150) // 自动生成摘要
         };
       })
     );
     
-    // 3. 生成侧边栏
+    // 生成侧边栏和封面页
     generateSidebar(posts);
-    
-    // 4. 可选：生成封面页
-    generateCoverPage(posts.slice(0, 5));
+    generateCoverPage(posts);
     
   } catch (error) {
     console.error('加载文章失败:', error);
-    loadMockPosts(); // 回退到模拟数据
+    loadMockPosts();
   }
 }
 
@@ -83,10 +83,32 @@ function parseFrontMatter(content) {
 }
 
 /**
- * 生成侧边栏内容
+ * 自动生成文章摘要
+ */
+function generateExcerpt(content, maxLength = 120) {
+  // 移除Front Matter
+  const contentWithoutFM = content.replace(/^---[\s\S]*?---/, '');
+  
+  // 移除Markdown格式
+  const plainText = contentWithoutFM
+    .replace(/(#+\s*)/g, '')    // 移除标题
+    .replace(/(\*{1,2}|_{1,2})(.*?)\1/g, '$2') // 移除粗体/斜体
+    .replace(/!?\[(.*?)\]\(.*?\)/g, '$1')      // 移除图片/链接
+    .replace(/<\/?[^>]+>/g, '')                // 移除HTML标签
+    .replace(/\n/g, ' ')                       // 换行转空格
+    .replace(/\s{2,}/g, ' ')                   // 合并多个空格
+    .trim();
+  
+  // 截取摘要
+  if (plainText.length <= maxLength) return plainText;
+  return plainText.substring(0, maxLength) + '...';
+}
+
+/**
+ * 生成侧边栏内容（按日期分组）
  */
 function generateSidebar(posts) {
-  // 按日期降序排序
+  // 按日期降序排序（最新在前）
   posts.sort((a, b) => {
     const dateA = a.date ? new Date(a.date) : new Date(0);
     const dateB = b.date ? new Date(b.date) : new Date(0);
@@ -102,12 +124,13 @@ function generateSidebar(posts) {
   }, {});
   
   // 生成侧边栏Markdown内容
-  let sidebarContent = `# 导航\n\n- [🏠 首页](/)\n- [📚 所有文章\n`;
+  let sidebarContent = `# 🧭 导航\n\n`;
+  sidebarContent += `- [🏠 首页](/)\n`;
+  sidebarContent += `- [📚 所有文章](#)\n`;
   
   // 按年份倒序添加文章
   Object.keys(postsByYear)
-    .sort()
-    .reverse()
+    .sort((a, b) => b - a) // 降序排列年份
     .forEach(year => {
       sidebarContent += `  - **${year}年**\n`;
       
@@ -118,38 +141,47 @@ function generateSidebar(posts) {
           sidebarContent += ` <small class="article-date">${post.date}</small>`;
         }
         
-        if (post.tags) {
-          sidebarContent += `  \n      ${post.tags.split(',').map(tag => 
-            `<span class="tag">${tag.trim()}</span>`
-          ).join(' ')}`;
-        }
-        
         sidebarContent += '\n';
       });
     });
   
   // 添加其他链接
-  sidebarContent += `\n- [📝 关于我](/about)\n`;
-  sidebarContent += `- [🔍 标签分类](/tags)\n`;
+  sidebarContent += `\n- [🔖 标签分类](/tags)\n`;
+  sidebarContent += `- [👤 关于作者](/about)\n`;
   sidebarContent += `- [💻 GitHub项目](https://github.com/forestbird)\n`;
   
-  // 使用Docsify虚拟文件系统更新侧边栏
+  // 更新虚拟文件
   updateVirtualFile('_sidebar.md', sidebarContent);
 }
 
 /**
- * 生成封面页（可选）
+ * 生成封面页（展示最新文章）
  */
-function generateCoverPage(featuredPosts) {
-  let coverContent = `# ForestBird的知识库 \n\n> 记录学习与成长的点点滴滴\n\n`;
+function generateCoverPage(posts) {
+  // 按日期排序获取最新文章
+  const latestPosts = [...posts].sort((a, b) => 
+    new Date(b.date || 0) - new Date(a.date || 0)
+  ).slice(0, 5); // 只取前5篇
+  
+  let coverContent = `# 🌳 ForestBird的知识库 \n\n`;
+  coverContent += `> 记录学习与成长的点点滴滴\n\n`;
   
   // 添加精选文章
-  coverContent += `## 精选文章\n\n`;
-  featuredPosts.forEach(post => {
-    coverContent += `- [${post.title}](/${post.path}) - ${post.date}\n`;
+  coverContent += `## 🔥 最新文章\n\n`;
+  
+  latestPosts.forEach(post => {
+    coverContent += `### [${post.title}](/_posts/${post.name}.md)\n`;
+    coverContent += `> ${post.excerpt}\n`;
+    
+    if (post.date) {
+      coverContent += `<small>发布日期：${post.date}</small>\n\n`;
+    } else {
+      coverContent += `<small>未指定日期</small>\n\n`;
+    }
   });
   
-  coverContent += `\n[进入知识库 →](/README)`;
+  coverContent += `\n[浏览全部文章 →](#)\n\n`;
+  coverContent += `[GitHub仓库](https://github.com/forestbird/forestbird.github.io) | [联系作者](mailto:forestbird@example.com)`;
   
   updateVirtualFile('_coverpage.md', coverContent);
 }
@@ -185,26 +217,30 @@ function loadMockPosts() {
       path: '_posts/hello-world.md',
       name: 'hello-world',
       title: '你好，世界！',
-      date: '2023-08-25',
+      date: '2023-08-28',
       author: 'ForestBird',
       tags: '介绍, 开始',
-      cover: '/images/hello.jpg'
+      cover: '/images/hello.jpg',
+      excerpt: '这是我的第一篇博客文章，介绍如何使用Docsify和GitHub Pages构建个人知识库。'
     },
     {
-      path: '_posts/docsify-guide.md',
-      name: 'docsify-guide',
-      title: 'Docsify使用指南',
-      date: '2023-08-20',
+      path: '_posts/docsify-tutorial.md',
+      name: 'docsify-tutorial',
+      title: 'Docsify高级教程',
+      date: '2023-08-25',
       author: 'ForestBird',
-      tags: '技术, 文档'
+      tags: '技术, 文档',
+      cover: '/images/docsify.jpg',
+      excerpt: '深入探索Docsify的高级功能，包括自定义主题、插件开发和性能优化。'
     },
     {
-      path: '_posts/github-pages.md',
-      name: 'github-pages',
-      title: 'GitHub Pages部署',
-      date: '2023-08-15',
-      author: 'ForestBird',
-      tags: '技术, GitHub'
+      path: '_posts/github-pages-guide.md',
+      name: 'github-pages-guide',
+      title: 'GitHub Pages完全指南',
+      author: 'ForestBird', // 没有日期
+      tags: '技术, GitHub',
+      cover: '/images/github.jpg',
+      excerpt: '从基础到高级，全面掌握GitHub Pages的部署技巧和最佳实践。'
     }
   ];
   
