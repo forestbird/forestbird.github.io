@@ -1,7 +1,7 @@
 ---
 id: 696
 title: 20250820about_excel_and_other
-date: '2024-10-09T10:06:00+08:00'
+date: 2025-08-20T16:06:00+08:00
 author: forestbird
 layout: post
 guid: 'https://bird.work/?p=696'
