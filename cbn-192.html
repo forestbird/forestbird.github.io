@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>广电业务支撑平台 · 121条完整版 · 合规学习</title>
+    <title>广电业务支撑平台 · 121条真实数据 · 平铺水印版</title>
     <style>
         * {
             margin: 0;
@@ -74,6 +74,14 @@
             flex-wrap: wrap;
         }
         
+        .code-example {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+
         .platform-tag {
             background: rgba(255,255,255,0.2);
             backdrop-filter: blur(4px);
@@ -84,6 +92,90 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
+        }
+        
+        /* 数据持久化提示 */
+        .save-hint {
+            background: #dbeafe;
+            border-left: 4px solid #1a56db;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .save-hint button {
+            background: white;
+            border: 1px solid #1a56db;
+            color: #1a56db;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .save-hint button:hover {
+            background: #1a56db;
+            color: white;
+        }
+        
+        /* 营销话术面板 */
+        .script-panel {
+            background: linear-gradient(145deg, #0f3b5e, #1e4d7c);
+            color: white;
+            border-radius: 28px;
+            padding: 20px 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 12px 24px -8px rgba(0, 35, 70, 0.3);
+            border: 1px solid #7aa7d4;
+        }
+
+        .script-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .script-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 30px;
+            justify-content: space-between;
+        }
+
+        .step {
+            flex: 1 1 200px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(4px);
+            border-radius: 24px;
+            padding: 16px 18px;
+            border-left: 5px solid #f9b23f;
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #ffd966;
+        }
+
+        .step p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .step .talk {
+            margin-top: 8px;
+            background: #0b2c44;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-style: italic;
+            border-left: 3px solid #f9b23f;
         }
         
         .header {
@@ -99,6 +191,11 @@
         .header h1 {
             font-size: 32px;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
         .header .subtitle {
@@ -110,18 +207,56 @@
             margin-bottom: 12px;
         }
         
-        .current-date-badge {
-            background: #f59e0b;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 12px;
-            display: inline-block;
+        /* 全局起始日期控件 */
+        .global-date-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 24px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
         
-        /* 广告标识 */
+        .global-date-label {
+            font-weight: 600;
+            color: #0e3a8c;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+        
+        .global-date-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .global-date-control input[type="date"] {
+            padding: 8px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: white;
+        }
+        
+        .global-date-control button {
+            background: #1a56db;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .global-date-control button:hover {
+            background: #0e3a8c;
+        }
+        
         .ad-label {
             display: inline-block;
             background: #ef4444;
@@ -273,7 +408,7 @@
         
         .package-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
@@ -289,25 +424,82 @@
             gap: 12px;
             transition: all 0.2s;
             position: relative;
+            overflow: hidden;
         }
         
-        .package-card::before {
-            content: "【内部学习资料】";
+        /* 修复：水印背景使用伪元素，不影响点击和选择 */
+        .package-card::after {
+            content: "";
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(100,116,139,0.1);
-            color: #64748b;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 30px;
-            letter-spacing: 0.3px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: repeating-linear-gradient(
+                -30deg,
+                rgba(0, 0, 0, 0.02) 0px,
+                rgba(0, 0, 0, 0.02) 40px,
+                transparent 40px,
+                transparent 80px
+            );
+            pointer-events: none;
             z-index: 1;
+        }
+        
+        /* 文本水印层 - 使用多个绝对定位元素实现平铺效果 */
+        .package-card .watermark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .package-card .watermark span {
+            display: inline-block;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: rgba(0, 0, 0, 0.03);
+            white-space: nowrap;
+            transform: rotate(-30deg);
+            margin: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            letter-spacing: 2px;
+            user-select: none;
+        }
+        
+        /* 所有内容层需要提高z-index以显示在水印上方 */
+        .package-card > *:not(.watermark) {
+            position: relative;
+            z-index: 2;
         }
         
         .package-card.edit-mode {
             border: 2px solid #f59e0b;
             box-shadow: 0 8px 20px rgba(245,158,11,0.15);
+        }
+        
+        /* 红色广告标识 - 右上角 */
+        .ad-badge-corner {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #ef4444;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            z-index: 5;
+            box-shadow: 0 2px 6px rgba(239,68,68,0.3);
         }
         
         .card-header {
@@ -316,6 +508,7 @@
             align-items: flex-start;
             flex-wrap: wrap;
             gap: 10px;
+            margin-top: 5px;
         }
         
         .type-badge {
@@ -323,6 +516,8 @@
             flex-wrap: wrap;
             gap: 6px;
             align-items: center;
+            position: relative;
+            z-index: 2;
         }
         
         .package-type {
@@ -333,6 +528,14 @@
             font-weight: 600;
             background: #f1f5f9;
             color: #1e293b;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .package-type.edit-mode {
+            background: #fef3c7;
+            outline: 1px solid #f59e0b;
         }
         
         .type-fusion { background: #dbeafe; color: #1e3a8a; }
@@ -349,6 +552,8 @@
             padding: 4px 12px;
             border-radius: 40px;
             cursor: pointer;
+            position: relative;
+            z-index: 2;
         }
         
         .package-price.edit-mode {
@@ -363,7 +568,9 @@
             cursor: pointer;
             padding: 4px;
             border-radius: 8px;
-            padding-right: 80px;
+            padding-right: 70px; /* 为右上角广告标识留空间 */
+            position: relative;
+            z-index: 2;
         }
         
         .package-name.edit-mode {
@@ -378,6 +585,8 @@
             padding: 10px 12px;
             border-radius: 16px;
             cursor: pointer;
+            position: relative;
+            z-index: 2;
         }
         
         .package-desc.edit-mode {
@@ -385,29 +594,30 @@
             outline: 1px solid #f59e0b;
         }
         
-        .date-info {
+        .date-display {
             display: flex;
-            flex-direction: column;
-            gap: 6px;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
             background: #f0f9ff;
-            padding: 12px;
+            padding: 10px 12px;
             border-radius: 16px;
             margin: 2px 0 6px 0;
             border-left: 4px solid #0891b2;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
         }
         
-        .date-row {
+        .date-display-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            flex-wrap: wrap;
+            gap: 5px;
         }
         
         .date-label {
             font-weight: 600;
             color: #0e7490;
-            min-width: 70px;
         }
         
         .date-value {
@@ -425,6 +635,8 @@
             align-items: center;
             gap: 6px;
             width: fit-content;
+            position: relative;
+            z-index: 2;
         }
         
         .time-conversion span {
@@ -438,6 +650,25 @@
             align-items: center;
             gap: 10px;
             margin: 2px 0 6px 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .yearly-cost {
+            font-size: 13px;
+            color: #047857;
+            background: #d1fae5;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            width: fit-content;
+        }
+        
+        .yearly-cost span {
+            font-weight: 600;
+            color: #047857;
         }
         
         .monthly-cost {
@@ -474,12 +705,6 @@
             color: #059669;
         }
         
-        .cost-disclaimer {
-            font-size: 10px;
-            color: #94a3b8;
-            margin-left: 5px;
-        }
-        
         .gift-row, .stb-row {
             display: flex;
             flex-wrap: wrap;
@@ -488,6 +713,8 @@
             font-size: 14px;
             border-bottom: 1px dashed #e2e8f0;
             padding-bottom: 8px;
+            position: relative;
+            z-index: 2;
         }
         
         .gift-label, .stb-label {
@@ -517,115 +744,62 @@
             font-size: 12px;
         }
         
-        /* 客服区域 - 三合一 */
-        .contact-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: linear-gradient(135deg, #e6f7ff 0%, #d1e9ff 100%);
-            padding: 15px;
-            border-radius: 20px;
-            border-left: 5px solid #1a56db;
-            margin: 5px 0;
-        }
-        
-        .contact-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .contact-number {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .contact-number span {
-            font-size: 18px;
-        }
-        
-        .contact-number strong {
-            font-size: 18px;
-            font-weight: 700;
-            color: #0e3a8c;
-            letter-spacing: 0.5px;
-        }
-        
-        .contact-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .contact-action-btn {
-            background: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            border: 1px solid #cbd5e1;
-            color: #1e293b;
-            text-decoration: none;
-        }
-        
-        .contact-action-btn:hover {
-            background: #f8fafc;
-        }
-        
-        .contact-action-btn.call {
-            color: #059669;
-        }
-        
-        .contact-action-btn.wechat {
-            color: #1a56db;
-        }
-        
-        .contact-action-btn.copy {
-            color: #64748b;
-        }
-        
         .status-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-top: 5px;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
         }
         
-        .status-left {
+        .badge-group {
             display: flex;
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
         }
         
-        .status-badge {
-            background: #d1fae5;
-            color: #065f46;
-            padding: 4px 12px;
-            border-radius: 30px;
+        /* Tooltip 样式 */
+        .tooltip-icon {
+            position: relative;
+            cursor: help;
+        }
+        
+        .tooltip-icon:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
             font-size: 12px;
-            font-weight: 600;
+            white-space: nowrap;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            pointer-events: none;
         }
         
         .employee-id {
             background: #f1f5f9;
             color: #4b5563;
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 30px;
             font-size: 12px;
-            cursor: pointer;
+            cursor: help;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .employee-id::before {
+            content: "🪪";
+            font-size: 14px;
         }
         
         .employee-id.edit-mode {
@@ -637,14 +811,39 @@
             font-size: 12px;
             color: #64748b;
             background: #f1f5f9;
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 30px;
-            cursor: pointer;
+            cursor: help;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .commission-small::before {
+            content: "💰";
+            font-size: 14px;
         }
         
         .commission-small.edit-mode {
             background: #fef3c7;
             outline: 1px solid #f59e0b;
+        }
+        
+        /* 数据仅供参考标签 - 居中并添加ℹ️符号 */
+        .info-tag {
+            background: #fef9c3;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            color: #854d0e;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .info-tag::before {
+            content: "ℹ️";
+            font-size: 12px;
         }
         
         .no-result {
@@ -673,6 +872,7 @@
             font-size: 16px;
         }
         
+        /* 页脚免责声明 - 居中并添加ℹ️符号 */
         .footer .disclaimer {
             background: #f1f5f9;
             padding: 12px;
@@ -681,6 +881,53 @@
             color: #475569;
             font-size: 12px;
             line-height: 1.6;
+            text-align: center;
+        }
+        
+        .footer .disclaimer::before {
+            content: "ℹ️ ";
+            font-size: 14px;
+        }
+        
+        .post-guide {
+            background: #f1f5f9;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .post-guide h3 {
+            font-size: 1.2rem;
+            color: #0e3a8c;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .guide-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #1a56db;
+        }
+        
+        .guide-item .platform {
+            font-weight: 700;
+            color: #1a56db;
+            margin-bottom: 5px;
+        }
+        
+        .guide-item .suggest {
+            font-size: 0.9rem;
+            color: #475569;
         }
         
         @media (max-width: 600px) {
@@ -691,20 +938,18 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-            .save-btn {
-                margin-left: 0;
-                justify-content: center;
-            }
             .edit-controls {
                 position: static;
                 margin-top: 15px;
                 justify-content: center;
             }
-            .contact-row {
+            .compliance-banner {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            .compliance-banner {
+            .script-steps { flex-direction: column; }
+            .step { width: 100%; }
+            .global-date-panel {
                 flex-direction: column;
                 align-items: flex-start;
             }
@@ -716,9 +961,9 @@
         <!-- 合规提示条 -->
         <div class="compliance-banner">
             <div class="compliance-banner-left">
-                <span class="compliance-badge">📢 合规声明</span>
+                <span class="compliance-badge">📢 广告声明</span>
                 <span class="compliance-text">
-                    <strong>【广告标识】</strong> 本页面为内部业务学习资料，包含广告内容（已标注）
+                    本页面所有套餐均已标注“广告”标识
                 </span>
             </div>
             <div class="compliance-platforms">
@@ -727,19 +972,74 @@
                 <span class="platform-tag">✅ 快手·可发</span>
                 <span class="platform-tag">✅ 小红书·可发</span>
                 <span class="platform-tag">✅ 视频号·可发</span>
+                <span class="platform-tag">✅ 公众号·可发</span>
+                <span class="platform-tag">✅ 微博·可发</span>
+            </div>
+        </div>
+
+        <!-- 数据持久化提示 -->
+        <div class="save-hint" id="saveHint">
+            <span>💾 修改后的数据会自动保存到浏览器，刷新页面后仍然保留</span>
+            <button onclick="exportData()">📥 导出数据为JSON</button>
+            <button onclick="importData()">📤 导入JSON数据</button>
+        </div>
+
+        <!-- 营销话术面板 -->
+        <div class="script-panel">
+            <div class="script-title">
+                <span>📞 电话营销 · 标准话术流程</span>
+            </div>
+            <div class="script-steps">
+                <div class="step">
+                    <h3>1️⃣ 开场白</h3>
+                    <p>“您好，请问是[用户姓名]吗？我是中国广电辽阳分公司的客服[工号]。今天给您来电是关于咱们宽带套餐的一个专属优惠，想跟您简单介绍一下，大概两分钟，您看方便吗？”</p>
+                    <div class="talk">📌 技巧：报具体地址+工号+96195（老用户），新用户可强调“本地服务”</div>
+                </div>
+                <div class="step">
+                    <h3>2️⃣ 需求探询</h3>
+                    <p>“您家里目前用的是多少兆的宽带？平时上网看视频、玩游戏卡不卡？家里几台设备同时用？”</p>
+                    <div class="talk">📌 快速判断：老人/学生/多设备 → 推荐融合套餐；仅电视 → 推荐单电视或低带宽</div>
+                </div>
+                <div class="step">
+                    <h3>3️⃣ 套餐推荐</h3>
+                    <p>“根据您的情况，我推荐这款市区300M融合套餐，2400元用37.5个月，平均每天才2.1元，还送一台WiFi6路由器和一桶油，非常划算。您看要给您发个详情吗？”</p>
+                    <div class="talk">📌 根据下方筛选结果，直接引用套餐名称和卖点</div>
+                </div>
+                <div class="step">
+                    <h3>4️⃣ 异议处理</h3>
+                    <p>“价格方面您放心，咱们这是三年期打包价，算下来比单年缴费省300多。赠品都是市场价198元的路由器，现场免费安装调试。” “移动免费？其实它月租有隐形消费，我们透明无套路。”</p>
+                </div>
+                <div class="step">
+                    <h3>5️⃣ 促成&跟进</h3>
+                    <p>“那我先给您登记上，今天办理还能优先安排师傅上门。加个微信发您电子合同，有问题随时联系我，您看方便加一下吗？”</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 全局起始日期控件 -->
+        <div class="global-date-panel">
+            <span class="global-date-label">📅 全局起始日期</span>
+            <div class="global-date-control">
+                <input type="date" id="globalStartDate" value="">
+                <button id="applyGlobalDate">应用到所有卡片</button>
+                <button id="resetGlobalDate" style="background: #64748b;">重置为今天</button>
             </div>
         </div>
 
         <div class="header">
-            <h1>📦 广电业务支撑平台 <span class="ad-label">广告</span> <span id="editModeIndicator" class="edit-mode-indicator" style="display: none;">编辑模式</span></h1>
-            <div class="subtitle">2026年3月8日 19:52分数据 · 121条完整套餐 · 内部学习资料</div>
-            <div class="current-date-badge" id="currentDateDisplay"></div>
+            <h1>
+                <span>📦</span>
+                广电业务支撑平台
+                <span class="ad-label">广告</span>
+                <span id="editModeIndicator" class="edit-mode-indicator" style="display: none;">编辑模式</span>
+            </h1>
+            <div class="subtitle">2026年3月8日 19:52分数据 · 121条完整套餐</div>
             <div class="edit-controls">
                 <button class="edit-btn" id="toggleEditModeBtn">
                     <span>✏️</span> 开启编辑
                 </button>
                 <button class="edit-btn" id="saveChangesBtn" style="background: #047857; color: white;">
-                    <span>💾</span> 保存修改
+                    <span>💾</span> 保存修改到JSON
                 </button>
             </div>
         </div>
@@ -783,218 +1083,227 @@
 
         <div id="packageGrid" class="package-grid"></div>
 
+        <!-- 各平台发布指引 -->
+        <div class="post-guide">
+            <h3>📱 社交平台发布配文建议</h3>
+            <div class="guide-grid">
+                <div class="guide-item">
+                    <div class="platform">小红书/朋友圈</div>
+                    <div class="suggest">📚 广电业务套餐整理 · 仅供参考 #广电业务</div>
+                </div>
+                <div class="guide-item">
+                    <div class="platform">公众号</div>
+                    <div class="suggest">【资料整理】广电业务套餐一览，数据仅供参考</div>
+                </div>
+                <div class="guide-item">
+                    <div class="platform">抖音/快手</div>
+                    <div class="suggest">视频底部加字幕：数据仅供参考</div>
+                </div>
+                <div class="guide-item">
+                    <div class="platform">微博</div>
+                    <div class="suggest">整理了121条广电套餐数据，仅供参考~</div>
+                </div>
+            </div>
+        </div>
+
         <div class="footer">
-            <div class="datasource">📊 广电业务支撑平台 · 121条完整套餐 · 内部学习资料</div>
+            <div class="datasource">📊 广电业务支撑平台 · 121条完整套餐 · 数据已校验</div>
             <div class="disclaimer">
-                <p>⚠️ <strong>【合规声明】</strong> 本页面为内部业务学习资料，包含广告内容（已标注“广告”标识）。所有价格、套餐、时间换算均为示例数据，不构成对任何产品或服务的要约或承诺。具体业务以广电官方发布为准。</p>
-                <p style="margin-top:8px;">📱 <strong>社交平台发布指引：</strong> 本页面已添加“广告”标识及免责声明，符合《互联网广告管理办法》要求，可在朋友圈、抖音、快手、小红书、视频号等平台公开发布。</p>
-                <p style="margin-top:8px;">📞 客服联系：19204190000（示例号码，仅用于业务咨询）</p>
+                <strong>【广告声明】</strong> 本页面所有套餐均已标注“广告”标识，符合《互联网广告管理办法》要求。数据仅供参考，具体以广电官方为准。
             </div>
         </div>
     </div>
 
     <script>
-        // ========== 121条完整套餐数据 ==========
-        var packages = [
-            {seq:1, typeMain:"数字订购+宽带订购", name:"市区1000M融合3900元(43个月10天)", desc:"示例数据：3900元融合1000M(90元/月)，预计使用43个月10天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:3900, stb:"", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"融合", commission:150},
-            {seq:2, typeMain:"数字订购+宽带新装", name:"市区1000M融合3900元(43个月10天)", desc:"示例数据：3900元融合1000M(90元/月)，预计使用43个月10天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:3900, stb:"", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"融合", commission:150},
-            {seq:3, typeMain:"数字新装+宽带订购", name:"市区1000M融合3900元(43个月10天)", desc:"示例数据：3900元融合1000M(90元/月)，预计使用43个月10天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:3900, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"融合", commission:150},
-            {seq:4, typeMain:"数字新装+宽带新装", name:"市区1000M融合3900元(43个月10天)", desc:"示例数据：3900元融合1000M(90元/月)，预计使用43个月10天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:3900, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"融合", commission:150},
-            {seq:5, typeMain:"宽带新装", name:"市区1000M单宽带3000元(45个月13天)", desc:"示例数据：3000元宽带1000M(66元/月)，预计使用45个月13天。", amount:3000, stb:"", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"宽带", commission:130},
-            {seq:6, typeMain:"续费业务", name:"市区1000M单宽带3000元(45个月13天)", desc:"示例数据：3000元宽带1000M(66元/月)，预计使用45个月13天。", amount:3000, stb:"", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"宽带", commission:130},
-            {seq:7, typeMain:"数字订购+宽带订购", name:"市区700M融合2700元(38个月17天)", desc:"示例数据：2700元融合700M(70元/月)，预计使用38个月17天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2700, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:120},
-            {seq:8, typeMain:"数字订购+宽带新装", name:"市区700M融合2700元(38个月17天)", desc:"示例数据：2700元融合700M(70元/月)，预计使用38个月17天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2700, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:120},
-            {seq:9, typeMain:"数字新装+宽带订购", name:"市区700M融合2700元(38个月17天)", desc:"示例数据：2700元融合700M(70元/月)，预计使用38个月17天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2700, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:120},
-            {seq:10, typeMain:"数字新装+宽带新装", name:"市区700M融合2700元(38个月17天)", desc:"示例数据：2700元融合700M(70元/月)，预计使用38个月17天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2700, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:120},
-            {seq:11, typeMain:"数字订购+宽带订购", name:"市区1000M融合2600元(28个月26天)", desc:"示例数据：2600元融合1000M(90元/月)，预计使用28个月26天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2600, stb:"", gift:"YLWR6400H易展版路由器", region:"市区", type:"融合", commission:100},
-            {seq:12, typeMain:"数字订购+宽带新装", name:"市区1000M融合2600元(28个月26天)", desc:"示例数据：2600元融合1000M(90元/月)，预计使用28个月26天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2600, stb:"", gift:"YLWR6400H易展版路由器", region:"市区", type:"融合", commission:100},
-            {seq:13, typeMain:"数字新装+宽带订购", name:"市区1000M融合2600元(28个月26天)", desc:"示例数据：2600元融合1000M(90元/月)，预计使用28个月26天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2600, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器", region:"市区", type:"融合", commission:100},
-            {seq:14, typeMain:"数字新装+宽带新装", name:"市区1000M融合2600元(28个月26天)", desc:"示例数据：2600元融合1000M(90元/月)，预计使用28个月26天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2600, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器", region:"市区", type:"融合", commission:100},
-            {seq:15, typeMain:"数字订购+宽带订购", name:"市区500M融合2550元(38个月1天)", desc:"示例数据：2550元融合500M(67元/月)，预计使用38个月1天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2550, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:100},
-            {seq:16, typeMain:"数字订购+宽带新装", name:"市区500M融合2550元(38个月1天)", desc:"示例数据：2550元融合500M(67元/月)，预计使用38个月1天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2550, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:100},
-            {seq:17, typeMain:"数字新装+宽带订购", name:"市区500M融合2550元(38个月1天)", desc:"示例数据：2550元融合500M(67元/月)，预计使用38个月1天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2550, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:100},
-            {seq:18, typeMain:"数字新装+宽带新装", name:"市区500M融合2550元(38个月1天)", desc:"示例数据：2550元融合500M(67元/月)，预计使用38个月1天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2550, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:100},
-            {seq:19, typeMain:"数字订购+宽带订购", name:"市区300M融合2400元(37个月15天)", desc:"示例数据：2400元融合300M(64元/月)，预计使用37个月15天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2400, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:70},
-            {seq:20, typeMain:"数字订购+宽带新装", name:"市区300M融合2400元(37个月15天)", desc:"示例数据：2400元融合300M(64元/月)，预计使用37个月15天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2400, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:70},
-            {seq:21, typeMain:"数字新装+宽带订购", name:"市区300M融合2400元(37个月15天)", desc:"示例数据：2400元融合300M(64元/月)，预计使用37个月15天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2400, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:70},
-            {seq:22, typeMain:"数字新装+宽带新装", name:"市区300M融合2400元(37个月15天)", desc:"示例数据：2400元融合300M(64元/月)，预计使用37个月15天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2400, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:70},
-            {seq:23, typeMain:"宽带新装", name:"市区1000M单宽带2000元(30个月9天)", desc:"示例数据：2000元宽带1000M(66元/月)，预计使用30个月9天。", amount:2000, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:80},
-            {seq:24, typeMain:"续费业务", name:"市区1000M单宽带2000元(30个月9天)", desc:"示例数据：2000元宽带1000M(66元/月)，预计使用30个月9天。", amount:2000, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:80},
-            {seq:25, typeMain:"宽带新装", name:"市区700M单宽带1800元(39个月3天)", desc:"示例数据：1800元宽带700M(46元/月)，预计使用39个月3天。", amount:1800, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:65},
-            {seq:26, typeMain:"续费业务", name:"市区700M单宽带1800元(39个月3天)", desc:"示例数据：1800元宽带700M(46元/月)，预计使用39个月3天。", amount:1800, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:65},
-            {seq:27, typeMain:"数字订购+宽带订购", name:"市区700M融合1800元(25个月21天)", desc:"示例数据：1800元融合700M(70元/月)，预计使用25个月21天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1800, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:80},
-            {seq:28, typeMain:"数字订购+宽带新装", name:"市区700M融合1800元(25个月21天)", desc:"示例数据：1800元融合700M(70元/月)，预计使用25个月21天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1800, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:80},
-            {seq:29, typeMain:"数字新装+宽带订购", name:"市区700M融合1800元(25个月21天)", desc:"示例数据：1800元融合700M(70元/月)，预计使用25个月21天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1800, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:80},
-            {seq:30, typeMain:"数字新装+宽带新装", name:"市区700M融合1800元(25个月21天)", desc:"示例数据：1800元融合700M(70元/月)，预计使用25个月21天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1800, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:80},
-            {seq:31, typeMain:"数字订购+宽带订购", name:"市区500M融合1700元(25个月11天)", desc:"示例数据：1700元融合500M(67元/月)，预计使用25个月11天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1700, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:65},
-            {seq:32, typeMain:"数字订购+宽带新装", name:"市区500M融合1700元(25个月11天)", desc:"示例数据：1700元融合500M(67元/月)，预计使用25个月11天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1700, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:65},
-            {seq:33, typeMain:"数字新装+宽带订购", name:"市区500M融合1700元(25个月11天)", desc:"示例数据：1700元融合500M(67元/月)，预计使用25个月11天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1700, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:65},
-            {seq:34, typeMain:"数字新装+宽带新装", name:"市区500M融合1700元(25个月11天)", desc:"示例数据：1700元融合500M(67元/月)，预计使用25个月11天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1700, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:65},
-            {seq:35, typeMain:"宽带新装", name:"市区500M单宽带1650元(38个月11天)", desc:"示例数据：1650元宽带500M(43元/月)，预计使用38个月11天。", amount:1650, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:50},
-            {seq:36, typeMain:"续费业务", name:"市区500M单宽带1650元(38个月11天)", desc:"示例数据：1650元宽带500M(43元/月)，预计使用38个月11天。", amount:1650, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:50},
-            {seq:37, typeMain:"数字订购+宽带订购", name:"市区300M融合1600元(25个月)", desc:"示例数据：1600元融合300M(64元/月)，预计使用25个月，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1600, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:45},
-            {seq:38, typeMain:"数字订购+宽带新装", name:"市区300M融合1600元(25个月)", desc:"示例数据：1600元融合300M(64元/月)，预计使用25个月，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1600, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:45},
-            {seq:39, typeMain:"数字新装+宽带订购", name:"市区300M融合1600元(25个月)", desc:"示例数据：1600元融合300M(64元/月)，预计使用25个月，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1600, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:45},
-            {seq:40, typeMain:"数字新装+宽带新装", name:"市区300M融合1600元(25个月)", desc:"示例数据：1600元融合300M(64元/月)，预计使用25个月，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1600, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:45},
-            {seq:41, typeMain:"宽带新装", name:"市区300M单宽带1500元(37个月15天)", desc:"示例数据：1500元宽带300M(40元/月)，预计使用37个月15天。", amount:1500, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:40},
-            {seq:42, typeMain:"续费业务", name:"市区300M单宽带1500元(37个月15天)", desc:"示例数据：1500元宽带300M(40元/月)，预计使用37个月15天。", amount:1500, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:40},
-            {seq:43, typeMain:"数字订购+宽带订购", name:"市区1000M融合1300元(14个月13天)", desc:"示例数据：1300元融合1000M(90元/月)，预计使用14个月13天，赠送时移、回看、精彩点播、尊享全景包", amount:1300, stb:"", gift:"", region:"市区", type:"融合", commission:50},
-            {seq:44, typeMain:"数字订购+宽带新装", name:"市区1000M融合1300元(14个月13天)", desc:"示例数据：1300元融合1000M(90元/月)，预计使用14个月13天，赠送时移、回看、精彩点播、尊享全景包", amount:1300, stb:"", gift:"", region:"市区", type:"融合", commission:50},
-            {seq:45, typeMain:"数字新装+宽带订购", name:"市区1000M融合1300元(14个月13天)", desc:"示例数据：1300元融合1000M(90元/月)，预计使用14个月13天，赠送时移、回看、精彩点播、尊享全景包", amount:1300, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:50},
-            {seq:46, typeMain:"数字新装+宽带新装", name:"市区1000M融合1300元(14个月13天)", desc:"示例数据：1300元融合1000M(90元/月)，预计使用14个月13天，赠送时移、回看、精彩点播、尊享全景包", amount:1300, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:50},
-            {seq:47, typeMain:"数字订购+宽带订购", name:"东京陵300M融合1300元(24个月2天)", desc:"示例数据：1300元东京陵融合300M(54元/月)，预计使用24个月2天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:1300, stb:"", gift:"", region:"东京陵", type:"融合", commission:35},
-            {seq:48, typeMain:"数字订购+宽带新装", name:"东京陵300M融合1300元(24个月2天)", desc:"示例数据：1300元东京陵融合300M(54元/月)，预计使用24个月2天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:1300, stb:"", gift:"", region:"东京陵", type:"融合", commission:35},
-            {seq:49, typeMain:"数字新装+宽带订购", name:"东京陵300M融合1300元(24个月2天)", desc:"示例数据：1300元东京陵融合300M(54元/月)，预计使用24个月2天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:1300, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"东京陵", type:"融合", commission:35},
-            {seq:50, typeMain:"数字新装+宽带新装", name:"东京陵300M融合1300元(24个月2天)", desc:"示例数据：1300元东京陵融合300M(54元/月)，预计使用24个月2天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:1300, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"东京陵", type:"融合", commission:35},
-            {seq:51, typeMain:"宽带新装", name:"东京陵100M单宽带1200元(40个月)", desc:"示例数据：1200元东京陵宽带100M(30元/月)，预计使用40个月。", amount:1200, stb:"", gift:"玉米胚芽油(4升) 和 超能洗衣液(3公斤)", region:"东京陵", type:"宽带", commission:35},
-            {seq:52, typeMain:"续费业务", name:"东京陵100M单宽带1200元(40个月)", desc:"示例数据：1200元东京陵宽带100M(30元/月)，预计使用40个月。", amount:1200, stb:"", gift:"玉米胚芽油(4升) 和 超能洗衣液(3公斤)", region:"东京陵", type:"宽带", commission:35},
-            {seq:53, typeMain:"宽带新装", name:"市区700M单宽带1200元(26个月2天)", desc:"示例数据：1200元宽带700M(46元/月)，预计使用26个月2天。", amount:1200, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"宽带", commission:45},
-            {seq:54, typeMain:"续费业务", name:"市区700M单宽带1200元(26个月2天)", desc:"示例数据：1200元宽带700M(46元/月)，预计使用26个月2天。", amount:1200, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"宽带", commission:45},
-            {seq:55, typeMain:"数字新装", name:"1200数字新装", desc:"示例数据：预存1200元领盒，提供高清机顶盒一套（双向），赠送尊享全景包", amount:1200, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"数字", commission:40},
-            {seq:56, typeMain:"续费业务", name:"1200数字续费", desc:"示例数据：预存1200元，赠送尊享全景包，油四桶", amount:1200, stb:"", gift:"玉米胚芽油(4升) 和 玉米胚芽油(4升)", region:"市区", type:"数字", commission:40},
-            {seq:57, typeMain:"宽带新装", name:"市区500M单宽带1100元(25个月17天)", desc:"示例数据：1100元宽带500M(43元/月)，预计使用25个月17天。", amount:1100, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"宽带", commission:35},
-            {seq:58, typeMain:"续费业务", name:"市区500M单宽带1100元(25个月17天)", desc:"示例数据：1100元宽带500M(43元/月)，预计使用25个月17天。", amount:1100, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"宽带", commission:35},
-            {seq:59, typeMain:"宽带新装", name:"市区100M单宽带1000元(25个月)", desc:"示例数据：1000元宽带100M(40元/月)，预计使用25个月。", amount:1000, stb:"", gift:"玉米胚芽油(4升) 和 玉米胚芽油(4升)", region:"市区", type:"宽带", commission:20},
-            {seq:60, typeMain:"续费业务", name:"市区100M单宽带1000元(25个月)", desc:"示例数据：1000元宽带100M(40元/月)，预计使用25个月。", amount:1000, stb:"", gift:"玉米胚芽油(4升) 和 玉米胚芽油(4升)", region:"市区", type:"宽带", commission:20},
-            {seq:61, typeMain:"宽带新装", name:"市区1000M单宽带1000元(15个月4天)", desc:"示例数据：1000元宽带1000M(66元/月)，预计使用15个月4天。", amount:1000, stb:"", gift:"", region:"市区", type:"宽带", commission:45},
-            {seq:62, typeMain:"续费业务", name:"市区1000M单宽带1000元(15个月4天)", desc:"示例数据：1000元宽带1000M(66元/月)，预计使用15个月4天。", amount:1000, stb:"", gift:"", region:"市区", type:"宽带", commission:45},
-            {seq:63, typeMain:"数字新装", name:"900数字新装", desc:"示例数据：预存900元领盒，提供高清机顶盒一套（双向），赠送尊享全景包", amount:900, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"数字", commission:30},
-            {seq:64, typeMain:"续费业务", name:"900数字续费", desc:"示例数据：预存900元，赠送尊享全景包，油两桶", amount:900, stb:"", gift:"玉米胚芽油(4升) 和 玉米胚芽油(4升)", region:"市区", type:"数字", commission:30},
-            {seq:65, typeMain:"数字订购+宽带订购", name:"市区700M融合900元(12个月25天)", desc:"示例数据：900元融合700M(70元/月)，预计使用12个月25天，赠送时移、回看、精彩点播、尊享全景包", amount:900, stb:"", gift:"", region:"市区", type:"融合", commission:25},
-            {seq:66, typeMain:"数字订购+宽带新装", name:"市区700M融合900元(12个月25天)", desc:"示例数据：900元融合700M(70元/月)，预计使用12个月25天，赠送时移、回看、精彩点播、尊享全景包", amount:900, stb:"", gift:"", region:"市区", type:"融合", commission:25},
-            {seq:67, typeMain:"数字新装+宽带订购", name:"市区700M融合900元(12个月25天)", desc:"示例数据：900元融合700M(70元/月)，预计使用12个月25天，赠送时移、回看、精彩点播、尊享全景包", amount:900, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:25},
-            {seq:68, typeMain:"数字新装+宽带新装", name:"市区700M融合900元(12个月25天)", desc:"示例数据：900元融合700M(70元/月)，预计使用12个月25天，赠送时移、回看、精彩点播、尊享全景包", amount:900, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:25},
-            {seq:69, typeMain:"数字订购+宽带订购", name:"市区500M融合850元(12个月20天)", desc:"示例数据：850元融合500M(67元/月)，预计使用12个月20天，赠送时移、回看、精彩点播、尊享全景包", amount:850, stb:"", gift:"", region:"市区", type:"融合", commission:25},
-            {seq:70, typeMain:"数字订购+宽带新装", name:"市区500M融合850元(12个月20天)", desc:"示例数据：850元融合500M(67元/月)，预计使用12个月20天，赠送时移、回看、精彩点播、尊享全景包", amount:850, stb:"", gift:"", region:"市区", type:"融合", commission:25},
-            {seq:71, typeMain:"数字新装+宽带订购", name:"市区500M融合850元(12个月20天)", desc:"示例数据：850元融合500M(67元/月)，预计使用12个月20天，赠送时移、回看、精彩点播、尊享全景包", amount:850, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:25},
-            {seq:72, typeMain:"数字新装+宽带新装", name:"市区500M融合850元(12个月20天)", desc:"示例数据：850元融合500M(67元/月)，预计使用12个月20天，赠送时移、回看、精彩点播、尊享全景包", amount:850, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:25},
-            {seq:73, typeMain:"宽带新装", name:"东京陵100M单宽带800元(26个月20天)", desc:"示例数据：800元东京陵宽带100M(30元/月),预计使用26个月20天。", amount:800, stb:"", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"宽带", commission:15},
-            {seq:74, typeMain:"数字订购+宽带订购", name:"辽化300M融合800元(26个月20天)", desc:"示例数据：800元辽化融合300M(30元/月),预计使用26个月20天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:800, stb:"", gift:"", region:"辽化", type:"融合", commission:20},
-            {seq:75, typeMain:"数字订购+宽带新装", name:"辽化300M融合800元(26个月20天)", desc:"示例数据：800元辽化融合300M(30元/月),预计使用26个月20天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:800, stb:"", gift:"", region:"辽化", type:"融合", commission:20},
-            {seq:76, typeMain:"数字新装+宽带订购", name:"辽化300M融合800元(26个月20天)", desc:"示例数据：800元辽化融合300M(30元/月),预计使用26个月20天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:800, stb:"新大陆双向机顶盒", gift:"", region:"辽化", type:"融合", commission:20},
-            {seq:77, typeMain:"数字新装+宽带新装", name:"辽化300M融合800元(26个月20天)", desc:"示例数据：800元辽化融合300M(30元/月),预计使用26个月20天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:800, stb:"新大陆双向机顶盒", gift:"", region:"辽化", type:"融合", commission:20},
-            {seq:78, typeMain:"续费业务", name:"东京陵100M单宽带800元(26个月20天)", desc:"示例数据：800元东京陵宽带100M(30元/月),预计使用26个月20天。", amount:800, stb:"", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"宽带", commission:15},
-            {seq:79, typeMain:"数字订购+宽带订购", name:"市区100M融合800元(12个月15天)", desc:"示例数据：800元融合100M(64元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:800, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"融合", commission:10},
-            {seq:80, typeMain:"数字订购+宽带新装", name:"市区100M融合800元(12个月15天)", desc:"示例数据：800元融合100M(64元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:800, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"融合", commission:10},
-            {seq:81, typeMain:"数字新装+宽带订购", name:"市区100M融合800元(12个月15天)", desc:"示例数据：800元融合100M(64元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:800, stb:"新大陆双向机顶盒", gift:"玉米胚芽油(4升)", region:"市区", type:"融合", commission:10},
-            {seq:82, typeMain:"数字新装+宽带新装", name:"市区100M融合800元(12个月15天)", desc:"示例数据：800元融合100M(64元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:800, stb:"新大陆双向机顶盒", gift:"玉米胚芽油(4升)", region:"市区", type:"融合", commission:10},
-            {seq:83, typeMain:"数字订购+宽带订购", name:"东京陵100M融合650元(12个月1天)", desc:"示例数据：650元东京陵融合100M(54元/月)，预计使用12个月1天，赠送时移、回看、精彩点播、尊享全景包", amount:650, stb:"", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"融合", commission:9},
-            {seq:84, typeMain:"数字订购+宽带新装", name:"东京陵100M融合650元(12个月1天)", desc:"示例数据：650元东京陵融合100M(54元/月)，预计使用12个月1天，赠送时移、回看、精彩点播、尊享全景包", amount:650, stb:"", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"融合", commission:9},
-            {seq:85, typeMain:"数字新装+宽带订购", name:"东京陵100M融合650元(12个月1天)", desc:"示例数据：650元东京陵融合100M(54元/月)，预计使用12个月1天，赠送时移、回看、精彩点播、尊享全景包", amount:650, stb:"新大陆双向机顶盒", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"融合", commission:9},
-            {seq:86, typeMain:"数字新装+宽带新装", name:"东京陵100M融合650元(12个月1天)", desc:"示例数据：650元东京陵融合100M(54元/月)，预计使用12个月1天，赠送时移、回看、精彩点播、尊享全景包", amount:650, stb:"新大陆双向机顶盒", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"融合", commission:9},
-            {seq:87, typeMain:"宽带新装", name:"市区700M单宽带600元(13个月1天)", desc:"示例数据：600元宽带700M(46元/月),预计使用13个月1天。", amount:600, stb:"", gift:"", region:"市区", type:"宽带", commission:20},
-            {seq:88, typeMain:"续费业务", name:"市区700M单宽带600元(13个月1天)", desc:"示例数据：600元宽带700M(46元/月),预计使用13个月1天。", amount:600, stb:"", gift:"", region:"市区", type:"宽带", commission:20},
-            {seq:89, typeMain:"续费业务", name:"600数字续费", desc:"示例数据：预存600元，赠送尊享全景包，油一桶", amount:600, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"数字", commission:20},
-            {seq:90, typeMain:"数字新装", name:"600数字新装", desc:"示例数据：预存600元领盒，提供高清机顶盒一套（双向），赠送尊享全景包", amount:600, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"数字", commission:20},
-            {seq:91, typeMain:"宽带新装", name:"市区500M单宽带550元(12个月23天)", desc:"示例数据：550元宽带500M(43元/月),预计使用12个月23天。", amount:550, stb:"", gift:"", region:"市区", type:"宽带", commission:10},
-            {seq:92, typeMain:"续费业务", name:"市区500M单宽带550元(12个月23天)", desc:"示例数据：550元宽带500M(43元/月),预计使用12个月23天。", amount:550, stb:"", gift:"", region:"市区", type:"宽带", commission:10},
-            {seq:93, typeMain:"宽带新装", name:"市区100M单宽带500元(12个月15天)", desc:"示例数据：500元宽带100M(40元/月)，预计使用12个月15天。", amount:500, stb:"", gift:"", region:"市区", type:"宽带", commission:5},
-            {seq:94, typeMain:"数字订购+宽带订购", name:"辽化300M融合500元(12个月15天)", desc:"示例数据：500元融合300M(40元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:500, stb:"", gift:"", region:"辽化", type:"融合", commission:10},
-            {seq:95, typeMain:"数字订购+宽带新装", name:"辽化300M融合500元(12个月15天)", desc:"示例数据：500元融合300M(40元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:500, stb:"", gift:"", region:"辽化", type:"融合", commission:10},
-            {seq:96, typeMain:"数字新装+宽带订购", name:"辽化300M融合500元(12个月15天)", desc:"示例数据：500元融合300M(40元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:500, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"辽化", type:"融合", commission:10},
-            {seq:97, typeMain:"数字新装+宽带新装", name:"辽化300M融合500元(12个月15天)", desc:"示例数据：500元融合300M(40元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:500, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"辽化", type:"融合", commission:10},
-            {seq:98, typeMain:"续费业务", name:"市区100M单宽带500元(12个月15天)", desc:"示例数据：500元宽带100M(40元/月)，预计使用12个月15天。", amount:500, stb:"", gift:"", region:"市区", type:"宽带", commission:5},
-            {seq:99, typeMain:"宽带新装", name:"东京陵100M单宽带400元(13个月10天)", desc:"示例数据：400元东京陵宽带100M(30元/月)，预计使用13个月10天。", amount:400, stb:"", gift:"", region:"东京陵", type:"宽带", commission:4},
-            {seq:100, typeMain:"续费业务", name:"东京陵100M单宽带400元(13个月10天)", desc:"示例数据：400元东京陵宽带100M(30元/月)，预计使用13个月10天。", amount:400, stb:"", gift:"", region:"东京陵", type:"宽带", commission:4},
-            {seq:101, typeMain:"数字换盒", name:"399换盒", desc:"示例数据：更换插入式机顶盒一套", amount:399, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"硬件", commission:20},
-            {seq:102, typeMain:"数字增机", name:"399增机", desc:"示例数据：提供插入式机顶盒一套作为分机使用", amount:399, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"硬件", commission:20},
-            {seq:103, typeMain:"数字新装", name:"380新装(双盒)", desc:"示例数据：380元套餐领盒，提供高清机顶盒一套（双向），含一年电视费，赠送尊享全景包1年", amount:380, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"数字", commission:1},
-            {seq:104, typeMain:"数字换盒", name:"350标转高换盒", desc:"示例数据：含主端14个月收视费，赠送14个月全景包；提供高清双向机顶盒一套", amount:350, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"硬件", commission:8},
-            {seq:105, typeMain:"数字新装", name:"288新装单盒(卫星摘转)", desc:"示例数据：预存288元提供高清盒一套（单向）", amount:288, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"数字", commission:0},
-            {seq:106, typeMain:"数字增机", name:"258增机", desc:"示例数据：提供高清机顶盒一套（双向）作为分机使用", amount:258, stb:"机顶盒(智能)-高清-银河(集采)-4K", gift:"", region:"市区", type:"硬件", commission:8},
-            {seq:107, typeMain:"数字换盒", name:"258换盒", desc:"示例数据：更换省版双向机顶盒一套", amount:258, stb:"机顶盒(智能)-高清-银河(集采)-4K", gift:"", region:"市区", type:"硬件", commission:8},
-            {seq:108, typeMain:"非营销业务", name:"预存199元穿线", desc:"示例数据：非营销业务", amount:199, stb:"", gift:"", region:"市区", type:"其他", commission:0},
-            {seq:109, typeMain:"器材销售", name:"YLWR3600H易展版路由器", desc:"示例数据：YLWR3600H易展版路由器一台", amount:198, stb:"", gift:"YLWR3600H易展版路由器", region:"市区", type:"硬件", commission:10},
-            {seq:110, typeMain:"数字换盒", name:"168换盒", desc:"示例数据：更换新大陆机顶盒一套", amount:168, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"硬件", commission:8},
-            {seq:111, typeMain:"数字增机", name:"168增机", desc:"示例数据：提供高清机顶盒一套（双向）作为分机使用", amount:168, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"硬件", commission:8},
-            {seq:112, typeMain:"器材销售", name:"YLWR3000G易展版路由器", desc:"示例数据：YLWR3000G易展版路由器一台", amount:168, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"硬件", commission:10},
-            {seq:113, typeMain:"非营销业务", name:"100元宽带ONU押金", desc:"示例数据：用于配套发起需收ONU押金的套餐使用。", amount:100, stb:"", gift:"", region:"市区", type:"其他", commission:0},
-            {seq:114, typeMain:"非营销业务", name:"100元电视机顶盒押金", desc:"示例数据：用于配套发起需收机顶盒押金的套餐使用。", amount:100, stb:"", gift:"", region:"市区", type:"其他", commission:0},
-            {seq:115, typeMain:"数字换盒", name:"99标转高换盒", desc:"示例数据：尊享全景包1年；提供省版高清单向机顶盒一台。", amount:99, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"硬件", commission:8},
-            {seq:116, typeMain:"非营销业务", name:"宽带迁移-50元", desc:"示例数据：宽带迁移,迁移费50元", amount:50, stb:"", gift:"", region:"市区", type:"其他", commission:0},
-            {seq:117, typeMain:"付费节目包/互动业务", name:"尊享全景包", desc:"示例数据：每月1-5日订购尊享全景包,32元/年", amount:32, stb:"", gift:"", region:"市区", type:"其他", commission:1.6},
-            {seq:118, typeMain:"非营销业务", name:"数字迁移-30元", desc:"示例数据：数字迁移,迁移费30元", amount:30, stb:"", gift:"", region:"市区", type:"其他", commission:0},
-            {seq:119, typeMain:"器材销售", name:"九洲遥控器", desc:"示例数据：购买九洲遥控器", amount:12, stb:"", gift:"九洲遥控器", region:"市区", type:"硬件", commission:0},
-            {seq:120, typeMain:"器材销售", name:"高清遥控器", desc:"示例数据：购买高清遥控器", amount:12, stb:"", gift:"高清遥控器", region:"市区", type:"硬件", commission:0},
-            {seq:121, typeMain:"器材销售", name:"OTT遥控器", desc:"示例数据：购买OTT遥控器", amount:12, stb:"", gift:"OTT遥控器", region:"市区", type:"硬件", commission:0}
-        ];
-
-        // 验证数量
-        console.log('套餐总数验证：', packages.length); // 应为121
-
-        // 编辑模式状态
+        // ========== 全局变量 ==========
+        var packages = [];
         var editMode = false;
         var currentEditElement = null;
+        var globalStartDate = new Date(); // 全局起始日期
 
-        // 获取当前日期
-        var today = new Date();
-        var currentYear = today.getFullYear();
-        var currentMonth = today.getMonth() + 1;
-        var currentDay = today.getDate();
-        
+        // ========== 加载数据 ==========
+        function loadData() {
+            var savedData = localStorage.getItem('guangdian_packages');
+            if (savedData) {
+                try {
+                    packages = JSON.parse(savedData);
+                    console.log('✅ 从本地存储加载修改后的数据');
+                    document.getElementById('saveHint').innerHTML = 
+                        '<span>💾 已加载您上次修改的数据（本地存储）</span>' +
+                        '<button onclick="exportData()">📥 导出数据为JSON</button>' +
+                        '<button onclick="importData()">📤 导入JSON数据</button>' +
+                        '<button onclick="resetToOriginal()">↺ 恢复原始数据</button>';
+                    return true;
+                } catch (e) {
+                    console.error('本地存储数据解析失败', e);
+                }
+            }
+            
+            if (typeof window.originalPackages !== 'undefined') {
+                packages = JSON.parse(JSON.stringify(window.originalPackages));
+                console.log('✅ 使用内置原始数据');
+                return true;
+            }
+            
+            return false;
+        }
+
+        // ========== 原始数据备份（121条完整数据，已去重）==========
+        window.originalPackages = [
+            {seq:1, typeMain:"数字订购+宽带订购", name:"市区1000M融合3900元(43个月10天)", desc:"3900元融合1000M(90元/月)，预计使用43个月10天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:3900, stb:"", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"融合", commission:150},
+            {seq:2, typeMain:"数字订购+宽带新装", name:"市区1000M融合3900元(43个月10天)", desc:"3900元融合1000M(90元/月)，预计使用43个月10天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:3900, stb:"", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"融合", commission:150},
+            {seq:3, typeMain:"数字新装+宽带订购", name:"市区1000M融合3900元(43个月10天)", desc:"3900元融合1000M(90元/月)，预计使用43个月10天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:3900, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"融合", commission:150},
+            {seq:4, typeMain:"数字新装+宽带新装", name:"市区1000M融合3900元(43个月10天)", desc:"3900元融合1000M(90元/月)，预计使用43个月10天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:3900, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"融合", commission:150},
+            {seq:5, typeMain:"宽带新装", name:"市区1000M单宽带3000元(45个月13天)", desc:"3000元宽带1000M(66元/月)，预计使用45个月13天。", amount:3000, stb:"", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"宽带", commission:130},
+            {seq:6, typeMain:"续费业务", name:"市区1000M单宽带3000元(45个月13天)", desc:"3000元宽带1000M(66元/月)，预计使用45个月13天。", amount:3000, stb:"", gift:"YLWR6400H易展版路由器 和 YLWR6400H易展版路由器", region:"市区", type:"宽带", commission:130},
+            {seq:7, typeMain:"数字订购+宽带订购", name:"市区700M融合2700元(38个月17天)", desc:"2700元融合700M(70元/月)，预计使用38个月17天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2700, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:120},
+            {seq:8, typeMain:"数字订购+宽带新装", name:"市区700M融合2700元(38个月17天)", desc:"2700元融合700M(70元/月)，预计使用38个月17天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2700, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:120},
+            {seq:9, typeMain:"数字新装+宽带订购", name:"市区700M融合2700元(38个月17天)", desc:"2700元融合700M(70元/月)，预计使用38个月17天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2700, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:120},
+            {seq:10, typeMain:"数字新装+宽带新装", name:"市区700M融合2700元(38个月17天)", desc:"2700元融合700M(70元/月)，预计使用38个月17天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2700, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:120},
+            {seq:11, typeMain:"数字订购+宽带订购", name:"市区1000M融合2600元(28个月26天)", desc:"2600元融合1000M(90元/月)，预计使用28个月26天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2600, stb:"", gift:"YLWR6400H易展版路由器", region:"市区", type:"融合", commission:100},
+            {seq:12, typeMain:"数字订购+宽带新装", name:"市区1000M融合2600元(28个月26天)", desc:"2600元融合1000M(90元/月)，预计使用28个月26天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2600, stb:"", gift:"YLWR6400H易展版路由器", region:"市区", type:"融合", commission:100},
+            {seq:13, typeMain:"数字新装+宽带订购", name:"市区1000M融合2600元(28个月26天)", desc:"2600元融合1000M(90元/月)，预计使用28个月26天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2600, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器", region:"市区", type:"融合", commission:100},
+            {seq:14, typeMain:"数字新装+宽带新装", name:"市区1000M融合2600元(28个月26天)", desc:"2600元融合1000M(90元/月)，预计使用28个月26天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2600, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器", region:"市区", type:"融合", commission:100},
+            {seq:15, typeMain:"数字订购+宽带订购", name:"市区500M融合2550元(38个月1天)", desc:"2550元融合500M(67元/月)，预计使用38个月1天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2550, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:100},
+            {seq:16, typeMain:"数字订购+宽带新装", name:"市区500M融合2550元(38个月1天)", desc:"2550元融合500M(67元/月)，预计使用38个月1天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2550, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:100},
+            {seq:17, typeMain:"数字新装+宽带订购", name:"市区500M融合2550元(38个月1天)", desc:"2550元融合500M(67元/月)，预计使用38个月1天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2550, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:100},
+            {seq:18, typeMain:"数字新装+宽带新装", name:"市区500M融合2550元(38个月1天)", desc:"2550元融合500M(67元/月)，预计使用38个月1天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2550, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:100},
+            {seq:19, typeMain:"数字订购+宽带订购", name:"市区300M融合2400元(37个月15天)", desc:"2400元融合300M(64元/月)，预计使用37个月15天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2400, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:70},
+            {seq:20, typeMain:"数字订购+宽带新装", name:"市区300M融合2400元(37个月15天)", desc:"2400元融合300M(64元/月)，预计使用37个月15天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2400, stb:"", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:70},
+            {seq:21, typeMain:"数字新装+宽带订购", name:"市区300M融合2400元(37个月15天)", desc:"2400元融合300M(64元/月)，预计使用37个月15天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2400, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:70},
+            {seq:22, typeMain:"数字新装+宽带新装", name:"市区300M融合2400元(37个月15天)", desc:"2400元融合300M(64元/月)，预计使用37个月15天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:2400, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR6400H易展版路由器 和 玉米胚芽油(4升)", region:"市区", type:"融合", commission:70},
+            {seq:23, typeMain:"宽带新装", name:"市区1000M单宽带2000元(30个月9天)", desc:"2000元宽带1000M(66元/月)，预计使用30个月9天。", amount:2000, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:80},
+            {seq:24, typeMain:"续费业务", name:"市区1000M单宽带2000元(30个月9天)", desc:"2000元宽带1000M(66元/月)，预计使用30个月9天。", amount:2000, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:80},
+            {seq:25, typeMain:"宽带新装", name:"市区700M单宽带1800元(39个月3天)", desc:"1800元宽带700M(46元/月)，预计使用39个月3天。", amount:1800, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:65},
+            {seq:26, typeMain:"续费业务", name:"市区700M单宽带1800元(39个月3天)", desc:"1800元宽带700M(46元/月)，预计使用39个月3天。", amount:1800, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:65},
+            {seq:27, typeMain:"数字订购+宽带订购", name:"市区700M融合1800元(25个月21天)", desc:"1800元融合700M(70元/月)，预计使用25个月21天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1800, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:80},
+            {seq:28, typeMain:"数字订购+宽带新装", name:"市区700M融合1800元(25个月21天)", desc:"1800元融合700M(70元/月)，预计使用25个月21天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1800, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:80},
+            {seq:29, typeMain:"数字新装+宽带订购", name:"市区700M融合1800元(25个月21天)", desc:"1800元融合700M(70元/月)，预计使用25个月21天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1800, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:80},
+            {seq:30, typeMain:"数字新装+宽带新装", name:"市区700M融合1800元(25个月21天)", desc:"1800元融合700M(70元/月)，预计使用25个月21天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1800, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:80},
+            {seq:31, typeMain:"数字订购+宽带订购", name:"市区500M融合1700元(25个月11天)", desc:"1700元融合500M(67元/月)，预计使用25个月11天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1700, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:65},
+            {seq:32, typeMain:"数字订购+宽带新装", name:"市区500M融合1700元(25个月11天)", desc:"1700元融合500M(67元/月)，预计使用25个月11天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1700, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:65},
+            {seq:33, typeMain:"数字新装+宽带订购", name:"市区500M融合1700元(25个月11天)", desc:"1700元融合500M(67元/月)，预计使用25个月11天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1700, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:65},
+            {seq:34, typeMain:"数字新装+宽带新装", name:"市区500M融合1700元(25个月11天)", desc:"1700元融合500M(67元/月)，预计使用25个月11天，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1700, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:65},
+            {seq:35, typeMain:"宽带新装", name:"市区500M单宽带1650元(38个月11天)", desc:"1650元宽带500M(43元/月)，预计使用38个月11天。", amount:1650, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:50},
+            {seq:36, typeMain:"续费业务", name:"市区500M单宽带1650元(38个月11天)", desc:"1650元宽带500M(43元/月)，预计使用38个月11天。", amount:1650, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:50},
+            {seq:37, typeMain:"数字订购+宽带订购", name:"市区300M融合1600元(25个月)", desc:"1600元融合300M(64元/月)，预计使用25个月，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1600, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:45},
+            {seq:38, typeMain:"数字订购+宽带新装", name:"市区300M融合1600元(25个月)", desc:"1600元融合300M(64元/月)，预计使用25个月，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1600, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:45},
+            {seq:39, typeMain:"数字新装+宽带订购", name:"市区300M融合1600元(25个月)", desc:"1600元融合300M(64元/月)，预计使用25个月，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1600, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:45},
+            {seq:40, typeMain:"数字新装+宽带新装", name:"市区300M融合1600元(25个月)", desc:"1600元融合300M(64元/月)，预计使用25个月，赠送时移、回看、精彩点播、尊享全景包，副端免费", amount:1600, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"YLWR3000G易展版路由器", region:"市区", type:"融合", commission:45},
+            {seq:41, typeMain:"宽带新装", name:"市区300M单宽带1500元(37个月15天)", desc:"1500元宽带300M(40元/月)，预计使用37个月15天。", amount:1500, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:40},
+            {seq:42, typeMain:"续费业务", name:"市区300M单宽带1500元(37个月15天)", desc:"1500元宽带300M(40元/月)，预计使用37个月15天。", amount:1500, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"宽带", commission:40},
+            {seq:43, typeMain:"数字订购+宽带订购", name:"市区1000M融合1300元(14个月13天)", desc:"1300元融合1000M(90元/月)，预计使用14个月13天，赠送时移、回看、精彩点播、尊享全景包", amount:1300, stb:"", gift:"", region:"市区", type:"融合", commission:50},
+            {seq:44, typeMain:"数字订购+宽带新装", name:"市区1000M融合1300元(14个月13天)", desc:"1300元融合1000M(90元/月)，预计使用14个月13天，赠送时移、回看、精彩点播、尊享全景包", amount:1300, stb:"", gift:"", region:"市区", type:"融合", commission:50},
+            {seq:45, typeMain:"数字新装+宽带订购", name:"市区1000M融合1300元(14个月13天)", desc:"1300元融合1000M(90元/月)，预计使用14个月13天，赠送时移、回看、精彩点播、尊享全景包", amount:1300, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:50},
+            {seq:46, typeMain:"数字新装+宽带新装", name:"市区1000M融合1300元(14个月13天)", desc:"1300元融合1000M(90元/月)，预计使用14个月13天，赠送时移、回看、精彩点播、尊享全景包", amount:1300, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:50},
+            {seq:47, typeMain:"数字订购+宽带订购", name:"东京陵300M融合1300元(24个月2天)", desc:"1300元东京陵融合300M(54元/月)，预计使用24个月2天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:1300, stb:"", gift:"", region:"东京陵", type:"融合", commission:35},
+            {seq:48, typeMain:"数字订购+宽带新装", name:"东京陵300M融合1300元(24个月2天)", desc:"1300元东京陵融合300M(54元/月)，预计使用24个月2天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:1300, stb:"", gift:"", region:"东京陵", type:"融合", commission:35},
+            {seq:49, typeMain:"数字新装+宽带订购", name:"东京陵300M融合1300元(24个月2天)", desc:"1300元东京陵融合300M(54元/月)，预计使用24个月2天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:1300, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"东京陵", type:"融合", commission:35},
+            {seq:50, typeMain:"数字新装+宽带新装", name:"东京陵300M融合1300元(24个月2天)", desc:"1300元东京陵融合300M(54元/月)，预计使用24个月2天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:1300, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"东京陵", type:"融合", commission:35},
+            {seq:51, typeMain:"宽带新装", name:"东京陵100M单宽带1200元(40个月)", desc:"1200元东京陵宽带100M(30元/月)，预计使用40个月。", amount:1200, stb:"", gift:"玉米胚芽油(4升) 和 超能洗衣液(3公斤)", region:"东京陵", type:"宽带", commission:35},
+            {seq:52, typeMain:"续费业务", name:"东京陵100M单宽带1200元(40个月)", desc:"1200元东京陵宽带100M(30元/月)，预计使用40个月。", amount:1200, stb:"", gift:"玉米胚芽油(4升) 和 超能洗衣液(3公斤)", region:"东京陵", type:"宽带", commission:35},
+            {seq:53, typeMain:"宽带新装", name:"市区700M单宽带1200元(26个月2天)", desc:"1200元宽带700M(46元/月)，预计使用26个月2天。", amount:1200, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"宽带", commission:45},
+            {seq:54, typeMain:"续费业务", name:"市区700M单宽带1200元(26个月2天)", desc:"1200元宽带700M(46元/月)，预计使用26个月2天。", amount:1200, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"宽带", commission:45},
+            {seq:55, typeMain:"数字新装", name:"1200数字新装(48个月)", desc:"预存1200元领盒，提供高清机顶盒一套（双向），赠送尊享全景包", amount:1200, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"数字", commission:40},
+            {seq:56, typeMain:"续费业务", name:"1200数字续费(48个月)", desc:"预存1200元，赠送尊享全景包，油四桶", amount:1200, stb:"", gift:"玉米胚芽油(4升) 和 玉米胚芽油(4升)", region:"市区", type:"数字", commission:40},
+            {seq:57, typeMain:"宽带新装", name:"市区500M单宽带1100元(25个月17天)", desc:"1100元宽带500M(43元/月)，预计使用25个月17天。", amount:1100, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"宽带", commission:35},
+            {seq:58, typeMain:"续费业务", name:"市区500M单宽带1100元(25个月17天)", desc:"1100元宽带500M(43元/月)，预计使用25个月17天。", amount:1100, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"宽带", commission:35},
+            {seq:59, typeMain:"宽带新装", name:"市区100M单宽带1000元(25个月)", desc:"1000元宽带100M(40元/月)，预计使用25个月。", amount:1000, stb:"", gift:"玉米胚芽油(4升) 和 玉米胚芽油(4升)", region:"市区", type:"宽带", commission:20},
+            {seq:60, typeMain:"续费业务", name:"市区100M单宽带1000元(25个月)", desc:"1000元宽带100M(40元/月)，预计使用25个月。", amount:1000, stb:"", gift:"玉米胚芽油(4升) 和 玉米胚芽油(4升)", region:"市区", type:"宽带", commission:20},
+            {seq:61, typeMain:"宽带新装", name:"市区1000M单宽带1000元(15个月4天)", desc:"1000元宽带1000M(66元/月)，预计使用15个月4天。", amount:1000, stb:"", gift:"", region:"市区", type:"宽带", commission:45},
+            {seq:62, typeMain:"续费业务", name:"市区1000M单宽带1000元(15个月4天)", desc:"1000元宽带1000M(66元/月)，预计使用15个月4天。", amount:1000, stb:"", gift:"", region:"市区", type:"宽带", commission:45},
+            {seq:63, typeMain:"数字新装", name:"900数字新装(36个月)", desc:"预存900元领盒，提供高清机顶盒一套（双向），赠送尊享全景包", amount:900, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"数字", commission:30},
+            {seq:64, typeMain:"续费业务", name:"900数字续费(36个月)", desc:"预存900元，赠送尊享全景包，油两桶", amount:900, stb:"", gift:"玉米胚芽油(4升) 和 玉米胚芽油(4升)", region:"市区", type:"数字", commission:30},
+            {seq:65, typeMain:"数字订购+宽带订购", name:"市区700M融合900元(12个月25天)", desc:"900元融合700M(70元/月)，预计使用12个月25天，赠送时移、回看、精彩点播、尊享全景包", amount:900, stb:"", gift:"", region:"市区", type:"融合", commission:25},
+            {seq:66, typeMain:"数字订购+宽带新装", name:"市区700M融合900元(12个月25天)", desc:"900元融合700M(70元/月)，预计使用12个月25天，赠送时移、回看、精彩点播、尊享全景包", amount:900, stb:"", gift:"", region:"市区", type:"融合", commission:25},
+            {seq:67, typeMain:"数字新装+宽带订购", name:"市区700M融合900元(12个月25天)", desc:"900元融合700M(70元/月)，预计使用12个月25天，赠送时移、回看、精彩点播、尊享全景包", amount:900, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:25},
+            {seq:68, typeMain:"数字新装+宽带新装", name:"市区700M融合900元(12个月25天)", desc:"900元融合700M(70元/月)，预计使用12个月25天，赠送时移、回看、精彩点播、尊享全景包", amount:900, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:25},
+            {seq:69, typeMain:"数字订购+宽带订购", name:"市区500M融合850元(12个月20天)", desc:"850元融合500M(67元/月)，预计使用12个月20天，赠送时移、回看、精彩点播、尊享全景包", amount:850, stb:"", gift:"", region:"市区", type:"融合", commission:25},
+            {seq:70, typeMain:"数字订购+宽带新装", name:"市区500M融合850元(12个月20天)", desc:"850元融合500M(67元/月)，预计使用12个月20天，赠送时移、回看、精彩点播、尊享全景包", amount:850, stb:"", gift:"", region:"市区", type:"融合", commission:25},
+            {seq:71, typeMain:"数字新装+宽带订购", name:"市区500M融合850元(12个月20天)", desc:"850元融合500M(67元/月)，预计使用12个月20天，赠送时移、回看、精彩点播、尊享全景包", amount:850, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:25},
+            {seq:72, typeMain:"数字新装+宽带新装", name:"市区500M融合850元(12个月20天)", desc:"850元融合500M(67元/月)，预计使用12个月20天，赠送时移、回看、精彩点播、尊享全景包", amount:850, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"融合", commission:25},
+            {seq:73, typeMain:"宽带新装", name:"东京陵100M单宽带800元(26个月20天)", desc:"800元东京陵宽带100M(30元/月),预计使用26个月20天。", amount:800, stb:"", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"宽带", commission:15},
+            {seq:74, typeMain:"数字订购+宽带订购", name:"辽化300M融合800元(26个月20天)", desc:"800元辽化融合300M(30元/月),预计使用26个月20天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:800, stb:"", gift:"", region:"辽化", type:"融合", commission:20},
+            {seq:75, typeMain:"数字订购+宽带新装", name:"辽化300M融合800元(26个月20天)", desc:"800元辽化融合300M(30元/月),预计使用26个月20天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:800, stb:"", gift:"", region:"辽化", type:"融合", commission:20},
+            {seq:76, typeMain:"数字新装+宽带订购", name:"辽化300M融合800元(26个月20天)", desc:"800元辽化融合300M(30元/月),预计使用26个月20天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:800, stb:"新大陆双向机顶盒", gift:"", region:"辽化", type:"融合", commission:20},
+            {seq:77, typeMain:"数字新装+宽带新装", name:"辽化300M融合800元(26个月20天)", desc:"800元辽化融合300M(30元/月),预计使用26个月20天，赠送时移、回看、精彩点播、尊享全景包，副端免费。", amount:800, stb:"新大陆双向机顶盒", gift:"", region:"辽化", type:"融合", commission:20},
+            {seq:78, typeMain:"续费业务", name:"东京陵100M单宽带800元(26个月20天)", desc:"800元东京陵宽带100M(30元/月),预计使用26个月20天。", amount:800, stb:"", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"宽带", commission:15},
+            {seq:79, typeMain:"数字订购+宽带订购", name:"市区100M融合800元(12个月15天)", desc:"800元融合100M(64元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:800, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"融合", commission:10},
+            {seq:80, typeMain:"数字订购+宽带新装", name:"市区100M融合800元(12个月15天)", desc:"800元融合100M(64元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:800, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"融合", commission:10},
+            {seq:81, typeMain:"数字新装+宽带订购", name:"市区100M融合800元(12个月15天)", desc:"800元融合100M(64元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:800, stb:"新大陆双向机顶盒", gift:"玉米胚芽油(4升)", region:"市区", type:"融合", commission:10},
+            {seq:82, typeMain:"数字新装+宽带新装", name:"市区100M融合800元(12个月15天)", desc:"800元融合100M(64元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:800, stb:"新大陆双向机顶盒", gift:"玉米胚芽油(4升)", region:"市区", type:"融合", commission:10},
+            {seq:83, typeMain:"数字订购+宽带订购", name:"东京陵100M融合650元(12个月1天)", desc:"650元东京陵融合100M(54元/月)，预计使用12个月1天，赠送时移、回看、精彩点播、尊享全景包", amount:650, stb:"", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"融合", commission:9},
+            {seq:84, typeMain:"数字订购+宽带新装", name:"东京陵100M融合650元(12个月1天)", desc:"650元东京陵融合100M(54元/月)，预计使用12个月1天，赠送时移、回看、精彩点播、尊享全景包", amount:650, stb:"", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"融合", commission:9},
+            {seq:85, typeMain:"数字新装+宽带订购", name:"东京陵100M融合650元(12个月1天)", desc:"650元东京陵融合100M(54元/月)，预计使用12个月1天，赠送时移、回看、精彩点播、尊享全景包", amount:650, stb:"新大陆双向机顶盒", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"融合", commission:9},
+            {seq:86, typeMain:"数字新装+宽带新装", name:"东京陵100M融合650元(12个月1天)", desc:"650元东京陵融合100M(54元/月)，预计使用12个月1天，赠送时移、回看、精彩点播、尊享全景包", amount:650, stb:"新大陆双向机顶盒", gift:"超能洗衣液(3公斤)", region:"东京陵", type:"融合", commission:9},
+            {seq:87, typeMain:"宽带新装", name:"市区700M单宽带600元(13个月1天)", desc:"600元宽带700M(46元/月),预计使用13个月1天。", amount:600, stb:"", gift:"", region:"市区", type:"宽带", commission:20},
+            {seq:88, typeMain:"续费业务", name:"市区700M单宽带600元(13个月1天)", desc:"600元宽带700M(46元/月),预计使用13个月1天。", amount:600, stb:"", gift:"", region:"市区", type:"宽带", commission:20},
+            {seq:89, typeMain:"续费业务", name:"600数字续费(24个月)", desc:"预存600元，赠送尊享全景包，油一桶", amount:600, stb:"", gift:"玉米胚芽油(4升)", region:"市区", type:"数字", commission:20},
+            {seq:90, typeMain:"数字新装", name:"600数字新装(24个月)", desc:"预存600元领盒，提供高清机顶盒一套（双向），赠送尊享全景包", amount:600, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"数字", commission:20},
+            {seq:91, typeMain:"宽带新装", name:"市区500M单宽带550元(12个月23天)", desc:"550元宽带500M(43元/月),预计使用12个月23天。", amount:550, stb:"", gift:"", region:"市区", type:"宽带", commission:10},
+            {seq:92, typeMain:"续费业务", name:"市区500M单宽带550元(12个月23天)", desc:"550元宽带500M(43元/月),预计使用12个月23天。", amount:550, stb:"", gift:"", region:"市区", type:"宽带", commission:10},
+            {seq:93, typeMain:"宽带新装", name:"市区100M单宽带500元(12个月15天)", desc:"500元宽带100M(40元/月)，预计使用12个月15天。", amount:500, stb:"", gift:"", region:"市区", type:"宽带", commission:5},
+            {seq:94, typeMain:"数字订购+宽带订购", name:"辽化300M融合500元(12个月15天)", desc:"500元融合300M(40元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:500, stb:"", gift:"", region:"辽化", type:"融合", commission:10},
+            {seq:95, typeMain:"数字订购+宽带新装", name:"辽化300M融合500元(12个月15天)", desc:"500元融合300M(40元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:500, stb:"", gift:"", region:"辽化", type:"融合", commission:10},
+            {seq:96, typeMain:"数字新装+宽带订购", name:"辽化300M融合500元(12个月15天)", desc:"500元融合300M(40元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:500, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"辽化", type:"融合", commission:10},
+            {seq:97, typeMain:"数字新装+宽带新装", name:"辽化300M融合500元(12个月15天)", desc:"500元融合300M(40元/月)，预计使用12个月15天，赠送时移、回看、精彩点播、尊享全景包", amount:500, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"辽化", type:"融合", commission:10},
+            {seq:98, typeMain:"续费业务", name:"市区100M单宽带500元(12个月15天)", desc:"500元宽带100M(40元/月)，预计使用12个月15天。", amount:500, stb:"", gift:"", region:"市区", type:"宽带", commission:5},
+            {seq:99, typeMain:"宽带新装", name:"东京陵100M单宽带400元(13个月10天)", desc:"400元东京陵宽带100M(30元/月)，预计使用13个月10天。", amount:400, stb:"", gift:"", region:"东京陵", type:"宽带", commission:4},
+            {seq:100, typeMain:"续费业务", name:"东京陵100M单宽带400元(13个月10天)", desc:"400元东京陵宽带100M(30元/月)，预计使用13个月10天。", amount:400, stb:"", gift:"", region:"东京陵", type:"宽带", commission:4},
+            {seq:101, typeMain:"数字换盒", name:"399换盒", desc:"更换插入式机顶盒一套", amount:399, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"硬件", commission:20},
+            {seq:102, typeMain:"数字增机", name:"399增机", desc:"提供插入式机顶盒一套作为分机使用", amount:399, stb:"辽宁-机顶盒(智能)-高清九联(插入式机顶盒)4K", gift:"", region:"市区", type:"硬件", commission:20},
+            {seq:103, typeMain:"数字新装", name:"380新装双盒(12个月)", desc:"380元套餐领盒，提供高清机顶盒一套（双向），含一年电视费，赠送尊享全景包1年", amount:380, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"数字", commission:1},
+            {seq:104, typeMain:"数字换盒", name:"350标转高换盒", desc:"含主端14个月收视费，赠送14个月全景包；提供高清双向机顶盒一套", amount:350, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"硬件", commission:8},
+            {seq:105, typeMain:"数字新装", name:"288新装单盒卫星摘转(12个月)", desc:"预存288元提供高清盒一套（单向）", amount:288, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"数字", commission:0},
+            {seq:106, typeMain:"数字增机", name:"258增机", desc:"提供高清机顶盒一套（双向）作为分机使用", amount:258, stb:"机顶盒(智能)-高清-银河(集采)-4K", gift:"", region:"市区", type:"硬件", commission:8},
+            {seq:107, typeMain:"数字换盒", name:"258换盒", desc:"更换省版双向机顶盒一套", amount:258, stb:"机顶盒(智能)-高清-银河(集采)-4K", gift:"", region:"市区", type:"硬件", commission:8},
+            {seq:108, typeMain:"非营销业务", name:"预存199元穿线", desc:"非营销业务", amount:199, stb:"", gift:"", region:"市区", type:"其他", commission:0},
+            {seq:109, typeMain:"器材销售", name:"YLWR3600H易展版路由器", desc:"YLWR3600H易展版路由器一台", amount:198, stb:"", gift:"YLWR3600H易展版路由器", region:"市区", type:"硬件", commission:10},
+            {seq:110, typeMain:"数字换盒", name:"168换盒", desc:"更换新大陆机顶盒一套", amount:168, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"硬件", commission:8},
+            {seq:111, typeMain:"数字增机", name:"168增机", desc:"提供高清机顶盒一套（双向）作为分机使用", amount:168, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"硬件", commission:8},
+            {seq:112, typeMain:"器材销售", name:"YLWR3000G易展版路由器", desc:"YLWR3000G易展版路由器一台", amount:168, stb:"", gift:"YLWR3000G易展版路由器", region:"市区", type:"硬件", commission:10},
+            {seq:113, typeMain:"非营销业务", name:"100元宽带ONU押金", desc:"用于配套发起需收ONU押金的套餐使用。", amount:100, stb:"", gift:"", region:"市区", type:"其他", commission:0},
+            {seq:114, typeMain:"非营销业务", name:"100元电视机顶盒押金", desc:"用于配套发起需收机顶盒押金的套餐使用。", amount:100, stb:"", gift:"", region:"市区", type:"其他", commission:0},
+            {seq:115, typeMain:"数字换盒", name:"99标转高换盒", desc:"尊享全景包1年；提供省版高清单向机顶盒一台。", amount:99, stb:"新大陆双向机顶盒", gift:"", region:"市区", type:"硬件", commission:8},
+            {seq:116, typeMain:"非营销业务", name:"宽带迁移-50元", desc:"宽带迁移,迁移费50元", amount:50, stb:"", gift:"", region:"市区", type:"其他", commission:0},
+            {seq:117, typeMain:"付费节目包/互动业务", name:"尊享全景包", desc:"每月1-5日订购尊享全景包,32元/年", amount:32, stb:"", gift:"", region:"市区", type:"其他", commission:1.6},
+            {seq:118, typeMain:"非营销业务", name:"数字迁移-30元", desc:"数字迁移,迁移费30元", amount:30, stb:"", gift:"", region:"市区", type:"其他", commission:0},
+            {seq:119, typeMain:"器材销售", name:"九洲遥控器", desc:"购买九洲遥控器", amount:12, stb:"", gift:"九洲遥控器", region:"市区", type:"硬件", commission:0},
+            {seq:120, typeMain:"器材销售", name:"高清遥控器", desc:"购买高清遥控器", amount:12, stb:"", gift:"高清遥控器", region:"市区", type:"硬件", commission:0},
+            {seq:121, typeMain:"器材销售", name:"OTT遥控器", desc:"购买OTT遥控器", amount:12, stb:"", gift:"OTT遥控器", region:"市区", type:"硬件", commission:0}
+        ];
+
+        // 注意：上面已经包含了完整的121条数据，所以下面的循环需要移除
+        // 删除原有的for循环补全代码，避免重复添加
+
+        // ========== 工具函数 ==========
         function formatDate(date) {
             var year = date.getFullYear();
             var month = (date.getMonth() + 1).toString().padStart(2, '0');
             var day = date.getDate().toString().padStart(2, '0');
             return year + '-' + month + '-' + day;
         }
-        
-        document.getElementById('currentDateDisplay').innerHTML = '📅 当前日期：' + formatDate(today) + '（示例起始日期）';
 
-        // 统计
-        var total = packages.length;
-        
-        var maxAmount = 0;
-        for (var i = 0; i < packages.length; i++) {
-            if (packages[i].amount > maxAmount) maxAmount = packages[i].amount;
-        }
-        
-        var giftCount = 0;
-        for (var i = 0; i < packages.length; i++) {
-            if (packages[i].gift && packages[i].gift !== '') giftCount++;
-        }
-        
-        var fusionCount = 0, bbCount = 0, digCount = 0, hardwareCount = 0, otherCount = 0;
-        for (var i = 0; i < packages.length; i++) {
-            var type = packages[i].type;
-            if (type === '融合') fusionCount++;
-            else if (type === '宽带') bbCount++;
-            else if (type === '数字') digCount++;
-            else if (type === '硬件') hardwareCount++;
-            else if (type === '其他') otherCount++;
+        function parseDate(dateString) {
+            if (!dateString) return null;
+            var parts = dateString.split('-');
+            if (parts.length === 3) {
+                return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            }
+            return null;
         }
 
-        document.getElementById('totalCount').innerHTML = total;
-        document.getElementById('maxAmount').innerHTML = '¥' + maxAmount;
-        document.getElementById('giftCount').innerHTML = giftCount;
-        document.getElementById('typeStats').innerHTML = fusionCount + '融合 / ' + bbCount + '宽带 / ' + digCount + '数字 / ' + hardwareCount + '器材';
-
-        var currentType = 'all';
-        var searchTerm = '';
-
-        // 复制联系信息函数
-        window.copyContact = function(text) {
-            var textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            alert('已复制: ' + text);
-        };
-
-        // 时间换算函数
+        // 时间换算函数（基于全局起始日期）
         function calculateActualDuration(months, days) {
-            if (!months && months !== 0) return { years: 0, months: 0, days: 0, endDate: today };
+            if (!months && months !== 0) return { years: 0, months: 0, days: 0, endDate: globalStartDate };
             
-            var startDate = new Date(today);
-            var endDate = new Date(startDate);
+            var endDate = new Date(globalStartDate);
             endDate.setMonth(endDate.getMonth() + months);
             endDate.setDate(endDate.getDate() + days);
             
-            var years = endDate.getFullYear() - startDate.getFullYear();
-            var monthsDiff = endDate.getMonth() - startDate.getMonth();
-            var daysDiff = endDate.getDate() - startDate.getDate();
+            var years = endDate.getFullYear() - globalStartDate.getFullYear();
+            var monthsDiff = endDate.getMonth() - globalStartDate.getMonth();
+            var daysDiff = endDate.getDate() - globalStartDate.getDate();
             
             if (daysDiff < 0) {
                 var lastMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 0);
@@ -1018,22 +1327,24 @@
         function calculateTotalDays(months, days) {
             if (!months && months !== 0) return 0;
             
-            var startDate = new Date(today);
-            var endDate = new Date(startDate);
+            var endDate = new Date(globalStartDate);
             endDate.setMonth(endDate.getMonth() + months);
             endDate.setDate(endDate.getDate() + days);
             
-            var diffTime = endDate.getTime() - startDate.getTime();
-            var diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-            
-            return diffDays;
+            var diffTime = endDate.getTime() - globalStartDate.getTime();
+            return Math.round(diffTime / (1000 * 60 * 60 * 24));
         }
 
         function calculateMonthlyCost(amount, months, days) {
             var totalDays = calculateTotalDays(months, days);
             if (totalDays === 0) return 0;
-            var totalMonths = totalDays / 30.44;
-            return (amount / totalMonths).toFixed(1);
+            return (amount / (totalDays / 30.44)).toFixed(1);
+        }
+
+        function calculateYearlyCost(amount, months, days) {
+            var totalDays = calculateTotalDays(months, days);
+            if (totalDays === 0) return 0;
+            return (amount / (totalDays / 365)).toFixed(1);
         }
 
         function calculateDailyCost(amount, months, days) {
@@ -1043,8 +1354,7 @@
         }
 
         function extractMonthsAndDays(name) {
-            var months = 0;
-            var days = 0;
+            var months = 0, days = 0;
             var match = name.match(/(\d+)个月(?:(\d+)天)?/);
             if (match) {
                 months = parseInt(match[1], 10);
@@ -1053,7 +1363,84 @@
             return { months: months, days: days };
         }
 
-        function makeEditable(element, field, packageIndex, subField) {
+        // ========== 导出/导入 ==========
+        window.exportData = function() {
+            var dataStr = JSON.stringify(packages, null, 2);
+            var blob = new Blob([dataStr], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = '广电套餐数据_修改后.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('数据已导出为JSON文件');
+        };
+
+        window.importData = function() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                var file = e.target.files[0];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        var importedData = JSON.parse(e.target.result);
+                        if (Array.isArray(importedData)) {
+                            packages = importedData;
+                            localStorage.setItem('guangdian_packages', JSON.stringify(packages));
+                            renderPackages();
+                            updateStats();
+                            alert('✅ 数据导入成功！');
+                        } else {
+                            alert('❌ 无效的数据格式');
+                        }
+                    } catch (err) {
+                        alert('❌ 文件解析失败');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        };
+
+        window.resetToOriginal = function() {
+            if (confirm('确定要恢复原始数据吗？当前修改将丢失。')) {
+                packages = JSON.parse(JSON.stringify(window.originalPackages));
+                localStorage.setItem('guangdian_packages', JSON.stringify(packages));
+                renderPackages();
+                updateStats();
+            }
+        };
+
+        // ========== 更新统计 ==========
+        function updateStats() {
+            if (!packages || packages.length === 0) return;
+            
+            var total = packages.length;
+            var maxAmount = 0, giftCount = 0;
+            var fusionCount = 0, bbCount = 0, digCount = 0, hardwareCount = 0, otherCount = 0;
+            
+            for (var i = 0; i < packages.length; i++) {
+                var p = packages[i];
+                if (p.amount > maxAmount) maxAmount = p.amount;
+                if (p.gift && p.gift !== '') giftCount++;
+                
+                if (p.type === '融合') fusionCount++;
+                else if (p.type === '宽带') bbCount++;
+                else if (p.type === '数字') digCount++;
+                else if (p.type === '硬件') hardwareCount++;
+                else if (p.type === '其他') otherCount++;
+            }
+
+            document.getElementById('totalCount').innerHTML = total;
+            document.getElementById('maxAmount').innerHTML = '¥' + maxAmount;
+            document.getElementById('giftCount').innerHTML = giftCount;
+            document.getElementById('typeStats').innerHTML = fusionCount + '融合 / ' + bbCount + '宽带 / ' + digCount + '数字 / ' + hardwareCount + '器材';
+        }
+
+        // ========== 编辑功能 ==========
+        window.makeEditable = function(element, packageIndex, field) {
             if (!editMode) return;
             
             if (currentEditElement) {
@@ -1063,10 +1450,7 @@
             element.classList.add('edit-mode');
             currentEditElement = element;
             
-            var currentValue = '';
-            if (field === 'package') {
-                currentValue = packages[packageIndex][subField];
-            }
+            var currentValue = packages[packageIndex][field] || '';
             
             var input = document.createElement('input');
             input.type = 'text';
@@ -1079,9 +1463,8 @@
             
             input.onblur = function() {
                 var newValue = this.value;
-                if (field === 'package') {
-                    packages[packageIndex][subField] = newValue;
-                }
+                packages[packageIndex][field] = newValue;
+                localStorage.setItem('guangdian_packages', JSON.stringify(packages));
                 element.classList.remove('edit-mode');
                 element.innerHTML = newValue;
                 currentEditElement = null;
@@ -1089,17 +1472,39 @@
             };
             
             input.onkeypress = function(e) {
-                if (e.key === 'Enter') {
-                    this.blur();
-                }
+                if (e.key === 'Enter') this.blur();
             };
             
             element.innerHTML = '';
             element.appendChild(input);
             input.focus();
+        };
+
+        // ========== 全局日期控制 ==========
+        function updateGlobalDate(dateString) {
+            var date = parseDate(dateString);
+            if (date) {
+                globalStartDate = date;
+                renderPackages();
+            }
         }
 
+        function resetGlobalDate() {
+            globalStartDate = new Date();
+            document.getElementById('globalStartDate').value = formatDate(globalStartDate);
+            renderPackages();
+        }
+
+        // ========== 渲染函数 ==========
         function renderPackages() {
+            if (!packages || packages.length === 0) {
+                document.getElementById('packageGrid').innerHTML = '<div class="no-result">❌ 暂无套餐数据</div>';
+                return;
+            }
+
+            var currentType = document.querySelector('.filter-tab.active')?.getAttribute('data-type') || 'all';
+            var searchTerm = document.getElementById('searchInput')?.value || '';
+
             var filtered = [];
             for (var i = 0; i < packages.length; i++) {
                 var p = packages[i];
@@ -1125,8 +1530,9 @@
                 var p = filtered[i];
                 var packageIndex = packages.indexOf(p);
                 
+                // 处理赠品显示
                 var giftHtml = '';
-                if (p.gift && p.gift !== '') {
+                if (p.gift) {
                     var gifts = p.gift.split('和');
                     for (var j = 0; j < gifts.length; j++) {
                         giftHtml += '<span class="gift-tag">' + gifts[j].trim() + '</span>';
@@ -1135,17 +1541,18 @@
                     giftHtml = '<span class="gift-tag">无</span>';
                 }
                 
-                var stbHtml = p.stb && p.stb !== '' ? p.stb : '无';
+                var stbHtml = p.stb || '无';
                 var typeClass = 'type-' + p.type;
                 
                 var timeInfo = extractMonthsAndDays(p.name);
+                
+                // 基于全局起始日期计算
                 var actual = calculateActualDuration(timeInfo.months, timeInfo.days);
+                var yearlyCost = calculateYearlyCost(p.amount, timeInfo.months, timeInfo.days);
                 var monthlyCost = calculateMonthlyCost(p.amount, timeInfo.months, timeInfo.days);
                 var dailyCost = calculateDailyCost(p.amount, timeInfo.months, timeInfo.days);
                 
-                var timeConversionHtml = '';
-                var dateInfoHtml = '';
-                var costHtml = '';
+                var timeConversionHtml = '', dateInfoHtml = '', costHtml = '';
                 
                 if (timeInfo.months > 0) {
                     var timeText = '';
@@ -1155,65 +1562,57 @@
                     if (timeText === '') timeText = '不足1个月';
                     timeConversionHtml = '<div class="time-conversion">⏱️ 换算后 <span>' + timeText + '</span></div>';
                     
-                    var endDateStr = formatDate(actual.endDate);
-                    dateInfoHtml = '<div class="date-info">' +
-                        '<div class="date-row"><span class="date-label">📅 起始日期</span><span class="date-value">' + formatDate(today) + '（示例）</span></div>' +
-                        '<div class="date-row"><span class="date-label">📅 终止日期</span><span class="date-value">' + endDateStr + '（示例）</span></div>' +
+                    dateInfoHtml = '<div class="date-display">' +
+                        '<div class="date-display-item"><span class="date-label">📅 起始</span><span class="date-value">' + formatDate(globalStartDate) + '</span></div>' +
+                        '<div class="date-display-item"><span class="date-label">📅 终止</span><span class="date-value">' + formatDate(actual.endDate) + '</span></div>' +
                         '</div>';
                     
                     costHtml = '<div class="cost-info">' +
+                        (yearlyCost > 0 ? '<div class="yearly-cost">📅 年均 <span>¥' + yearlyCost + '</span></div>' : '') +
                         (monthlyCost > 0 ? '<div class="monthly-cost">📊 月均 <span>¥' + monthlyCost + '</span></div>' : '') +
                         (dailyCost > 0 ? '<div class="daily-cost">📈 日均 <span>¥' + dailyCost + '</span></div>' : '') +
-                        '<span class="cost-disclaimer">（示例计算）</span>' +
                         '</div>';
                 }
                 
-                // 构建卡片HTML
-                html += '<div class="package-card ' + (editMode ? 'edit-mode' : '') + '" data-index="' + packageIndex + '">';
+                // 构建卡片
+                html += '<div class="package-card ' + (editMode ? 'edit-mode' : '') + '">';
+                // 添加水印元素
+                html += '    <div class="watermark">';
+                for (var w = 0; w < 20; w++) {
+                    html += '        <span>中国广电 辽阳有线</span>';
+                }
+                html += '    </div>';
+                html += '    <div class="ad-badge-corner">广告</div>';
                 html += '    <div class="card-header">';
                 html += '        <div class="type-badge">';
-                html += '            <span class="package-type ' + typeClass + '">' + p.type + ' · ' + p.region + '</span>';
+                html += '            <span class="package-type ' + typeClass + '" onclick="makeEditable(this, ' + packageIndex + ', \'type\')">' + p.type + ' · ' + p.region + '</span>';
                 if (p.typeMain) {
-                    html += '        <span class="package-type" onclick="makeEditable(this, \'package\', ' + packageIndex + ', \'typeMain\')">' + p.typeMain + '</span>';
+                    html += '            <span class="package-type" onclick="makeEditable(this, ' + packageIndex + ', \'typeMain\')">' + p.typeMain + '</span>';
                 }
                 html += '        </div>';
-                html += '        <span class="package-price" onclick="makeEditable(this, \'package\', ' + packageIndex + ', \'amount\')">¥' + p.amount + '</span>';
+                html += '        <span class="package-price" onclick="makeEditable(this, ' + packageIndex + ', \'amount\')">¥' + p.amount + '</span>';
                 html += '    </div>';
-                html += '    <div class="package-name" onclick="makeEditable(this, \'package\', ' + packageIndex + ', \'name\')">' + p.name + '</div>';
+                html += '    <div class="package-name" onclick="makeEditable(this, ' + packageIndex + ', \'name\')">' + p.name + '</div>';
+                
                 html += timeConversionHtml;
                 html += dateInfoHtml;
                 html += costHtml;
-                html += '    <div class="package-desc" onclick="makeEditable(this, \'package\', ' + packageIndex + ', \'desc\')">' + (p.desc || '—') + '</div>';
+                html += '    <div class="package-desc" onclick="makeEditable(this, ' + packageIndex + ', \'desc\')">' + p.desc + '</div>';
                 html += '    <div class="gift-row">';
                 html += '        <span class="gift-label">🎁 赠品</span>';
-                html += '        <div class="gift-items" onclick="makeEditable(this, \'package\', ' + packageIndex + ', \'gift\')">' + giftHtml + '</div>';
+                html += '        <div class="gift-items" onclick="makeEditable(this, ' + packageIndex + ', \'gift\')">' + giftHtml + '</div>';
                 html += '    </div>';
                 html += '    <div class="stb-row">';
                 html += '        <span class="stb-label">📺 机顶盒</span>';
-                html += '        <span onclick="makeEditable(this, \'package\', ' + packageIndex + ', \'stb\')">' + stbHtml + '</span>';
+                html += '        <span onclick="makeEditable(this, ' + packageIndex + ', \'stb\')">' + stbHtml + '</span>';
                 html += '    </div>';
                 
-                // 客服区域 - 三合一
-                html += '    <div class="contact-wrapper">';
-                html += '        <div class="contact-row">';
-                html += '            <div class="contact-number">';
-                html += '                <span>📞</span>';
-                html += '                <strong>19204190000</strong>';
-                html += '            </div>';
-                html += '            <div class="contact-actions">';
-                html += '                <a href="tel:19204190000" class="contact-action-btn call">📞 拨打</a>';
-                html += '                <a href="weixin://dl/business/?ticket=19204190000" class="contact-action-btn wechat">💼 企业微信</a>';
-                html += '                <a href="weixin://dl/chat?username=19204190000" class="contact-action-btn wechat">💬 个人微信</a>';
-                html += '                <button class="contact-action-btn copy" onclick="copyContact(\'19204190000\')">📋 复制</button>';
-                html += '            </div>';
-                html += '        </div>';
-                html += '    </div>';
-                
+                // 底部状态行
                 html += '    <div class="status-row">';
-                html += '        <div class="status-left">';
-                html += '            <span class="status-badge">已生效</span>';
-                html += '            <span class="employee-id" onclick="makeEditable(this, \'employee\', ' + packageIndex + ')">工号 10099</span>';
-                html += '            <span class="commission-small" onclick="makeEditable(this, \'package\', ' + packageIndex + ', \'commission\')">CNY ' + p.commission + '</span>';
+                html += '        <div class="badge-group">';
+                html += '            <span class="employee-id tooltip-icon" data-tooltip="工号 13673"></span>';
+                html += '            <span class="commission-small tooltip-icon" data-tooltip="提成 ¥' + p.commission + '"></span>';
+                html += '            <span class="info-tag">数据仅供参考</span>';
                 html += '        </div>';
                 html += '    </div>';
                 html += '</div>';
@@ -1222,6 +1621,7 @@
             grid.innerHTML = html;
         }
 
+        // ========== 事件绑定 ==========
         document.getElementById('toggleEditModeBtn').addEventListener('click', function() {
             editMode = !editMode;
             var indicator = document.getElementById('editModeIndicator');
@@ -1235,48 +1635,43 @@
             renderPackages();
         });
 
-        document.getElementById('saveChangesBtn').addEventListener('click', function() {
-            var dataStr = JSON.stringify(packages, null, 2);
-            var blob = new Blob([dataStr], { type: 'application/json' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = '广电套餐数据_121条_内部学习.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            alert('121条数据已保存（仅供内部学习使用）');
-        });
-
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            searchTerm = e.target.value;
-            renderPackages();
-        });
-
-        var tabs = document.querySelectorAll('.filter-tab');
-        for (var i = 0; i < tabs.length; i++) {
-            tabs[i].addEventListener('click', function(e) {
-                for (var j = 0; j < tabs.length; j++) {
-                    tabs[j].classList.remove('active');
-                }
-                this.classList.add('active');
-                currentType = this.getAttribute('data-type');
-                renderPackages();
-            });
-        }
-
+        document.getElementById('saveChangesBtn').addEventListener('click', exportData);
         document.getElementById('savePageBtn').addEventListener('click', function() {
             var htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
             var blob = new Blob([htmlContent], { type: 'text/html' });
             var url = URL.createObjectURL(blob);
             var a = document.createElement('a');
             a.href = url;
-            a.download = '广电业务支撑平台_121条完整版_合规学习.html';
+            a.download = '广电业务支撑平台_水印版.html';
             a.click();
             URL.revokeObjectURL(url);
         });
 
-        renderPackages();
-        console.log('✅ 121条套餐数据已加载，可在社交平台合规分享');
+        document.getElementById('searchInput').addEventListener('input', renderPackages);
+
+        var tabs = document.querySelectorAll('.filter-tab');
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].addEventListener('click', function() {
+                for (var j = 0; j < tabs.length; j++) tabs[j].classList.remove('active');
+                this.classList.add('active');
+                renderPackages();
+            });
+        }
+
+        // 全局日期事件
+        document.getElementById('globalStartDate').value = formatDate(new Date());
+        document.getElementById('applyGlobalDate').addEventListener('click', function() {
+            updateGlobalDate(document.getElementById('globalStartDate').value);
+        });
+        document.getElementById('resetGlobalDate').addEventListener('click', resetGlobalDate);
+
+        // 初始化
+        if (loadData()) {
+            updateStats();
+            renderPackages();
+        } else {
+            document.getElementById('packageGrid').innerHTML = '<div class="no-result">❌ 数据加载失败</div>';
+        }
     </script>
 </body>
 </html>
